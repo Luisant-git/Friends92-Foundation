@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id                Int      @id @default(autoincrement())
+  name              String   @unique
+  email             String?  @unique
+  password          String
+  role              Role     @default(ADMIN)
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  banner            Banner[]
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
+
+model Banner{
+  id                Int @id @default(autoincrement())
+  title             String
+  imageUrl          String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  adminId           Int
+  admin             Admin @relation(fields: [adminId],references: [id])
+}
+
+
+model Alumni {
+  id            Int        @id @default(autoincrement())
+  name          String
+  year          Int
+  city          String
+  mobile        String @unique
+  department    String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
