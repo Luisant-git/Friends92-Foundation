@@ -14,7 +14,7 @@ async function bootstrap() {
   });
   // Enable CORS so frontend can call this backend
   app.enableCors({
-    origin: 'http://localhost:5174', // your Vite frontend URL
+    origin: 'http://localhost:5173', // your Vite frontend URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

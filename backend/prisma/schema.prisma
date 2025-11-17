@@ -46,3 +46,4 @@ model Alumni {
   updatedAt     DateTime  @updatedAt
 }
 
+
