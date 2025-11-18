@@ -34,7 +34,7 @@ export class UploadController {
     }),
   )
   uploadImage(@UploadedFile() file: Express.Multer.File) {
-    const baseUrl = process.env.UPLOAD_URL || 'http://localhost:3000/uploads';
+    const baseUrl = process.env.UPLOAD_URL ;
     return {
       filename: file.filename,
       url: `${baseUrl}/${file.filename}`,

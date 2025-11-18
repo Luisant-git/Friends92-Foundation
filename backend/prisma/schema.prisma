@@ -46,4 +46,11 @@ model Alumni {
   updatedAt     DateTime  @updatedAt
 }
 
+model Gallery {
+  id                 Int      @id @default(autoincrement())
+  title             String
+  category          String
+  imageUrl          String
+  createdAt         DateTime @default(now())
+}
 
