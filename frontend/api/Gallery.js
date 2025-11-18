@@ -1,4 +1,5 @@
-const BASE_URL = "http://localhost:3000";
+// Use environment variable
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 // 1️⃣ Upload Image
 export async function uploadImage(file) {
@@ -30,12 +31,13 @@ export async function getGallery() {
   return res.json();
 }
 
+// Get limited gallery items
 export async function getGalleryLimit() {
   const res = await fetch(`${BASE_URL}/gallery/limit`);
   return res.json();
 }
 
-// Update gallery
+// Update gallery item
 export async function updateGallery(id, data) {
   const res = await fetch(`${BASE_URL}/gallery/${id}`, {
     method: "PATCH",
@@ -46,6 +48,7 @@ export async function updateGallery(id, data) {
   if (!res.ok) throw new Error("Update failed");
   return res.json();
 }
+
 // 4️⃣ Delete Gallery Item
 export async function deleteGallery(id) {
   const res = await fetch(`${BASE_URL}/gallery/${id}`, {

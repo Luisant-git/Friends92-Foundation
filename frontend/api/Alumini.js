@@ -1,5 +1,5 @@
-const API_URL = "http://localhost:3000/alumni";
-
+// Use environment variable for API URL
+const API_URL = `${import.meta.env.VITE_API_URL}/alumni`;
 
 // Create Alumni
 export const createAlumni = async (data) => {
@@ -47,14 +47,16 @@ export const deleteAlumni = async (id) => {
   }
 };
 
-// Alumini.js
+// Filter alumni
 export const filterAlumni = async (department, year) => {
   try {
     const params = new URLSearchParams();
     if (department) params.append("department", department);
     if (year) params.append("passedOutYear", year);
 
-    const res = await fetch(`http://localhost:3000/alumni/filter?${params.toString()}`);
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/alumni/filter?${params.toString()}`
+    );
     if (!res.ok) throw new Error("Failed to fetch filtered alumni");
     return await res.json();
   } catch (error) {
@@ -62,7 +64,3 @@ export const filterAlumni = async (department, year) => {
     throw error;
   }
 };
- 
-
-
-
