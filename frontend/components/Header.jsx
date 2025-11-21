@@ -11,7 +11,7 @@ import {
 import Friends92Logo from "./icons/Logo";
 import LoginModal from "./LoginModal";
 import AlumniRegister from "../pages/AluminiRegister";
-import { loginAdmin } from "../api/login";
+import { loginAdmin } from "../api/Login.js";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
