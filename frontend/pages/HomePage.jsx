@@ -4,20 +4,12 @@ import { Briefcase, Users, ClipboardList, Cpu } from "lucide-react";
 import Objective from "./Objective";
 import TeamSection from "./Teamsection";
 import Carousel from "../components/common/Carousel";
-import img1 from '../assets/campus.avif';
-import img2 from '../assets/friends.avif';
-import img3 from '../assets/graduation.avif';
-import img4 from "../assets/sports.avif";
-import img5 from "../assets/study.avif";
 
-
-
-
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const [banners, setBanners] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
- 
 
   useEffect(() => {
     async function fetchBanners() {
@@ -39,94 +31,93 @@ const HomePage = () => {
     return () => clearInterval(timer);
   }, [banners.length]);
 
+  const services = [
+    {
+      icon: <Briefcase className="w-10 h-10 text-primary" />,
+      title: "Placement Opportunities",
+      link: "/placement",
+    },
+    {
+      icon: <Users className="w-10 h-10 text-primary" />,
+      title: "Alumnis",
+      link: "/alumni/view",
+    },
+    {
+      icon: <ClipboardList className="w-10 h-10 text-primary" />,
+      title: "Services",
+      link: "/services",
+    },
+    {
+      icon: <Cpu className="w-10 h-10 text-primary" />,
+      title: "Projects",
+      link: "/projects/live",
+    },
+  ];
+
   
 
-const services = [
-  {
-    icon: <Briefcase className="w-10 h-10 text-primary" />,
-    title: "Placement Opportunities", 
-  },
-  {
-    icon: <Users className="w-10 h-10 text-primary" />,
-    title: "Alumnis",
-  },
-  {
-    icon: <ClipboardList className="w-10 h-10 text-primary" />,
-    title: "Services",
-  },
-  {
-    icon: <Cpu className="w-10 h-10 text-primary" />,
-    title: "Projects",
-  },
-];
-
-const images = [
-  {
-    id: 1,
-    src:  img1 ,
-    title: "An Overview of our Campus",
-  },
-  {
-    id: 2,
-    src: img2 ,
-    title: "Academic Advising",
-  },
-  {
-    id: 3,
-    src:  img3,
-    title: "Celebrating achievement and New Beginnings",
-  },
-  {
-    id: 4,
-    src:  img4 ,
-    title: "Ultimate Sports Championship",
-  },
-  {
-    id: 5,
-    src:  img5 ,
-    title: "Skill Development Workshops",
-  },
-];
-
-
-  const ServiceCard = ({ icon, title }) => (
-    <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col items-center justify-center text-center">
+  const ServiceCard = ({ icon, title, link }) => (
+    <Link
+      to={link}
+      className="bg-white p-8 rounded-xl border border-gray-200 shadow-lg 
+               hover:shadow-2xl transition-all duration-300 transform 
+               hover:-translate-y-2 flex flex-col items-center justify-center 
+               text-center cursor-pointer"
+    >
       <div className="h-12 w-12 text-[#16a34a] mb-4">{icon}</div>
       <h3 className="text-lg font-bold text-brand-dark">{title}</h3>
-    </div>
+    </Link>
   );
 
   return (
     <div className="animate-fadeIn">
       {/* Hero Section */}
-      <section className="relative h-[60vh] md:h-[80vh] bg-cover bg-center text-white overflow-hidden">
+
+      <section
+        className="relative 
+  h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[80vh]
+  text-white overflow-hidden"
+      >
         {banners.map((banner, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ${
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
-            style={{
-              backgroundImage: `url('${banner.imageUrl}')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
           >
-            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+            {/* ⭐ MOBILE — full image, NO CROP */}
+            <img
+              src={banner.imageUrl}
+              alt="banner"
+              className="sm:hidden w-full h-full object-contain bg-[#f5f5f5] pointer-events-none"
+            />
+
+            {/* ⭐ DESKTOP — cover */}
+            <img
+              src={banner.imageUrl}
+              alt="banner"
+              className="hidden sm:block w-full h-full object-cover pointer-events-none"
+            />
+
+            {/* ⭐ DARK LAYOUT (but soft) → for indicators visibility */}
+            <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
+            {/* ↑ You can change bg-black/30 → bg-black/40 to make darker */}
           </div>
         ))}
 
-        {/* Carousel Indicators */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {banners.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentSlide ? "bg-white" : "bg-white/50"
-              }`}
-            />
-          ))}
+        {/* ⭐ INDICATORS — visible in dark layout */}
+        <div className="absolute bottom-4 w-full flex justify-center z-30">
+          <div className="flex space-x-2">
+            {banners.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === currentSlide ? "bg-white" : "bg-white/60"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -146,7 +137,7 @@ const images = [
           </div>
         </section>
 
-        <Carousel images={images} />
+        <Carousel />
       </div>
 
       {/* Services Section */}

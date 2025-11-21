@@ -1,11 +1,11 @@
 export default function GalleryCard({ image, onClick }) {
   return (
     <div
-      className="p-3 cursor-pointer"
+      className="p-3 cursor-pointer bg-transparent"
       style={{ flex: "0 0 calc(100% / 4)" }}
       onClick={onClick}
     >
-      <div className="w-full h-52 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+      <div className="w-full h-52 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-transparent">
         <img
           src={
             image.src ||

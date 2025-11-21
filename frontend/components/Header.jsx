@@ -20,9 +20,7 @@ const Header = () => {
   const [isManageDropdownOpen, setIsManageDropdownOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("adminLoggedIn") === "true"
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const projectsDropdownRef = useRef(null);
   const alumniDropdownRef = useRef(null);
@@ -30,12 +28,17 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Sync login state with localStorage on component mount
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("adminLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
+  }, []);
+
   const activeLinkStyle = {
     color: "#16a34a",
     fontWeight: "600",
   };
 
-  /* Close menus when route changes */
   useEffect(() => {
     setIsProjectsDropdownOpen(false);
     setIsManageDropdownOpen(false);
@@ -43,7 +46,6 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   }, [location]);
 
-  /* Close dropdown when clicking outside */
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -59,16 +61,20 @@ const Header = () => {
         setIsAlumniDropdownOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogin = async (username, password) => {
     try {
-      const data = await loginAdmin(username, password);
+      await loginAdmin(username, password);
       setIsLoggedIn(true);
       localStorage.setItem("adminLoggedIn", "true");
       setIsLoginModalOpen(false);
+
+      // Force a re-render by toggling mobile menu closed
+      setIsMobileMenuOpen(false);
     } catch (error) {
       alert(error.message);
     }
@@ -77,17 +83,17 @@ const Header = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     localStorage.removeItem("adminLoggedIn");
+    setIsManageDropdownOpen(false);
     navigate("/");
   };
 
-  /* NAV LINKS COMPONENT */
   const NavLinks = ({ isMobile }) => {
     const navClass = isMobile
-      ? "flex flex-col space-y-4"
-      : "hidden md:flex items-center space-x-8";
+      ? "flex flex-col space-y-2"
+      : "hidden md:flex items-center gap-2";
 
     const linkClass =
-      "text-gray-600 hover:text-green-600 transition-colors duration-300 text-lg";
+      "text-gray-600 hover:text-green-600 transition text-base px-2 py-1.5 font-medium";
 
     return (
       <ul className={navClass}>
@@ -119,11 +125,11 @@ const Header = () => {
               setIsProjectsDropdownOpen(false);
               setIsManageDropdownOpen(false);
             }}
-            className={`${linkClass} flex items-center space-x-1`}
+            className={`${linkClass} flex items-center gap-1`}
           >
             <span>Alumni</span>
             <ChevronDown
-              className={`w-4 h-4 transform transition-transform duration-300 ${
+              className={`w-4 h-4 transition ${
                 isAlumniDropdownOpen ? "rotate-180" : ""
               }`}
             />
@@ -132,18 +138,18 @@ const Header = () => {
           {isAlumniDropdownOpen && (
             <div
               className={`${
-                isMobile ? "relative mt-2" : "absolute top-full left-0 mt-2"
-              } bg-white shadow-lg rounded-md py-2 w-48 z-20`}
+                isMobile ? "relative mt-1" : "absolute left-0 top-full mt-1"
+              } bg-white shadow-md rounded-md py-1 w-48 z-20`}
             >
               <button
                 onClick={() => setShowModal(true)}
-                className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-green-100"
+                className="block w-full text-left px-4 py-2 hover:bg-green-100 text-gray-700 text-sm"
               >
                 Register
               </button>
               <Link
                 to="/alumni/view"
-                className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                className="block px-4 py-2 hover:bg-green-100 text-gray-700 text-sm"
               >
                 View
               </Link>
@@ -159,11 +165,11 @@ const Header = () => {
               setIsAlumniDropdownOpen(false);
               setIsManageDropdownOpen(false);
             }}
-            className={`${linkClass} flex items-center space-x-1`}
+            className={`${linkClass} flex items-center gap-1`}
           >
             <span>Projects</span>
             <ChevronDown
-              className={`w-4 h-4 transform transition-transform duration-300 ${
+              className={`w-4 h-4 transition ${
                 isProjectsDropdownOpen ? "rotate-180" : ""
               }`}
             />
@@ -172,23 +178,33 @@ const Header = () => {
           {isProjectsDropdownOpen && (
             <div
               className={`${
-                isMobile ? "relative mt-2" : "absolute top-full left-0 mt-2"
-              } bg-white shadow-lg rounded-md py-2 w-48 z-20`}
+                isMobile ? "relative mt-1" : "absolute left-0 top-full mt-1"
+              } bg-white shadow-md rounded-md py-1 w-48 z-20`}
             >
               <Link
                 to="/projects/live"
-                className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                className="block px-4 py-2 hover:bg-green-100 text-gray-700 text-sm"
               >
                 Live Projects
               </Link>
               <Link
                 to="/projects/completed"
-                className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                className="block px-4 py-2 hover:bg-green-100 text-gray-700 text-sm"
               >
                 Completed Projects
               </Link>
             </div>
           )}
+        </li>
+
+        <li>
+          <NavLink
+            to="/placement"
+            className={linkClass}
+            style={({ isActive }) => (isActive ? activeLinkStyle : undefined)}
+          >
+            Placement
+          </NavLink>
         </li>
 
         <li>
@@ -231,7 +247,7 @@ const Header = () => {
           </NavLink>
         </li>
 
-        {/* Manage Dropdown */}
+        {/* Manage for Admin */}
         {isLoggedIn && (
           <li className="relative" ref={manageDropdownRef}>
             <button
@@ -240,11 +256,11 @@ const Header = () => {
                 setIsProjectsDropdownOpen(false);
                 setIsAlumniDropdownOpen(false);
               }}
-              className={`${linkClass} flex items-center space-x-1`}
+              className={`${linkClass} flex items-center gap-1`}
             >
               <span>Manage</span>
               <ChevronDown
-                className={`w-4 h-4 transform transition-transform duration-300 ${
+                className={`w-4 h-4 transition ${
                   isManageDropdownOpen ? "rotate-180" : ""
                 }`}
               />
@@ -253,26 +269,32 @@ const Header = () => {
             {isManageDropdownOpen && (
               <div
                 className={`${
-                  isMobile ? "relative mt-2" : "absolute top-full left-0 mt-2"
-                } bg-white shadow-lg rounded-md py-2 w-48 z-20`}
+                  isMobile ? "relative mt-1" : "absolute left-0 top-full mt-1"
+                } bg-white shadow-md rounded-md py-1 w-48 z-20`}
               >
                 <Link
                   to="/admin/banner"
-                  className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                  className="block px-4 py-2 hover:bg-green-100 text-gray-700 text-sm"
                 >
                   Banner
                 </Link>
                 <Link
                   to="/admin/services"
-                  className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                  className="block px-4 py-2 hover:bg-green-100 text-gray-700 text-sm"
                 >
                   Services
                 </Link>
                 <Link
                   to="/admin/gallery"
-                  className="block px-4 py-2 text-gray-700 hover:bg-green-100"
+                  className="block px-4 py-2 hover:bg-green-100 text-gray-700 text-sm"
                 >
                   Gallery
+                </Link>
+                <Link
+                  to="/admin/placement"
+                  className="block px-4 py-2 hover:bg-green-100 text-gray-700 text-sm"
+                >
+                  Placement
                 </Link>
               </div>
             )}
@@ -284,143 +306,120 @@ const Header = () => {
 
   return (
     <>
-      {/* ---------------------- PREMIUM GREEN TOP BAR ---------------------- */}
+      {/* Top Green Bar */}
       <div className="bg-green-600 shadow-sm">
         <div className="w-full px-4 md:px-10 py-2">
-          {/* Desktop */}
+          {/* Desktop Layout */}
           <div className="hidden md:flex justify-between items-center text-sm text-white">
-            {/* Email + Phone */}
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
-                <MdMail className="w-4 h-4 text-white" />
+                <MdMail className="w-4 h-4" />
                 <span>friends92foundation@gmail.com</span>
               </div>
-
               <div className="w-px h-4 bg-white/40"></div>
-
               <div className="flex items-center gap-2">
-                <MdPhone className="w-4 h-4 text-white" />
+                <MdPhone className="w-4 h-4" />
                 <span>+91 98765 43210</span>
               </div>
             </div>
 
-            {/* Social Icons */}
             <div className="flex items-center gap-4">
-              <FaFacebookF className="w-4 h-4 text-white hover:text-gray-200" />
-              <FaInstagram className="w-4 h-4 text-white hover:text-gray-200" />
-              <FaTwitter className="w-4 h-4 text-white hover:text-gray-200" />
-              <FaLinkedinIn className="w-4 h-4 text-white hover:text-gray-200" />
+              <FaFacebookF className="w-4 h-4 hover:text-gray-200 transition cursor-pointer" />
+              <FaInstagram className="w-4 h-4 hover:text-gray-200 transition cursor-pointer" />
+              <FaTwitter className="w-4 h-4 hover:text-gray-200 transition cursor-pointer" />
+              <FaLinkedinIn className="w-4 h-4 hover:text-gray-200 transition cursor-pointer" />
             </div>
           </div>
 
-          {/* Mobile */}
-          <div className="md:hidden flex flex-col items-center text-white space-y-2 pt-1">
-            <div className="flex items-center gap-2">
-              <MdMail className="w-4 h-4 text-white" />
-              <span className="text-sm">friends92foundation@gmail.com</span>
+          {/* Mobile Layout - Stacked Lines */}
+          <div className="md:hidden flex flex-col items-center gap-1.5 text-white text-xs">
+            <div className="flex items-center justify-center gap-1.5 w-full">
+              <MdMail className="w-3.5 h-3.5 flex-shrink-0" />
+              <span className="text-xs">friends92foundation@gmail.com</span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <MdPhone className="w-4 h-4 text-white" />
-              <span className="text-sm">+91 98765 43210</span>
+            <div className="flex items-center justify-center gap-1.5 w-full">
+              <MdPhone className="w-3.5 h-3.5 flex-shrink-0" />
+              <span className="text-xs">+91 98765 43210</span>
             </div>
 
-            <div className="flex justify-center gap-5">
-              <FaFacebookF className="w-4 h-4 text-white hover:text-gray-200" />
-              <FaInstagram className="w-4 h-4 text-white hover:text-gray-200" />
-              <FaTwitter className="w-4 h-4 text-white hover:text-gray-200" />
-              <FaLinkedinIn className="w-4 h-4 text-white hover:text-gray-200" />
+            <div className="flex items-center justify-center gap-3 pt-1">
+              <FaFacebookF className="w-3.5 h-3.5 hover:text-gray-200 transition cursor-pointer" />
+              <FaInstagram className="w-3.5 h-3.5 hover:text-gray-200 transition cursor-pointer" />
+              <FaTwitter className="w-3.5 h-3.5 hover:text-gray-200 transition cursor-pointer" />
+              <FaLinkedinIn className="w-3.5 h-3.5 hover:text-gray-200 transition cursor-pointer" />
             </div>
           </div>
         </div>
       </div>
-      {/* ------------------------------------------------------ */}
 
-      {/* MAIN NAVBAR */}
-      <header className="bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-50">
-        <div className="w-full py-3">
-          <div className="flex items-center justify-between px-4 md:px-6">
-            {/* Logo */}
-            <Link
-              to="/"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center space-x-2"
-            >
-              <Friends92Logo className="w-10 h-10 text-green-600" />
-              <span
-                className="font-bold text-gray-800 tracking-wide
-                  text-base md:text-xl"
+      {/* Main Header */}
+      <header className="bg-white shadow-md sticky top-0 z-50">
+        <div className="w-full py-2.5 px-4 md:px-6 flex items-center justify-between">
+          {/* Logo */}
+          <Link
+            to="/"
+            className="flex items-center gap-2"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <Friends92Logo className="w-9 h-9 text-green-600" />
+            <span className="font-bold text-gray-800 text-sm md:text-base">
+              FRIENDS <span className="text-green-600">92</span> FOUNDATION
+            </span>
+          </Link>
+
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center">
+            <NavLinks isMobile={false} />
+          </nav>
+
+          {/* Desktop Login */}
+          <div className="hidden md:block">
+            {isLoggedIn ? (
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 text-white px-4 py-1.5 rounded-full text-sm flex items-center gap-1"
               >
-                FRIENDS<span className="text-green-600"> 92 </span> FOUNDATION
-              </span>
-            </Link>
-
-            {/* Desktop Links */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <NavLinks isMobile={false} />
-            </nav>
-
-            {/* Desktop Login */}
-            <div className="hidden md:block">
-              {isLoggedIn ? (
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-600 text-white font-semibold px-6 py-2 rounded-full hover:bg-red-700 transition-all duration-300 shadow-sm flex items-center gap-1"
-                >
-                  <LogOut className="w-4 h-4" /> Logout
-                </button>
-              ) : (
-                <button
-                  onClick={() => setIsLoginModalOpen(true)}
-                  className="bg-green-600 text-white font-semibold px-6 py-2 rounded-full hover:bg-green-700 transition-all duration-300 shadow-sm flex items-center gap-1"
-                >
-                  <LogIn className="w-4 h-4" /> Login
-                </button>
-              )}
-            </div>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                {isMobileMenuOpen ? <X /> : <Menu />}
+                <LogOut className="w-4 h-4" /> Logout
               </button>
-            </div>
+            ) : (
+              <button
+                onClick={() => setIsLoginModalOpen(true)}
+                className="bg-green-600 text-white px-4 py-1.5 rounded-full text-sm flex items-center gap-1"
+              >
+                <LogIn className="w-4 h-4" /> Login
+              </button>
+            )}
+          </div>
+
+          {/* Mobile Menu Icon */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-1.5"
+            >
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
         </div>
 
-        {/* MOBILE MENU */}
+        {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div
-            className="
-    md:hidden 
-    bg-white 
-    shadow-lg 
-    absolute 
-    top-full 
-    left-0 
-    w-full 
-    px-8 
-    pt-4 
-    pb-8
-    max-h-[85vh] 
-    overflow-y-auto
-    z-50
-  "
-          >
+          <div className="md:hidden bg-white shadow-lg absolute left-0 w-full px-4 py-3 z-50">
             <NavLinks isMobile={true} />
 
-            <div className="mt-6">
+            <div className="mt-4">
               {isLoggedIn ? (
                 <button
                   onClick={handleLogout}
-                  className="block text-center w-full bg-red-600 text-white font-semibold px-6 py-3 rounded-full hover:bg-red-700 transition-all duration-300 shadow-sm"
+                  className="w-full bg-red-600 text-white py-2 rounded-full text-base"
                 >
                   Logout
                 </button>
               ) : (
                 <button
                   onClick={() => setIsLoginModalOpen(true)}
-                  className="block text-center w-full bg-green-600 text-white font-semibold px-6 py-3 rounded-full hover:bg-green-700 transition-all duration-300 shadow-sm"
+                  className="w-full bg-green-600 text-white py-2 rounded-full text-base"
                 >
                   Login
                 </button>
@@ -429,12 +428,13 @@ const Header = () => {
           </div>
         )}
       </header>
-      {/* Login Modal */}
+
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
         onLogin={handleLogin}
       />
+
       {showModal && (
         <AlumniRegister
           isOpen={showModal}

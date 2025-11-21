@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
-import {
-  createGallery,
-  deleteGallery,
-  getGallery,
-  updateGallery,
-  uploadImage,
-} from "../api/Gallery.js";
 import { Edit, Trash2 } from "lucide-react";
-import SearchableDropdown from "../components/SearchableDropdown.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function AdminGallery() {
-  const categories = ["Alumini Meet", "Charitable Trust", "Sports", "Workshop"];
+import {
+  createGallery,
+  getGallery,
+  updateGallery,
+  deleteGallery,
+  uploadImage,
+} from "../api/Gallery.js";
+import CategoryDropdown from "../components/common/Categorydropdown.jsx";
 
+export default function AdminGallery() {
   const [gallery, setGallery] = useState([]);
-  const [form, setForm] = useState({ title: "", category: "", image: null });
+  const [form, setForm] = useState({ title: "", category: null, image: null });
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
@@ -28,7 +27,7 @@ export default function AdminGallery() {
     try {
       const data = await getGallery();
       setGallery(data);
-    } catch (err) {
+    } catch {
       toast.error("Failed to load gallery");
     }
   };
@@ -40,17 +39,18 @@ export default function AdminGallery() {
   };
 
   const resetForm = () => {
-    setForm({ title: "", category: "", image: null });
+    setForm({ title: "", category: null, image: null });
     setPreview("");
     setEditingItem(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.title) return toast.warn("Please enter title");
-    if (!form.category) return toast.warn("Please select category");
-    if (!form.image && !editingItem)
-      return toast.warn("Please select an image");
+
+    // Silent validation: just prevent submission if fields missing
+    if (!form.title || !form.category || (!form.image && !editingItem)) {
+      return; // do nothing, no warning
+    }
 
     setLoading(true);
     try {
@@ -62,20 +62,20 @@ export default function AdminGallery() {
 
       const data = {
         title: form.title,
-        category: form.category,
+        categoryId: form.category.id,
         imageUrl,
       };
 
       if (editingItem) {
         await updateGallery(editingItem.id, data);
-        toast.success("Gallery updated");
+        toast.success("Gallery updated successfully");
       } else {
         await createGallery(data);
-        toast.success("Image added");
+        toast.success("Image added successfully");
       }
 
       resetForm();
-      loadGallery();
+      await loadGallery();
     } catch (err) {
       toast.error(err.message || "Something went wrong");
     } finally {
@@ -85,7 +85,11 @@ export default function AdminGallery() {
 
   const handleEdit = (item) => {
     setEditingItem(item);
-    setForm({ title: item.title, category: item.category, image: null });
+    setForm({
+      title: item.title,
+      category: item.category,
+      image: null,
+    });
     setPreview(item.imageUrl);
   };
 
@@ -94,7 +98,7 @@ export default function AdminGallery() {
     try {
       await deleteGallery(id);
       toast.success("Deleted successfully");
-      loadGallery();
+      await loadGallery();
     } catch {
       toast.error("Delete failed");
     }
@@ -104,35 +108,29 @@ export default function AdminGallery() {
     <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Admin Gallery</h1>
 
-      {/* Upload Form */}
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-xl shadow-md mb-8"
       >
-        {/* Title */}
         <div className="mb-4">
           <label className="block font-semibold mb-2">Title</label>
           <input
             type="text"
-            placeholder="Enter image title"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="w-full p-3.5 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-all"
+            placeholder="Enter image title"
+            className="w-full h-12 p-3 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-600"
           />
         </div>
 
-        {/* Category */}
         <div className="mb-4">
           <label className="block font-semibold mb-2">Category</label>
-          <SearchableDropdown
-            options={categories}
+          <CategoryDropdown
             value={form.category}
-            onChange={(val) => setForm({ ...form, category: val })}
-            placeholder="Select"
+            onChange={(cat) => setForm({ ...form, category: cat })}
           />
         </div>
 
-        {/* Image Upload */}
         <div className="mb-4">
           <label className="block font-semibold mb-2">Image</label>
           <div
@@ -188,8 +186,7 @@ export default function AdminGallery() {
           />
         </div>
 
-        {/* Buttons */}
-        <div className="flex items-center gap-4">
+        <div className="flex gap-4">
           <button
             type="submit"
             disabled={loading}
@@ -209,7 +206,6 @@ export default function AdminGallery() {
         </div>
       </form>
 
-      {/* Gallery Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded-lg shadow-md border">
           <thead>
@@ -226,16 +222,20 @@ export default function AdminGallery() {
               gallery.map((item, i) => (
                 <tr key={item.id} className="border-t hover:bg-gray-50">
                   <td className="p-3">{i + 1}</td>
-                  <td className="p-3">{item.title}</td>
-                  <td className="p-3">{item.category}</td>
+                  <td className="p-3">{item.title || "-"}</td>
+                  <td className="p-3">{item.category?.name || "-"}</td>
                   <td className="p-3">
-                    <img
-                      src={item.imageUrl}
-                      alt={item.title}
-                      className="w-32 h-20 object-cover rounded border"
-                    />
+                    {item.imageUrl ? (
+                      <img
+                        src={item.imageUrl}
+                        alt={item.title || "Image"}
+                        className="w-32 h-20 object-cover rounded border"
+                      />
+                    ) : (
+                      "-"
+                    )}
                   </td>
-                  <td className="p-3 flex items-center gap-4">
+                  <td className="p-3 flex gap-4">
                     <button
                       onClick={() => handleEdit(item)}
                       className="text-sky-600 hover:text-sky-800"
@@ -262,12 +262,7 @@ export default function AdminGallery() {
         </table>
       </div>
 
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
     </div>
   );
 }

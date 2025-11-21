@@ -1,11 +1,11 @@
-import { IsString } from 'class-validator';
+import { IsString, IsInt,} from 'class-validator';
 
 export class CreateGalleryDto {
   @IsString()
   title: string;
 
-  @IsString()
-  category: string;
+  @IsInt()
+  categoryId: number; 
 
   @IsString()
   imageUrl: string;

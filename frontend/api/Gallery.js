@@ -1,7 +1,7 @@
-// Use environment variable
+// Gallery.js
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-// 1️⃣ Upload Image
+// Upload image
 export async function uploadImage(file) {
   const formData = new FormData();
   formData.append("image", file);
@@ -10,31 +10,30 @@ export async function uploadImage(file) {
     method: "POST",
     body: formData,
   });
-
   return res.json();
 }
 
-// 2️⃣ Create Gallery Item
+// Create gallery item
 export async function createGallery(data) {
+  // data = { title, categoryId, imageUrl }
   const res = await fetch(`${BASE_URL}/gallery`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-
   return res.json();
 }
 
-// 3️⃣ Get All Gallery Items
+// Get all gallery items
 export async function getGallery() {
   const res = await fetch(`${BASE_URL}/gallery`);
-  return res.json();
+  return res.json(); // returns gallery items with category objects
 }
 
-// Get limited gallery items
+// Get all gallery items
 export async function getGalleryLimit() {
   const res = await fetch(`${BASE_URL}/gallery/limit`);
-  return res.json();
+  return res.json(); // returns gallery items with category objects
 }
 
 // Update gallery item
@@ -44,15 +43,35 @@ export async function updateGallery(id, data) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-
   if (!res.ok) throw new Error("Update failed");
   return res.json();
 }
 
-// 4️⃣ Delete Gallery Item
+// Delete gallery item
 export async function deleteGallery(id) {
-  const res = await fetch(`${BASE_URL}/gallery/${id}`, {
-    method: "DELETE",
+  const res = await fetch(`${BASE_URL}/gallery/${id}`, { method: "DELETE" });
+  return res.json();
+}
+
+// Category.js
+export async function createCategory(data) {
+  const res = await fetch(`${BASE_URL}/category`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
   });
+  if (!res.ok) throw new Error("Failed to create category");
+  return res.json(); // returns created category {id, name}
+}
+
+export async function getCategories() {
+  const res = await fetch(`${BASE_URL}/category`);
+  if (!res.ok) throw new Error("Failed to fetch categories");
+  return res.json(); // returns array of categories [{id, name}]
+}
+
+export async function deleteCategory(id) {
+  const res = await fetch(`${BASE_URL}/category/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to delete category");
   return res.json();
 }

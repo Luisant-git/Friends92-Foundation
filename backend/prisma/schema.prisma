@@ -49,8 +49,34 @@ model Alumni {
 model Gallery {
   id                 Int      @id @default(autoincrement())
   title             String
-  category          String
+  categoryId        Int 
+  category          Category @relation(fields: [categoryId],references: [id])
   imageUrl          String
   createdAt         DateTime @default(now())
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  gallery   Gallery[]
+}
+
+
+model Placement {
+  id                  Int        @id @default(autoincrement())
+  companyName         String
+  companyDesc         String
+  companyLocation     String
+  jobTitle            String
+  jobLocation         String
+  jobDescription      String
+  companyContactNumber String
+  companyEmail        String
+  skills              String[]   
+  experience          Int
+  status              Boolean    @default(true)
+
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
 }
 

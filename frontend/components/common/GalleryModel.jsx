@@ -2,14 +2,12 @@ import React, { useEffect } from "react";
 import { X } from "lucide-react";
 
 export default function ImageModal({ image, onClose }) {
-  // Close on ESC key
   useEffect(() => {
     const handleEsc = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
-  // Correct image field detection (your API does NOT return image.src)
   const imgSrc =
     image?.src ||
     image?.url ||
@@ -27,7 +25,7 @@ export default function ImageModal({ image, onClose }) {
     >
       <div
         className="relative bg-white rounded-3xl shadow-2xl p-6
-                   max-w-4xl w-[90%] border border-gray-200 animate-scaleIn"
+                   max-w-4xl w-[90%] border-t border-gray-200 animate-scaleIn"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}

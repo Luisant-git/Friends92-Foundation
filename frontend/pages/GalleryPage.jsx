@@ -1,41 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { getGallery } from "../api/Gallery";
+import { getGallery, getCategories } from "../api/Gallery";
+import ImageModal from "../components/common/GalleryModel";
+import GalleryCard from "../components/common/GalleryCard";
 
 export default function GalleryPage() {
-  const categories = [
-    "All",
-    "Alumini Meet",
-    "Charitable Trust",
-    "Sports",
-    "Workshop",
-  ];
-
+  const [categories, setCategories] = useState([]);
   const [gallery, setGallery] = useState([]);
   const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    async function fetchGallery() {
+    async function fetchData() {
       try {
-        const data = await getGallery();
-        setGallery(data);
+        const [galleryData, categoriesData] = await Promise.all([
+          getGallery(),
+          getCategories(),
+        ]);
+
+        setGallery(galleryData);
+
+        // Add "All" as the first category
+        const categoryNames = ["All", ...categoriesData.map((c) => c.name)];
+        setCategories(categoryNames);
       } catch (err) {
         console.error("Gallery fetch error:", err);
       } finally {
         setLoading(false);
       }
     }
-    fetchGallery();
+
+    fetchData();
   }, []);
 
+  // Filter gallery based on active category
   const filteredGallery =
     activeCategory === "All"
       ? gallery
-      : gallery.filter((item) => item.category === activeCategory);
+      : gallery.filter((item) => item.category?.name === activeCategory);
 
   return (
     <div className="max-w-7xl mx-auto p-6 text-center">
-      {/* Heading */}
       <h1 className="text-4xl font-bold mb-6">Gallery</h1>
 
       {/* Category Tabs */}
@@ -66,29 +71,55 @@ export default function GalleryPage() {
           {filteredGallery.map((item) => (
             <div
               key={item.id}
-              className="relative rounded-xl shadow-lg overflow-hidden group cursor-pointer
-                         w-full h-[230px] bg-gray-200"
+              className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl 
+                         transition-all duration-300 cursor-pointer group"
+              onClick={() => setSelectedImage(item)}
             >
               {/* Image */}
               <img
-                src={item.imageUrl}
-                alt={item.title}
-                className="w-full h-full object-cover transition duration-500 
-                           group-hover:scale-110 group-hover:brightness-75"
+                src={
+                  item?.src ||
+                  item?.url ||
+                  item?.image ||
+                  item?.imageUrl ||
+                  item?.image_url ||
+                  item?.img ||
+                  ""
+                }
+                alt={item?.title || ""}
+                className="w-full h-64 object-cover transition-transform duration-500 
+                           group-hover:scale-105"
               />
 
-              {/* Hover Title Overlay */}
+              {/* Light Dark Overlay */}
               <div
-                className="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/60 to-transparent 
-                              opacity-0 group-hover:opacity-100 transition-all duration-500"
+                className="absolute inset-0 bg-black/0 group-hover:bg-black/20 
+                             transition-all duration-300 ease-out"
+              />
+
+              {/* Title - Bottom Left */}
+              <div
+                className="absolute bottom-0 left-0 right-0 p-4 
+                             transform translate-y-full group-hover:translate-y-0 
+                             transition-transform duration-300 ease-out"
               >
-                <p className="text-white text-base font-semibold">
-                  {item.title}
-                </p>
+                <div className="text-left">
+                  <h3 className="text-white font-semibold text-lg drop-shadow-lg">
+                    {item?.title}
+                  </h3>
+                </div>
               </div>
             </div>
           ))}
         </div>
+      )}
+
+      {/* Modal */}
+      {selectedImage && (
+        <ImageModal
+          image={selectedImage}
+          onClose={() => setSelectedImage(null)}
+        />
       )}
     </div>
   );

@@ -14,6 +14,8 @@ import AlumniRegister from './pages/AluminiRegister';
 import ViewAlumni from './pages/AlumniList';
 import AdminGallery from './pages/AdminGallery';
 import GalleryPage from './pages/GalleryPage';
+import AdminPlacementPage from './pages/AdminPlacementPage';
+import PlacementPage from './pages/PlacementPage';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -46,12 +48,14 @@ const App = () => {
             <Route path="/alumni/view" element={<ViewAlumni />} />
             {/* Gallery */}
             <Route path="/gallery" element={<GalleryPage/>}/>
+           <Route path="/placement" element={<PlacementPage/>}/>
 
             {isAdmin && (
               <>
                 <Route path="/admin/banner" element={<BannerPage />} />
                 <Route path="/admin/services" element={<ManageServicesPage />} />
                 <Route path="/admin/gallery" element={<AdminGallery/>}/>
+                <Route path="/admin/placement" element={<AdminPlacementPage/>}/>
               </>
             )}
 
