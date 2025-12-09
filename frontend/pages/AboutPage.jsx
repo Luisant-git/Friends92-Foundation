@@ -1,63 +1,152 @@
 import React from 'react';
-import Card from '../components/common/Card';
 
 const AboutPage = () => {
+  const trustees = [
+    { name: 'John Smith', role: 'Chairman', photo: 'https://picsum.photos/300/300?random=1', bio: 'With over 25 years of experience in education and philanthropy, John leads our foundation with vision and dedication.' },
+    { name: 'Sarah Johnson', role: 'Vice Chairman', photo: 'https://picsum.photos/300/300?random=2', bio: 'A renowned educator and community leader, Sarah brings strategic insight to our mission.' },
+    { name: 'Michael Chen', role: 'Treasurer', photo: 'https://picsum.photos/300/300?random=3', bio: 'Financial expert with a passion for social impact, ensuring our resources create maximum value.' },
+    { name: 'Emily Davis', role: 'Secretary', photo: 'https://picsum.photos/300/300?random=4', bio: 'Legal professional committed to governance excellence and organizational transparency.' }
+  ];
+
+  const team = [
+    { name: 'David Wilson', role: 'Executive Director', photo: 'https://picsum.photos/200/200?random=5' },
+    { name: 'Lisa Anderson', role: 'Program Manager', photo: 'https://picsum.photos/200/200?random=6' },
+    { name: 'James Brown', role: 'Community Outreach', photo: 'https://picsum.photos/200/200?random=7' },
+    { name: 'Maria Garcia', role: 'Operations Manager', photo: 'https://picsum.photos/200/200?random=8' }
+  ];
+
   return (
     <div className="bg-white">
-      {/* Page Header */}
+      {/* Header */}
       <section className="bg-slate-700 text-white py-20">
         <div className="container mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold">About Friends 92 Foundation</h1>
-          <p className="text-lg text-slate-300 mt-4">A Legacy of Excellence and a Vision for the Future</p>
+          <h1 className="text-5xl font-bold mb-4">About Us</h1>
+          <p className="text-xl text-blue-100">Building a Better Tomorrow Together</p>
         </div>
       </section>
 
-      {/* Mission & Vision */}
-      <section className="py-20">
+      {/* History */}
+      <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-slate-800 mb-4">Our Mission</h2>
-              <p className="text-slate-600 leading-relaxed mb-6">
-                To cultivate an inclusive and dynamic learning environment that empowers students to think critically, communicate effectively, and engage with the world as responsible global citizens. We are committed to fostering intellectual curiosity, creativity, and a lifelong passion for learning.
-              </p>
-              <h2 className="text-3xl font-bold text-slate-800 mb-4">Our Vision</h2>
-              <p className="text-slate-600 leading-relaxed">
-                To be a globally recognized leader in higher education, renowned for our innovative research, transformative teaching, and profound impact on society. We aspire to create a sustainable and equitable future through knowledge and leadership.
-              </p>
+          <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">History</h2>
+          <div className="max-w-4xl mx-auto">
+            <p className="text-lg text-gray-700 leading-relaxed mb-6">
+              Founded in 1992, Friends 92 Foundation emerged from a shared vision among classmates to create lasting positive change in our community. What began as a small group of dedicated individuals has grown into a thriving organization touching thousands of lives.
+            </p>
+            <p className="text-lg text-gray-700 leading-relaxed">
+              Over three decades, we've evolved from grassroots initiatives to comprehensive programs in education, healthcare, and community development, always staying true to our founding principles of compassion, integrity, and excellence.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Vision, Mission & Values */}
+      <section className="py-16">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">Vision, Mission and Values</h2>
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="bg-blue-50 p-8 rounded-lg">
+              <h3 className="text-2xl font-bold text-blue-600 mb-4">Vision</h3>
+              <p className="text-gray-700">To be a catalyst for sustainable community transformation, creating opportunities for every individual to reach their full potential.</p>
             </div>
-            <div>
-              <img src="https://picsum.photos/600/400?random=5" alt="Campus building" className="rounded-lg shadow-2xl"/>
+            <div className="bg-green-50 p-8 rounded-lg">
+              <h3 className="text-2xl font-bold text-green-600 mb-4">Mission</h3>
+              <p className="text-gray-700">Empowering communities through education, healthcare, and sustainable development programs that foster dignity, equality, and hope.</p>
+            </div>
+            <div className="bg-purple-50 p-8 rounded-lg">
+              <h3 className="text-2xl font-bold text-purple-600 mb-4">Values</h3>
+              <p className="text-gray-700">Integrity, Compassion, Excellence, Collaboration, and Accountability guide everything we do.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Leadership Team */}
-      <section className="py-20 bg-slate-50">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-12">Meet Our Leadership</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <img src="https://picsum.photos/200/200?random=6" alt="Dr. Evelyn Reed" className="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg"/>
-              <h3 className="text-xl font-bold text-slate-800">Dr. Evelyn Reed</h3>
-              <p className="text-sky-600">President</p>
+      {/* Our Story */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">Our Story and History</h2>
+          <div className="max-w-4xl mx-auto">
+            <div className="space-y-8">
+              <div className="flex gap-6">
+                <div className="flex-shrink-0 w-24 text-right">
+                  <span className="text-2xl font-bold text-blue-600">1992</span>
+                </div>
+                <div className="flex-1 pb-8 border-l-4 border-blue-600 pl-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">The Beginning</h3>
+                  <p className="text-gray-700">A group of friends from the class of '92 came together with a dream to give back to society.</p>
+                </div>
+              </div>
+              <div className="flex gap-6">
+                <div className="flex-shrink-0 w-24 text-right">
+                  <span className="text-2xl font-bold text-blue-600">2000</span>
+                </div>
+                <div className="flex-1 pb-8 border-l-4 border-blue-600 pl-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Expansion</h3>
+                  <p className="text-gray-700">Launched our first major education initiative, providing scholarships to 100 underprivileged students.</p>
+                </div>
+              </div>
+              <div className="flex gap-6">
+                <div className="flex-shrink-0 w-24 text-right">
+                  <span className="text-2xl font-bold text-blue-600">2010</span>
+                </div>
+                <div className="flex-1 pb-8 border-l-4 border-blue-600 pl-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Healthcare Initiative</h3>
+                  <p className="text-gray-700">Established mobile health clinics serving rural communities across the region.</p>
+                </div>
+              </div>
+              <div className="flex gap-6">
+                <div className="flex-shrink-0 w-24 text-right">
+                  <span className="text-2xl font-bold text-blue-600">2024</span>
+                </div>
+                <div className="flex-1 pl-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Today</h3>
+                  <p className="text-gray-700">Serving over 10,000 beneficiaries annually through diverse programs and partnerships.</p>
+                </div>
+              </div>
             </div>
-            <div className="text-center">
-              <img src="https://picsum.photos/200/200?random=7" alt="Prof. Samuel Chen" className="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg"/>
-              <h3 className="text-xl font-bold text-slate-800">Prof. Samuel Chen</h3>
-              <p className="text-sky-600">Provost & VP, Academic Affairs</p>
-            </div>
-            <div className="text-center">
-              <img src="https://picsum.photos/200/200?random=8" alt="Ms. Maria Rodriguez" className="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg"/>
-              <h3 className="text-xl font-bold text-slate-800">Ms. Maria Rodriguez</h3>
-              <p className="text-sky-600">Dean of Students</p>
-            </div>
-             <div className="text-center">
-              <img src="https://picsum.photos/200/200?random=9" alt="Mr. David Grant" className="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg"/>
-              <h3 className="text-xl font-bold text-slate-800">Mr. David Grant</h3>
-              <p className="text-sky-600">Chief Financial Officer</p>
-            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Board of Trustees */}
+      <section className="py-16">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center text-gray-800 mb-4">Board of Trustees</h2>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Our distinguished board members bring diverse expertise and unwavering commitment to our mission.</p>
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {trustees.map((trustee, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                <div className="md:flex">
+                  <div className="md:flex-shrink-0">
+                    <img src={trustee.photo} alt={trustee.name} className="h-48 w-full md:w-48 object-cover" />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-2xl font-bold text-gray-800">{trustee.name}</h3>
+                    <p className="text-blue-600 font-semibold mb-3">{trustee.role}</p>
+                    <p className="text-gray-600 text-sm">{trustee.bio}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Dedicated Team */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center text-gray-800 mb-4">Dedicated Team</h2>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Meet the passionate professionals who bring our vision to life every day.</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {team.map((member, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition text-center">
+                <img src={member.photo} alt={member.name} className="w-full h-48 object-cover" />
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-1">{member.name}</h3>
+                  <p className="text-blue-600">{member.role}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

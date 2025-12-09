@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getBanners } from "../api/Banner";
-import { Briefcase, Users, ClipboardList, Cpu } from "lucide-react";
+import { Briefcase, Users, ClipboardList, Cpu, Heart, CheckCircle, MapPin, UserCheck } from "lucide-react";
 import Objective from "./Objective";
 import TeamSection from "./Teamsection";
 import Carousel from "../components/common/Carousel";
@@ -54,8 +54,6 @@ const HomePage = () => {
     },
   ];
 
-  
-
   const ServiceCard = ({ icon, title, link }) => (
     <Link
       to={link}
@@ -72,7 +70,6 @@ const HomePage = () => {
   return (
     <div className="animate-fadeIn">
       {/* Hero Section */}
-
       <section
         className="relative 
   h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[80vh]
@@ -85,27 +82,26 @@ const HomePage = () => {
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           >
-            {/* ⭐ MOBILE — full image, NO CROP */}
+            {/* MOBILE — full image, NO CROP */}
             <img
               src={banner.imageUrl}
               alt="banner"
               className="sm:hidden w-full h-full object-contain bg-[#f5f5f5] pointer-events-none"
             />
 
-            {/* ⭐ DESKTOP — cover */}
+            {/* DESKTOP — cover */}
             <img
               src={banner.imageUrl}
               alt="banner"
               className="hidden sm:block w-full h-full object-cover pointer-events-none"
             />
 
-            {/* ⭐ DARK LAYOUT (but soft) → for indicators visibility */}
+            {/* DARK LAYOUT (but soft) → for indicators visibility */}
             <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
-            {/* ↑ You can change bg-black/30 → bg-black/40 to make darker */}
           </div>
         ))}
 
-        {/* ⭐ INDICATORS — visible in dark layout */}
+        {/* INDICATORS — visible in dark layout */}
         <div className="absolute bottom-4 w-full flex justify-center z-30">
           <div className="flex space-x-2">
             {banners.map((_, index) => (
@@ -122,14 +118,48 @@ const HomePage = () => {
       </section>
 
       {/* Objective Section */}
-
       <Objective />
 
-      {/* Gallery carosole */}
+      {/* Our Impact Section */}
+      <section className="py-16 bg-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-4">
+              Our Impact
+            </h2>
+            <p className="text-slate-300 max-w-2xl mx-auto">
+              Making a difference in communities through our dedicated efforts and programs
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <Heart className="w-12 h-12 text-green-400 mx-auto mb-4" />
+              <div className="text-4xl font-bold text-green-400 mb-2">500+</div>
+              <div className="text-slate-300">Lives Impacted</div>
+            </div>
+            <div className="text-center">
+              <CheckCircle className="w-12 h-12 text-sky-400 mx-auto mb-4" />
+              <div className="text-4xl font-bold text-sky-400 mb-2">50+</div>
+              <div className="text-slate-300">Projects Completed</div>
+            </div>
+            <div className="text-center">
+              <MapPin className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+              <div className="text-4xl font-bold text-purple-400 mb-2">25+</div>
+              <div className="text-slate-300">Communities Served</div>
+            </div>
+            <div className="text-center">
+              <UserCheck className="w-12 h-12 text-orange-400 mx-auto mb-4" />
+              <div className="text-4xl font-bold text-orange-400 mb-2">100+</div>
+              <div className="text-slate-300">Volunteers</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery carousel */}
       <div className="mt-6">
         <section className="py-8 bg-white">
-          {" "}
-          {/* Reduced from py-16 to py-8 */}
           <div className="max-w-4xl mx-auto text-center px-4">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-dark">
               Gallery

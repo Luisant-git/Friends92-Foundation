@@ -16,6 +16,9 @@ import AdminGallery from './pages/AdminGallery';
 import GalleryPage from './pages/GalleryPage';
 import AdminPlacementPage from './pages/AdminPlacementPage';
 import PlacementPage from './pages/PlacementPage';
+import ProgramsPage from './pages/ProgramsPage';
+import SuccessStoriesPage from './pages/SuccessStoriesPage';
+import ContactPage from './pages/ContactPage';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -38,6 +41,9 @@ const App = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/programs" element={<ProgramsPage />} />
+            <Route path="/success-stories" element={<SuccessStoriesPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/services" element={<ServicePage />} />
             <Route path="/projects/live" element={<LiveProjectsPage />} />
             <Route
