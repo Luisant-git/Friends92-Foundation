@@ -23,6 +23,7 @@ export class GalleryService {
         title: data.title,
         imageUrl: data.imageUrl,
         categoryId: data.categoryId,
+        videoLink: data.videoLink,
       },
     });
   }

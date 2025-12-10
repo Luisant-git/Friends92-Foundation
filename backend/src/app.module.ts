@@ -8,9 +8,12 @@ import { AlumniModule } from './alumni/alumni.module';
 import { GalleryModule } from './gallery/gallery.module';
 import { PlacementModule } from './placement/placement.module';
 import { CategoryModule } from './category/category.module';
+import { EventsModule } from './events/events.module';
+import { ServicesModule } from './services/services.module';
+import { TeamModule } from './team/team.module';
 
 @Module({
-  imports: [AdminModule, BannerModule, UploadModule, AlumniModule, GalleryModule, PlacementModule, CategoryModule],
+  imports: [AdminModule, BannerModule, UploadModule, AlumniModule, GalleryModule, PlacementModule, CategoryModule, EventsModule, ServicesModule, TeamModule],
   controllers: [AppController],
   providers: [AppService],
 })

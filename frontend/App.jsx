@@ -1,11 +1,15 @@
 import React from 'react';
-import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Toaster } from "react-hot-toast";
 import Header from './components/Header';
 import Footer from './components/Footer';
+import AdminLayout from './components/AdminLayout';
+import AdminLoginPage from './pages/AdminLoginPage';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ServicePage from './pages/ServicePage';
+import SkillDevelopmentPage from './pages/SkillDevelopmentPage';
+import PersonalityDevelopmentPage from './pages/PersonalityDevelopmentPage';
 import LiveProjectsPage from './pages/LiveProjectsPage';
 import CompletedProjectsPage from './pages/CompletedProjectsPage';
 import BannerPage from './pages/BannerPage';
@@ -19,6 +23,10 @@ import PlacementPage from './pages/PlacementPage';
 import ProgramsPage from './pages/ProgramsPage';
 import SuccessStoriesPage from './pages/SuccessStoriesPage';
 import ContactPage from './pages/ContactPage';
+import EventsPage from './pages/EventsPage';
+import EventDetailPage from './pages/EventDetailPage';
+import AdminEventsPage from './pages/AdminEventsPage';
+import AdminTeam from './pages/AdminTeam';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -31,48 +39,148 @@ const ScrollToTop = () => {
 };
 
 const App = () => {
-   const isAdmin = localStorage.getItem("adminLoggedIn") === "true";
+  const isAdmin = localStorage.getItem("adminLoggedIn") === "true";
   return (
-    <HashRouter>
+    <BrowserRouter>
       <ScrollToTop />
-      <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
-        <Header />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/programs" element={<ProgramsPage />} />
-            <Route path="/success-stories" element={<SuccessStoriesPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/services" element={<ServicePage />} />
-            <Route path="/projects/live" element={<LiveProjectsPage />} />
-            <Route
-              path="/projects/completed"
-              element={<CompletedProjectsPage />}
-            />
-            <Route path="/alumni/register" element={<AlumniRegister />} />
-            <Route path="/alumni/view" element={<ViewAlumni />} />
-            {/* Gallery */}
-            <Route path="/gallery" element={<GalleryPage/>}/>
-           <Route path="/placement" element={<PlacementPage/>}/>
+      <Toaster position="top-center" reverseOrder={false} />
+      <Routes>
+        {/* Public Routes with Header/Footer */}
+        <Route path="/" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><HomePage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/about" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><AboutPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/programs" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><ProgramsPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/success-stories" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><SuccessStoriesPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/contact" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><ContactPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/services" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><ServicePage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/services/skill-development" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><SkillDevelopmentPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/services/personality-development" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><PersonalityDevelopmentPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/projects/live" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><LiveProjectsPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/projects/completed" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><CompletedProjectsPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/alumni/register" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><AlumniRegister /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/alumni/view" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><ViewAlumni /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/gallery" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><GalleryPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/placement" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><PlacementPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/events" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><EventsPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/events/:id" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><EventDetailPage /></main>
+            <Footer />
+          </div>
+        } />
 
-            {isAdmin && (
-              <>
-                <Route path="/admin/banner" element={<BannerPage />} />
-                <Route path="/admin/services" element={<ManageServicesPage />} />
-                <Route path="/admin/gallery" element={<AdminGallery/>}/>
-                <Route path="/admin/placement" element={<AdminPlacementPage/>}/>
-              </>
-            )}
+        {/* Admin Login Route */}
+        <Route path="/admin/login" element={<AdminLoginPage />} />
 
-            {/* Optional fallback for any unknown paths */}
-            <Route path="*" element={<HomePage />} />
-          </Routes>
-        </main>
-        <Footer />
-        <Toaster position="top-center" reverseOrder={false} />
-      </div>
-    </HashRouter>
+        {/* Admin Routes with Admin Layout */}
+        <Route path="/admin" element={isAdmin ? <AdminLayout /> : <Navigate to="/admin/login" />}>
+          <Route path="banner" element={<BannerPage />} />
+          <Route path="services" element={<ManageServicesPage />} />
+          <Route path="gallery" element={<AdminGallery />} />
+          <Route path="placement" element={<AdminPlacementPage />} />
+          <Route path="events" element={<AdminEventsPage />} />
+          <Route path="team" element={<AdminTeam />} />
+        </Route>
+
+        <Route path="*" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><HomePage /></main>
+            <Footer />
+          </div>
+        } />
+      </Routes>
+    </BrowserRouter>
   );
 };
 

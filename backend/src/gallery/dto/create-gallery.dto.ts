@@ -1,4 +1,4 @@
-import { IsString, IsInt,} from 'class-validator';
+import { IsString, IsInt, IsOptional} from 'class-validator';
 
 export class CreateGalleryDto {
   @IsString()
@@ -9,4 +9,8 @@ export class CreateGalleryDto {
 
   @IsString()
   imageUrl: string;
+
+  @IsOptional()
+  @IsString()
+  videoLink?: string;
 }

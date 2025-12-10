@@ -2,19 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Edit, Trash2 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { createTeam, getTeam, updateTeam, deleteTeam } from "../api/Team.js";
+import { uploadImage } from "../api/Gallery.js";
 
-import {
-  createGallery,
-  getGallery,
-  updateGallery,
-  deleteGallery,
-  uploadImage,
-} from "../api/Gallery.js";
-import CategoryDropdown from "../components/common/Categorydropdown.jsx";
-
-export default function AdminGallery() {
-  const [gallery, setGallery] = useState([]);
-  const [form, setForm] = useState({ title: "", category: null, image: null, videoLink: "" });
+export default function AdminTeam() {
+  const [team, setTeam] = useState([]);
+  const [form, setForm] = useState({ name: "", title: "", image: null, order: 0 });
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
@@ -23,15 +16,15 @@ export default function AdminGallery() {
   const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
-    loadGallery();
+    loadTeam();
   }, []);
 
-  const loadGallery = async () => {
+  const loadTeam = async () => {
     try {
-      const data = await getGallery();
-      setGallery(data);
+      const data = await getTeam();
+      setTeam(data);
     } catch {
-      toast.error("Failed to load gallery");
+      toast.error("Failed to load team");
     }
   };
 
@@ -42,7 +35,7 @@ export default function AdminGallery() {
   };
 
   const resetForm = () => {
-    setForm({ title: "", category: null, image: null, videoLink: "" });
+    setForm({ name: "", title: "", image: null, order: 0 });
     setPreview("");
     setEditingItem(null);
     setShowEditModal(false);
@@ -50,11 +43,7 @@ export default function AdminGallery() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Silent validation: just prevent submission if fields missing
-    if (!form.title || !form.category || (!form.image && !editingItem)) {
-      return; // do nothing, no warning
-    }
+    if (!form.name || !form.title || (!form.image && !editingItem)) return;
 
     setLoading(true);
     try {
@@ -65,22 +54,22 @@ export default function AdminGallery() {
       }
 
       const data = {
+        name: form.name,
         title: form.title,
-        categoryId: form.category.id,
         imageUrl,
-        videoLink: form.videoLink || null,
+        order: parseInt(form.order) || 0,
       };
 
       if (editingItem) {
-        await updateGallery(editingItem.id, data);
-        toast.success("Gallery updated successfully");
+        await updateTeam(editingItem.id, data);
+        toast.success("Team member updated successfully");
       } else {
-        await createGallery(data);
-        toast.success("Image added successfully");
+        await createTeam(data);
+        toast.success("Team member added successfully");
       }
 
       resetForm();
-      await loadGallery();
+      await loadTeam();
     } catch (err) {
       toast.error(err.message || "Something went wrong");
     } finally {
@@ -91,10 +80,10 @@ export default function AdminGallery() {
   const handleEdit = (item) => {
     setEditingItem(item);
     setForm({
+      name: item.name,
       title: item.title,
-      category: item.category,
       image: null,
-      videoLink: item.videoLink || "",
+      order: item.order,
     });
     setPreview(item.imageUrl);
     setShowEditModal(true);
@@ -102,9 +91,9 @@ export default function AdminGallery() {
 
   const confirmDelete = async () => {
     try {
-      await deleteGallery(deleteId);
+      await deleteTeam(deleteId);
       toast.success("Deleted successfully");
-      await loadGallery();
+      await loadTeam();
       setShowDeleteModal(false);
       setDeleteId(null);
     } catch {
@@ -115,12 +104,12 @@ export default function AdminGallery() {
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Gallery Management</h1>
+        <h1 className="text-2xl font-bold">Team Management</h1>
         <button
           onClick={() => setShowEditModal(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold"
         >
-          Add New Image
+          Add Team Member
         </button>
       </div>
 
@@ -128,62 +117,63 @@ export default function AdminGallery() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">{editingItem ? 'Edit Gallery' : 'Add Gallery'}</h2>
+              <h2 className="text-2xl font-bold">{editingItem ? 'Edit Team Member' : 'Add Team Member'}</h2>
               <button onClick={resetForm} className="text-gray-500 hover:text-gray-700">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
             <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block font-semibold mb-2">Title</label>
-          <input
-            type="text"
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-            placeholder="Enter image title"
-            className="w-full h-12 p-3 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-600"
-          />
-        </div>
+              <div className="mb-4">
+                <label className="block font-semibold mb-2">Name</label>
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  placeholder="Enter member name"
+                  className="w-full h-12 p-3 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-600"
+                />
+              </div>
 
-        <div className="mb-4">
-          <label className="block font-semibold mb-2">Category</label>
-          <CategoryDropdown
-            value={form.category}
-            onChange={(cat) => setForm({ ...form, category: cat })}
-          />
-        </div>
+              <div className="mb-4">
+                <label className="block font-semibold mb-2">Title</label>
+                <input
+                  type="text"
+                  value={form.title}
+                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  placeholder="Enter member title"
+                  className="w-full h-12 p-3 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-600"
+                />
+              </div>
 
-        <div className="mb-4">
-          <label className="block font-semibold mb-2">Image</label>
-          <div className="flex items-center gap-3">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:cursor-pointer hover:file:bg-blue-100"
-            />
-          </div>
-          {preview && (
-            <div className="mt-3">
-              <img
-                src={preview}
-                alt="Preview"
-                className="w-20 h-20 object-cover rounded border"
-              />
-            </div>
-          )}
-        </div>
+              <div className="mb-4">
+                <label className="block font-semibold mb-2">Order</label>
+                <input
+                  type="number"
+                  value={form.order}
+                  onChange={(e) => setForm({ ...form, order: e.target.value })}
+                  placeholder="Display order"
+                  className="w-full h-12 p-3 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-600"
+                />
+              </div>
 
-        <div className="mb-4">
-          <label className="block font-semibold mb-2">Video Link (Optional)</label>
-          <input
-            type="url"
-            value={form.videoLink}
-            onChange={(e) => setForm({ ...form, videoLink: e.target.value })}
-            placeholder="Enter video URL (YouTube, Vimeo, etc.)"
-            className="w-full h-12 p-3 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-600"
-          />
-        </div>
+              <div className="mb-4">
+                <label className="block font-semibold mb-2">Image</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:cursor-pointer hover:file:bg-blue-100"
+                />
+                {preview && (
+                  <div className="mt-3">
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      className="w-20 h-20 object-cover rounded-full border"
+                    />
+                  </div>
+                )}
+              </div>
 
               <div className="flex gap-4">
                 <button
@@ -210,7 +200,7 @@ export default function AdminGallery() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
             <h3 className="text-xl font-bold text-gray-800 mb-4">Confirm Delete</h3>
-            <p className="text-gray-600 mb-6">Are you sure you want to delete this image?</p>
+            <p className="text-gray-600 mb-6">Are you sure you want to delete this team member?</p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => { setShowDeleteModal(false); setDeleteId(null); }}
@@ -233,46 +223,27 @@ export default function AdminGallery() {
         <table className="min-w-full bg-white rounded-lg shadow-md border">
           <thead>
             <tr className="bg-blue-50 text-left">
-              <th className="p-3">S.No</th>
-              <th className="p-3">Title</th>
-              <th className="p-3">Category</th>
+              <th className="p-3">Order</th>
               <th className="p-3">Image</th>
-              <th className="p-3">Video</th>
+              <th className="p-3">Name</th>
+              <th className="p-3">Title</th>
               <th className="p-3">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {gallery.length ? (
-              gallery.map((item, index) => (
+            {team.length ? (
+              team.map((item) => (
                 <tr key={item.id} className="border-t hover:bg-gray-50">
-                  <td className="p-3">{index + 1}</td>
-                  <td className="p-3">{item.title || "-"}</td>
-                  <td className="p-3">{item.category?.name || "-"}</td>
+                  <td className="p-3">{item.order}</td>
                   <td className="p-3">
-                    {item.imageUrl ? (
-                      <img
-                        src={item.imageUrl}
-                        alt={item.title || "Image"}
-                        className="w-32 h-20 object-cover rounded border"
-                      />
-                    ) : (
-                      "-"
-                    )}
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className="w-12 h-12 object-cover rounded-full border"
+                    />
                   </td>
-                  <td className="p-3">
-                    {item.videoLink ? (
-                      <a
-                        href={item.videoLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800"
-                      >
-                        📹 Video
-                      </a>
-                    ) : (
-                      "-"
-                    )}
-                  </td>
+                  <td className="p-3">{item.name}</td>
+                  <td className="p-3">{item.title}</td>
                   <td className="p-3 flex gap-4">
                     <button
                       onClick={() => handleEdit(item)}
@@ -281,7 +252,10 @@ export default function AdminGallery() {
                       <Edit size={20} />
                     </button>
                     <button
-                      onClick={() => { setDeleteId(item.id); setShowDeleteModal(true); }}
+                      onClick={() => {
+                        setDeleteId(item.id);
+                        setShowDeleteModal(true);
+                      }}
                       className="text-red-600 hover:text-red-800 transition"
                     >
                       <Trash2 size={20} />
@@ -291,16 +265,15 @@ export default function AdminGallery() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="p-4 text-center text-gray-500">
-                  No gallery images
+                <td colSpan="5" className="p-8 text-center text-gray-500">
+                  No team members found
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
-
-      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
+      <ToastContainer />
     </div>
   );
 }

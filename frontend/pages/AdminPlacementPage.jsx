@@ -30,6 +30,9 @@ export default function PlacementAdmin() {
 
   const [placements, setPlacements] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
     fetchAllPlacements();
@@ -92,6 +95,8 @@ export default function PlacementAdmin() {
         experience: "",
         status: true,
       });
+      setShowEditModal(false);
+      setEditId(null);
       fetchAllPlacements();
     } catch (err) {
       console.error(err);
@@ -105,18 +110,19 @@ export default function PlacementAdmin() {
       skills: placement.skills.join(", "),
     });
     setEditId(placement.id);
+    setShowEditModal(true);
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure to delete this placement?")) {
-      try {
-        await deletePlacement(id);
-        toast.success("Placement deleted successfully!");
-        fetchAllPlacements();
-      } catch (err) {
-        console.error(err);
-        alert("Error deleting placement");
-      }
+  const confirmDelete = async () => {
+    try {
+      await deletePlacement(deleteId);
+      toast.success("Placement deleted successfully!");
+      fetchAllPlacements();
+      setShowDeleteModal(false);
+      setDeleteId(null);
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting placement");
     }
   };
 
@@ -124,15 +130,26 @@ export default function PlacementAdmin() {
     <div className="p-6 max-w-6xl mx-auto">
       <ToastContainer position="top-right" autoClose={3000} />
 
-      <h1 className="text-3xl font-bold mb-6">Placement Management</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Placement Management</h1>
+        <button
+          onClick={() => setShowEditModal(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold"
+        >
+          Add New Placement
+        </button>
+      </div>
 
-      {/* Form */}
-      <div className="bg-white p-6 rounded-2xl shadow-lg mb-8">
-        <h2 className="text-xl font-semibold mb-4">
-          {editId ? "Edit Placement" : "Add Placement"}
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">{editId ? 'Edit Placement' : 'Add Placement'}</h2>
+              <button onClick={() => { setShowEditModal(false); setEditId(null); }} className="text-gray-500 hover:text-gray-700">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left Column - Company Details */}
           <div className="space-y-4">
             <InputField
@@ -221,69 +238,96 @@ export default function PlacementAdmin() {
               onChange={(checked) => setForm({ ...form, status: checked })}
             />
           </div>
+            </div>
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={handleAddOrUpdate}
+                className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition"
+              >
+                {editId ? "Update" : "Add"}
+              </button>
+              <button
+                onClick={() => { setShowEditModal(false); setEditId(null); }}
+                className="bg-gray-400 text-white px-6 py-3 rounded-xl hover:bg-gray-500 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
+      )}
 
-        <button
-          onClick={handleAddOrUpdate}
-          className="mt-6 bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 transition"
-        >
-          {editId ? "Update Placement" : "Add Placement"}
-        </button>
-      </div>
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Confirm Delete</h3>
+            <p className="text-gray-600 mb-6">Are you sure you want to delete this placement?</p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => { setShowDeleteModal(false); setDeleteId(null); }}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-      {/* Table/List */}
-      <div className="bg-white rounded-2xl shadow-lg p-6 overflow-x-auto">
-        <h2 className="text-xl font-semibold mb-4">Placement List</h2>
-        <table className="min-w-full table-auto border-collapse">
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white rounded-lg shadow-md border">
           <thead>
-            <tr className="bg-gray-100 text-left">
-              <th className="p-3 border-b">Company</th>
-              <th className="p-3 border-b">Job</th>
-              <th className="p-3 border-b">Location</th>
-              <th className="p-3 border-b">Skills</th>
-              <th className="p-3 border-b">Experience</th>
-              <th className="p-3 border-b">Status</th>
-              <th className="p-3 border-b">Actions</th>
+            <tr className="bg-blue-50 text-left">
+              <th className="p-3">S.No</th>
+              <th className="p-3">Company</th>
+              <th className="p-3">Job</th>
+              <th className="p-3">Location</th>
+              <th className="p-3">Experience</th>
+              <th className="p-3">Status</th>
+              <th className="p-3">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {placements.map((p) => (
-              <tr key={p.id} className="hover:bg-gray-50 transition">
-                <td className="p-3 border-b">{p.companyName}</td>
-                <td className="p-3 border-b">{p.jobTitle}</td>
-                <td className="p-3 border-b">{p.jobLocation}</td>
-                <td className="p-3 border-b">{p.skills.join(", ")}</td>
-                <td className="p-3 border-b">{p.experience} yrs</td>
-                <td className="p-3 border-b">
-                  {p.status ? (
-                    <span className="text-green-600 font-medium">Active</span>
-                  ) : (
-                    <span className="text-red-600 font-medium">Inactive</span>
-                  )}
+            {placements.map((p, index) => (
+              <tr key={p.id} className="border-t hover:bg-gray-50">
+                <td className="p-3">{index + 1}</td>
+                <td className="p-3">{p.companyName}</td>
+                <td className="p-3">{p.jobTitle}</td>
+                <td className="p-3">{p.jobLocation}</td>
+                <td className="p-3">{p.experience} yrs</td>
+                <td className="p-3">
+                  <span className={`px-2 py-1 rounded text-sm ${
+                    p.status ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {p.status ? 'Active' : 'Inactive'}
+                  </span>
                 </td>
-                <td className="p-3 border-b flex space-x-3">
+                <td className="p-3 flex gap-4">
                   <button
                     onClick={() => handleEdit(p)}
-                    className="text-blue-600 hover:text-blue-800"
+                    className="text-blue-600 hover:text-blue-800 transition"
                   >
-                    <Pencil />
+                    <Pencil size={20} />
                   </button>
                   <button
-                    onClick={() => handleDelete(p.id)}
-                    className="text-red-600 hover:text-red-800"
+                    onClick={() => { setDeleteId(p.id); setShowDeleteModal(true); }}
+                    className="text-red-600 hover:text-red-800 transition"
                   >
-                    <Trash2 />
+                    <Trash2 size={20} />
                   </button>
                 </td>
               </tr>
             ))}
             {placements.length === 0 && (
               <tr>
-                <td
-                  colSpan="7"
-                  className="text-center p-4 text-gray-500 italic"
-                >
-                  No placements added yet.
+                <td colSpan="7" className="p-4 text-center text-gray-500">
+                  No placements available
                 </td>
               </tr>
             )}

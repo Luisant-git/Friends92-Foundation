@@ -52,6 +52,7 @@ model Gallery {
   categoryId        Int 
   category          Category @relation(fields: [categoryId],references: [id])
   imageUrl          String
+  videoLink         String?
   createdAt         DateTime @default(now())
 }
 
@@ -78,5 +79,51 @@ model Placement {
 
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  content     String?
+  eventDate   DateTime
+  location    String?
+  imageUrl    String?
+  videoUrl    String?
+  type        EventType @default(EVENT)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum EventType {
+  EVENT
+  NEWS
+}
+
+model Service {
+  id          Int         @id @default(autoincrement())
+  title       String
+  description String
+  content     String?
+  imageUrl    String?
+  type        ServiceType
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum ServiceType {
+  SKILL_DEVELOPMENT
+  PERSONALITY_DEVELOPMENT
+}
+
+model Team {
+  id          Int      @id @default(autoincrement())
+  name        String
+  title       String
+  imageUrl    String
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 

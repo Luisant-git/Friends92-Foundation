@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { MdMail, MdPhone } from "react-icons/md";
 import {
   FaFacebookF,
@@ -33,6 +33,7 @@ const Header = () => {
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    setIsServicesDropdownOpen(false);
   }, [location]);
 
   const handleLogin = async (username, password) => {
@@ -52,6 +53,8 @@ const Header = () => {
     localStorage.removeItem("adminLoggedIn");
     navigate("/");
   };
+
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
 
   const NavLinks = ({ isMobile }) => {
     const navClass = isMobile
@@ -123,14 +126,76 @@ const Header = () => {
           </NavLink>
         </li>
 
-        <li>
-          <NavLink
-            to="/services"
-            className={linkClass}
-            style={({ isActive }) => (isActive ? activeLinkStyle : undefined)}
-          >
-            Services
-          </NavLink>
+        {/* Services Dropdown */}
+        <li className={isMobile ? "" : "relative group"}>
+          {isMobile ? (
+            <div className="flex flex-col space-y-1">
+              <NavLink
+                to="/services"
+                className={linkClass}
+                style={({ isActive }) => (isActive ? activeLinkStyle : undefined)}
+              >
+                Services
+              </NavLink>
+              <div className="ml-4 flex flex-col space-y-1">
+                <NavLink
+                  to="/services/skill-development"
+                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                >
+                  Skill Development
+                </NavLink>
+                <NavLink
+                  to="/services/personality-development"
+                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                >
+                  Personality Development
+                </NavLink>
+                <NavLink
+                  to="/placement"
+                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                >
+                  Placement
+                </NavLink>
+              </div>
+            </div>
+          ) : (
+            <>
+              <button
+                className="flex items-center text-gray-600 hover:text-green-600 transition text-sm px-2 py-1.5 font-medium whitespace-nowrap"
+                onMouseEnter={() => setIsServicesDropdownOpen(true)}
+                onMouseLeave={() => setIsServicesDropdownOpen(false)}
+              >
+                Services
+                <ChevronDown className="w-3 h-3 ml-1" />
+              </button>
+              {isServicesDropdownOpen && (
+                <div 
+                  className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-lg border border-gray-200 py-2 min-w-48 z-50"
+                  onMouseEnter={() => setIsServicesDropdownOpen(true)}
+                  onMouseLeave={() => setIsServicesDropdownOpen(false)}
+                >
+                  <NavLink
+                    to="/services/skill-development"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                  >
+                    Skill Development
+                  </NavLink>
+                  <NavLink
+                    to="/services/personality-development"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                  >
+                    Personality Development
+                  </NavLink>
+                  <NavLink
+                    to="/placement"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                  >
+                    Placement
+                  </NavLink>
+                </div>
+              )}
+            </>
+          )}
         </li>
 
         <li>

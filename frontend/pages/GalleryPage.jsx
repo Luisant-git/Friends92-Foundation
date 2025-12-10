@@ -73,7 +73,7 @@ export default function GalleryPage() {
               key={item.id}
               className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl 
                          transition-all duration-300 cursor-pointer group"
-              onClick={() => setSelectedImage(item)}
+              onClick={() => item.videoLink ? window.open(item.videoLink, '_blank') : setSelectedImage(item)}
             >
               {/* Image */}
               <img
@@ -90,6 +90,17 @@ export default function GalleryPage() {
                 className="w-full h-64 object-cover transition-transform duration-500 
                            group-hover:scale-105"
               />
+
+              {/* Video Icon */}
+              {item.videoLink && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="bg-black/60 rounded-full p-4 group-hover:bg-black/80 transition-colors">
+                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                </div>
+              )}
 
               {/* Light Dark Overlay */}
               <div
