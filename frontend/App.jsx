@@ -27,6 +27,7 @@ import EventsPage from './pages/EventsPage';
 import EventDetailPage from './pages/EventDetailPage';
 import AdminEventsPage from './pages/AdminEventsPage';
 import AdminTeam from './pages/AdminTeam';
+import DonatePage from './pages/DonatePage';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -155,6 +156,13 @@ const App = () => {
           <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
             <Header />
             <main className="flex-grow"><EventDetailPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/donate" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><DonatePage /></main>
             <Footer />
           </div>
         } />
