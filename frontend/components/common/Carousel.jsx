@@ -3,6 +3,12 @@ import GalleryCard from "./GalleryCard.jsx";
 import ImageModal from "./GalleryModel.jsx";
 import { getGalleryLimit } from "../../api/Gallery.js";
 
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return null;
+  const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/)?.[1];
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+};
+
 
 export default function Carousel() {
   const trackRef = useRef(null);
@@ -46,9 +52,11 @@ export default function Carousel() {
       const maxDist = center;
       const scale = Math.max(0.85, 1.2 - (dist / maxDist) * 0.35);
 
-      child.style.transform = `scale(${scale})`;
-      child.style.transition = "transform 0.25s ease-out";
-      child.style.boxShadow = "0 8px 18px rgba(0,0,0,0.18)";
+      const innerCard = child.querySelector('.w-full');
+      if (innerCard) {
+        innerCard.style.transform = `scale(${scale})`;
+        innerCard.style.transition = "transform 0.25s ease-out";
+      }
     });
 
     trackRef.current.style.transform = `translateX(${pos.current}px)`;
@@ -104,7 +112,7 @@ export default function Carousel() {
 
   // INDICATOR CLICK
   const jumpTo = (i) => {
-    const width = 220; // your card width
+    const width = 220;
     pos.current = -(i * (width + 24));
     applyTransform();
     setCurrentIndex(i);
@@ -114,15 +122,24 @@ export default function Carousel() {
     <div className="relative w-full overflow-hidden py-6 px-6 sm:px-10 lg:px-16">
       {/* Main Carousel */}
       <div className="overflow-hidden">
-        <div ref={trackRef} className="flex items-center gap-6 cursor-pointer">
+        <div ref={trackRef} className="flex items-center cursor-pointer gap-4">
           {doubled.map((img, i) => (
-            <div
-              key={img.id + "-" + i}
-              className="flex-shrink-0 transition-all duration-300"
-              onClick={() => setSelected(img)}
-            >
-              <GalleryCard image={img} />
-            </div>
+            img.isVideo ? (
+              <div key={img.id + "-" + i} className="p-3 cursor-pointer bg-transparent flex-shrink-0">
+                <div className="w-full h-52 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-transparent">
+                  <iframe
+                    src={getYouTubeEmbedUrl(img.imageUrl)}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            ) : (
+              <div key={img.id + "-" + i} className="flex-shrink-0" onClick={() => setSelected(img)}>
+                <GalleryCard image={img} />
+              </div>
+            )
           ))}
         </div>
       </div>

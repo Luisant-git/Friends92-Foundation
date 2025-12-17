@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsOptional} from 'class-validator';
+import { IsString, IsInt, IsOptional, IsBoolean} from 'class-validator';
 
 export class CreateGalleryDto {
   @IsString()
@@ -11,6 +11,6 @@ export class CreateGalleryDto {
   imageUrl: string;
 
   @IsOptional()
-  @IsString()
-  videoLink?: string;
+  @IsBoolean()
+  isVideo?: boolean;
 }

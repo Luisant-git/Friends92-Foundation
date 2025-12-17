@@ -52,7 +52,7 @@ model Gallery {
   categoryId        Int 
   category          Category @relation(fields: [categoryId],references: [id])
   imageUrl          String
-  videoLink         String?
+  isVideo           Boolean  @default(false)
   createdAt         DateTime @default(now())
 }
 
@@ -116,14 +116,50 @@ enum ServiceType {
   PERSONALITY_DEVELOPMENT
 }
 
+model Volunteer {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  department          String
+  mobile1             String
+  mobile2             String?
+  email               String
+  profession          String
+  companyName         String?
+  designation         String?
+  companyDepartment   String?
+  companyPlace        String?
+  businessName        String?
+  natureOfBusiness    String?
+  businessPlace       String?
+  businessAddress     String?
+  permanentAddress    String
+  servicesOffered     String
+  remarks             String?
+  photoUrl            String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
 model Team {
   id          Int      @id @default(autoincrement())
   name        String
-  title       String
+  phone       String?
+  designation String?
+  description String?
   imageUrl    String
   order       Int      @default(0)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Trust {
+  id           Int     @id @default(autoincrement())
+  name         String
+  imageUrl     String
+  order        Int     @default(0)
+  isActive     Boolean @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 

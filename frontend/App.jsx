@@ -27,6 +27,10 @@ import EventsPage from './pages/EventsPage';
 import EventDetailPage from './pages/EventDetailPage';
 import AdminEventsPage from './pages/AdminEventsPage';
 import AdminTeam from './pages/AdminTeam';
+import AdminTrust from './pages/AdminTrust';
+import TeamPage from './pages/TeamPage';
+import VolunteerPage from './pages/VolunteerPage';
+import AdminVolunteerPage from './pages/AdminVolunteerPage';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -158,6 +162,20 @@ const App = () => {
             <Footer />
           </div>
         } />
+        <Route path="/team" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><TeamPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/volunteer" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><VolunteerPage /></main>
+            <Footer />
+          </div>
+        } />
 
         {/* Admin Login Route */}
         <Route path="/admin/login" element={<AdminLoginPage />} />
@@ -170,6 +188,8 @@ const App = () => {
           <Route path="placement" element={<AdminPlacementPage />} />
           <Route path="events" element={<AdminEventsPage />} />
           <Route path="team" element={<AdminTeam />} />
+          <Route path="trust" element={<AdminTrust />} />
+          <Route path="volunteer" element={<AdminVolunteerPage />} />
         </Route>
 
         <Route path="*" element={

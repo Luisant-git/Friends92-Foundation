@@ -3,6 +3,12 @@ import { getGallery, getCategories } from "../api/Gallery";
 import ImageModal from "../components/common/GalleryModel";
 import GalleryCard from "../components/common/GalleryCard";
 
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return null;
+  const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/)?.[1];
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+};
+
 export default function GalleryPage() {
   const [categories, setCategories] = useState([]);
   const [gallery, setGallery] = useState([]);
@@ -72,47 +78,35 @@ export default function GalleryPage() {
             <div
               key={item.id}
               className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl 
-                         transition-all duration-300 cursor-pointer group"
-              onClick={() => item.videoLink ? window.open(item.videoLink, '_blank') : setSelectedImage(item)}
+                         transition-all duration-300 group"
             >
-              {/* Image */}
-              <img
-                src={
-                  item?.src ||
-                  item?.url ||
-                  item?.image ||
-                  item?.imageUrl ||
-                  item?.image_url ||
-                  item?.img ||
-                  ""
-                }
-                alt={item?.title || ""}
-                className="w-full h-64 object-cover transition-transform duration-500 
-                           group-hover:scale-105"
-              />
-
-              {/* Video Icon */}
-              {item.videoLink && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-black/60 rounded-full p-4 group-hover:bg-black/80 transition-colors">
-                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                  </div>
+              {item.isVideo ? (
+                <div className="w-full h-64">
+                  <iframe
+                    src={getYouTubeEmbedUrl(item.imageUrl)}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <div className="cursor-pointer" onClick={() => setSelectedImage(item)}>
+                  <img
+                    src={item.imageUrl}
+                    alt={item?.title || ""}
+                    className="w-full h-64 object-cover transition-transform duration-500 
+                               group-hover:scale-105"
+                  />
+                  <div
+                    className="absolute inset-0 bg-black/0 group-hover:bg-black/20 
+                                 transition-all duration-300 ease-out"
+                  />
                 </div>
               )}
 
-              {/* Light Dark Overlay */}
-              <div
-                className="absolute inset-0 bg-black/0 group-hover:bg-black/20 
-                             transition-all duration-300 ease-out"
-              />
-
               {/* Title - Bottom Left */}
               <div
-                className="absolute bottom-0 left-0 right-0 p-4 
-                             transform translate-y-full group-hover:translate-y-0 
-                             transition-transform duration-300 ease-out"
+                className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent"
               >
                 <div className="text-left">
                   <h3 className="text-white font-semibold text-lg drop-shadow-lg">

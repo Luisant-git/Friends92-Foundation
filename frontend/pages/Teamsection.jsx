@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { getTeam } from "../api/Team.js";
+import { getTrust } from "../api/Trust.js";
 
 const TeamSection = () => {
-  const [teamMembers, setTeamMembers] = useState([]);
+  const [trustLogos, setTrustLogos] = useState([]);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    loadTeam();
+    loadTrust();
   }, []);
 
-  const loadTeam = async () => {
+  const loadTrust = async () => {
     try {
-      const data = await getTeam();
-      setTeamMembers(data);
+      const data = await getTrust();
+      setTrustLogos(data.filter(item => item.isActive));
     } catch (error) {
-      console.error('Failed to load team:', error);
+      console.error('Failed to load trust:', error);
     }
   };
 
   const prevSlide = () => {
-    setIndex((prev) => (prev <= 0 ? Math.max(0, teamMembers.length - 5) : prev - 1));
+    setIndex((prev) => (prev <= 0 ? Math.max(0, trustLogos.length - 5) : prev - 1));
   };
 
   const nextSlide = () => {
-    setIndex((prev) => (prev >= Math.max(0, teamMembers.length - 5) ? 0 : prev + 1));
+    setIndex((prev) => (prev >= Math.max(0, trustLogos.length - 5) ? 0 : prev + 1));
   };
 
   return (
@@ -32,16 +32,16 @@ const TeamSection = () => {
       {/* Heading */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-2xl font-bold text-brand-dark sm:text-3xl md:text-4xl">
-          Our Honourable Team Members
+          Our Trusted Partners
         </h2>
         <p className="mt-3 text-base sm:text-lg max-w-2xl mx-auto text-slate-600 px-4">
-          Meet the dedicated leaders shaping the future.
+          Organizations that trust and support us.
         </p>
       </div>
 
       {/* MOBILE VIEW – Slider with Prev/Next + Clickable Dots */}
       <div className="md:hidden mt-8 px-4 relative">
-        {teamMembers.length > 0 && (
+        {trustLogos.length > 0 && (
           <>
             <div className="overflow-hidden">
               <div
@@ -50,21 +50,15 @@ const TeamSection = () => {
                   transform: `translateX(-${index * 100}%)`,
                 }}
               >
-                {teamMembers.map((member, i) => (
+                {trustLogos.map((logo, i) => (
                   <div key={i} className="min-w-full text-center px-4">
                     <div className="w-28 h-28 sm:w-32 sm:h-32 mx-auto">
                       <img
-                        src={member.imageUrl}
-                        alt={member.name}
+                        src={logo.imageUrl}
+                        alt={logo.name}
                         className="rounded-full w-full h-full object-cover shadow-lg"
                       />
                     </div>
-                    <h3 className="mt-4 text-base sm:text-lg font-semibold text-brand-dark px-2">
-                      {member.name}
-                    </h3>
-                    <p className="text-brand-accent text-sm font-medium px-2">
-                      {member.title}
-                    </p>
                   </div>
                 ))}
               </div>
@@ -72,7 +66,7 @@ const TeamSection = () => {
 
             <button
               onClick={() =>
-                setIndex(index === 0 ? teamMembers.length - 1 : index - 1)
+                setIndex(index === 0 ? trustLogos.length - 1 : index - 1)
               }
               className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-2 rounded-full hover:bg-gray-100 transition"
             >
@@ -81,7 +75,7 @@ const TeamSection = () => {
 
             <button
               onClick={() =>
-                setIndex(index === teamMembers.length - 1 ? 0 : index + 1)
+                setIndex(index === trustLogos.length - 1 ? 0 : index + 1)
               }
               className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-2 rounded-full hover:bg-gray-100 transition"
             >
@@ -89,7 +83,7 @@ const TeamSection = () => {
             </button>
 
             <div className="flex justify-center mt-6 space-x-2">
-              {teamMembers.map((_, i) => (
+              {trustLogos.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setIndex(i)}
@@ -105,7 +99,7 @@ const TeamSection = () => {
 
       {/* DESKTOP/TABLET VIEW */}
       <div className="hidden md:block relative mt-10 max-w-7xl mx-auto px-20">
-        {teamMembers.length > 5 && (
+        {trustLogos.length > 5 && (
           <>
             <button
               onClick={prevSlide}
@@ -132,24 +126,18 @@ const TeamSection = () => {
               transform: `translateX(-${index * 20}%)`,
             }}
           >
-            {teamMembers.map((member, i) => (
+            {trustLogos.map((logo, i) => (
               <div
                 key={i}
                 className="min-w-[20%] text-center flex flex-col items-center flex-shrink-0"
               >
                 <div className="w-36 h-36 mx-auto">
                   <img
-                    src={member.imageUrl}
-                    alt={member.name}
+                    src={logo.imageUrl}
+                    alt={logo.name}
                     className="rounded-full w-full h-full object-cover shadow-lg"
                   />
                 </div>
-                <h3 className="mt-3 text-base font-semibold text-brand-dark px-2">
-                  {member.name}
-                </h3>
-                <p className="text-brand-accent text-sm font-medium px-2">
-                  {member.title}
-                </p>
               </div>
             ))}
           </div>

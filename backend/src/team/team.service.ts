@@ -11,7 +11,9 @@ export class TeamService {
     return this.prisma.team.create({
       data: {
         name: data.name,
-        title: data.title,
+        designation: data.designation,
+        phone: data.phone,
+        description: data.description,
         imageUrl: data.imageUrl,
         order: data.order || 0,
         isActive: data.isActive ?? true,
@@ -21,7 +23,6 @@ export class TeamService {
 
   async findAll() {
     return this.prisma.team.findMany({
-      where: { isActive: true },
       orderBy: { order: 'asc' },
     });
   }

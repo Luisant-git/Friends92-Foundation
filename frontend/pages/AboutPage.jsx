@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getTeam } from '../api/Team.js';
 
 const AboutPage = () => {
   const trustees = [
@@ -8,12 +9,20 @@ const AboutPage = () => {
     { name: 'Emily Davis', role: 'Secretary', photo: 'https://picsum.photos/300/300?random=4', bio: 'Legal professional committed to governance excellence and organizational transparency.' }
   ];
 
-  const team = [
-    { name: 'David Wilson', role: 'Executive Director', photo: 'https://picsum.photos/200/200?random=5' },
-    { name: 'Lisa Anderson', role: 'Program Manager', photo: 'https://picsum.photos/200/200?random=6' },
-    { name: 'James Brown', role: 'Community Outreach', photo: 'https://picsum.photos/200/200?random=7' },
-    { name: 'Maria Garcia', role: 'Operations Manager', photo: 'https://picsum.photos/200/200?random=8' }
-  ];
+  const [team, setTeam] = useState([]);
+
+  useEffect(() => {
+    loadTeam();
+  }, []);
+
+  const loadTeam = async () => {
+    try {
+      const data = await getTeam();
+      setTeam(data.filter(member => member.isActive));
+    } catch (error) {
+      console.error('Failed to load team:', error);
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -31,7 +40,7 @@ const AboutPage = () => {
           <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">History</h2>
           <div className="max-w-4xl mx-auto">
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              Founded in 1992, Friends 92 Foundation emerged from a shared vision among classmates to create lasting positive change in our community. What began as a small group of dedicated individuals has grown into a thriving organization touching thousands of lives.
+              Founded in 1992, Gptck92 trust emerged from a shared vision among classmates to create lasting positive change in our community. What began as a small group of dedicated individuals has grown into a thriving organization touching thousands of lives.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
               Over three decades, we've evolved from grassroots initiatives to comprehensive programs in education, healthcare, and community development, always staying true to our founding principles of compassion, integrity, and excellence.
@@ -138,12 +147,14 @@ const AboutPage = () => {
           <h2 className="text-4xl font-bold text-center text-gray-800 mb-4">Dedicated Team</h2>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Meet the passionate professionals who bring our vision to life every day.</p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            {team.map((member, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition text-center">
-                <img src={member.photo} alt={member.name} className="w-full h-48 object-cover" />
+            {team.map((member) => (
+              <div key={member.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition text-center">
+                <img src={member.imageUrl} alt={member.name} className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-800 mb-1">{member.name}</h3>
-                  <p className="text-blue-600">{member.role}</p>
+                  {member.designation && <p className="text-blue-600 mb-2">{member.designation}</p>}
+                  {member.description && <p className="text-gray-600 text-sm mb-2">{member.description}</p>}
+                  {member.phone && <p className="text-gray-600 text-sm">{member.phone}</p>}
                 </div>
               </div>
             ))}

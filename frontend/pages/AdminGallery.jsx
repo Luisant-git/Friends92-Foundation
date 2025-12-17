@@ -14,7 +14,7 @@ import CategoryDropdown from "../components/common/Categorydropdown.jsx";
 
 export default function AdminGallery() {
   const [gallery, setGallery] = useState([]);
-  const [form, setForm] = useState({ title: "", category: null, image: null, videoLink: "" });
+  const [form, setForm] = useState({ title: "", category: null, image: null, isVideo: false });
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
@@ -41,8 +41,21 @@ export default function AdminGallery() {
     setPreview(file ? URL.createObjectURL(file) : "");
   };
 
+  const extractYouTubeUrl = (input) => {
+    if (!input) return '';
+    // Extract URL from iframe if pasted
+    const iframeSrc = input.match(/src=["']([^"']+)["']/)?.[1];
+    return iframeSrc || input;
+  };
+
+  const getYouTubeEmbedUrl = (url) => {
+    if (!url) return null;
+    const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/)?.[1];
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  };
+
   const resetForm = () => {
-    setForm({ title: "", category: null, image: null, videoLink: "" });
+    setForm({ title: "", category: null, image: null, isVideo: false });
     setPreview("");
     setEditingItem(null);
     setShowEditModal(false);
@@ -67,8 +80,8 @@ export default function AdminGallery() {
       const data = {
         title: form.title,
         categoryId: form.category.id,
-        imageUrl,
-        videoLink: form.videoLink || null,
+        imageUrl: form.isVideo ? form.image : imageUrl,
+        isVideo: form.isVideo,
       };
 
       if (editingItem) {
@@ -93,8 +106,8 @@ export default function AdminGallery() {
     setForm({
       title: item.title,
       category: item.category,
-      image: null,
-      videoLink: item.videoLink || "",
+      image: item.imageUrl,
+      isVideo: item.isVideo || false,
     });
     setPreview(item.imageUrl);
     setShowEditModal(true);
@@ -154,35 +167,53 @@ export default function AdminGallery() {
         </div>
 
         <div className="mb-4">
-          <label className="block font-semibold mb-2">Image</label>
-          <div className="flex items-center gap-3">
+          <label className="flex items-center gap-2 font-semibold mb-2">
+            <input
+              type="checkbox"
+              checked={form.isVideo}
+              onChange={(e) => setForm({ ...form, isVideo: e.target.checked, image: null })}
+              className="w-4 h-4"
+            />
+            This is a YouTube Video
+          </label>
+        </div>
+
+        <div className="mb-4">
+          <label className="block font-semibold mb-2">{form.isVideo ? 'YouTube URL' : 'Image'}</label>
+          {form.isVideo ? (
+            <input
+              type="text"
+              value={form.image || ''}
+              onChange={(e) => setForm({ ...form, image: extractYouTubeUrl(e.target.value) })}
+              placeholder="Enter YouTube URL or paste iframe code"
+              className="w-full h-12 p-3 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-600"
+            />
+          ) : (
             <input
               type="file"
               accept="image/*"
               onChange={handleImageChange}
               className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:cursor-pointer hover:file:bg-blue-100"
             />
-          </div>
+          )}
           {preview && (
             <div className="mt-3">
-              <img
-                src={preview}
-                alt="Preview"
-                className="w-20 h-20 object-cover rounded border"
-              />
+              {form.isVideo ? (
+                <iframe
+                  src={getYouTubeEmbedUrl(preview)}
+                  className="w-full h-40 rounded border"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="w-20 h-20 object-cover rounded border"
+                />
+              )}
             </div>
           )}
-        </div>
-
-        <div className="mb-4">
-          <label className="block font-semibold mb-2">Video Link (Optional)</label>
-          <input
-            type="url"
-            value={form.videoLink}
-            onChange={(e) => setForm({ ...form, videoLink: e.target.value })}
-            placeholder="Enter video URL (YouTube, Vimeo, etc.)"
-            className="w-full h-12 p-3 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-600"
-          />
         </div>
 
               <div className="flex gap-4">
@@ -236,8 +267,8 @@ export default function AdminGallery() {
               <th className="p-3">S.No</th>
               <th className="p-3">Title</th>
               <th className="p-3">Category</th>
-              <th className="p-3">Image</th>
-              <th className="p-3">Video</th>
+              <th className="p-3">Type</th>
+              <th className="p-3">Preview</th>
               <th className="p-3">Actions</th>
             </tr>
           </thead>
@@ -249,49 +280,48 @@ export default function AdminGallery() {
                   <td className="p-3">{item.title || "-"}</td>
                   <td className="p-3">{item.category?.name || "-"}</td>
                   <td className="p-3">
-                    {item.imageUrl ? (
-                      <img
-                        src={item.imageUrl}
-                        alt={item.title || "Image"}
-                        className="w-32 h-20 object-cover rounded border"
+                    <span className={`px-2 py-1 rounded text-xs ${
+                      item.isVideo ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {item.isVideo ? 'Video' : 'Image'}
+                    </span>
+                  </td>
+                  <td className="p-3">
+                    {item.isVideo ? (
+                      <iframe
+                        src={getYouTubeEmbedUrl(item.imageUrl)}
+                        className="w-32 h-20 rounded border"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       />
                     ) : (
-                      "-"
+                      <img
+                        src={item.imageUrl}
+                        alt={item.title}
+                        className="w-32 h-20 object-cover rounded border"
+                      />
                     )}
                   </td>
                   <td className="p-3">
-                    {item.videoLink ? (
-                      <a
-                        href={item.videoLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800"
+                    <div className="flex gap-4">
+                      <button
+                        onClick={() => handleEdit(item)}
+                        className="text-blue-600 hover:text-blue-800 transition"
                       >
-                        📹 Video
-                      </a>
-                    ) : (
-                      "-"
-                    )}
-                  </td>
-                  <td className="p-3 flex gap-4">
-                    <button
-                      onClick={() => handleEdit(item)}
-                      className="text-blue-600 hover:text-blue-800 transition"
-                    >
-                      <Edit size={20} />
-                    </button>
-                    <button
-                      onClick={() => { setDeleteId(item.id); setShowDeleteModal(true); }}
-                      className="text-red-600 hover:text-red-800 transition"
-                    >
-                      <Trash2 size={20} />
-                    </button>
+                        <Edit size={20} />
+                      </button>
+                      <button
+                        onClick={() => { setDeleteId(item.id); setShowDeleteModal(true); }}
+                        className="text-red-600 hover:text-red-800 transition"
+                      >
+                        <Trash2 size={20} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="p-4 text-center text-gray-500">
+                <td colSpan="6" className="p-4 text-center text-gray-500">
                   No gallery images
                 </td>
               </tr>

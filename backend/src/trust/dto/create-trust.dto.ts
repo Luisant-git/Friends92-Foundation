@@ -1,20 +1,8 @@
 import { IsString, IsInt, IsOptional, IsBoolean } from 'class-validator';
 
-export class CreateTeamDto {
+export class CreateTrustDto {
   @IsString()
   name: string;
-
-  @IsOptional()
-  @IsString()
-  designation?: string;
-
-  @IsOptional()
-  @IsString()
-  phone?: string;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
 
   @IsString()
   imageUrl: string;

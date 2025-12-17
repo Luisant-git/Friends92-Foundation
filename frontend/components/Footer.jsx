@@ -141,7 +141,7 @@ const Footer = () => {
         </div>
         <div className="mt-12 border-t border-slate-700 pt-8 text-center text-slate-400">
           <p>
-            &copy; {new Date().getFullYear()} friends92foundation. All Rights Reserved.
+            &copy; {new Date().getFullYear()} gptck92trust. All Rights Reserved.
           </p>
         </div>
       </div>

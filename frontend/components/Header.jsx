@@ -281,7 +281,7 @@ const Header = () => {
           >
             <Friends92Logo className="w-9 h-9 text-green-600" />
             <span className="font-bold text-gray-800 text-sm md:text-base">
-              FRIENDS <span className="text-green-600">92</span> FOUNDATION
+              GPTCK <span className="text-green-600">92</span> TRUST
             </span>
           </Link>
 
