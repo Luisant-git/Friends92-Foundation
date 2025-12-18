@@ -119,10 +119,12 @@ enum ServiceType {
 model Volunteer {
   id                  Int      @id @default(autoincrement())
   name                String
-  department          String
+  service             String
   mobile1             String
   mobile2             String?
-  email               String
+  email               String   @unique
+  password            String
+  isActive            Boolean  @default(false)
   profession          String
   companyName         String?
   designation         String?
@@ -134,7 +136,6 @@ model Volunteer {
   businessAddress     String?
   permanentAddress    String
   servicesOffered     String
-  remarks             String?
   photoUrl            String?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt

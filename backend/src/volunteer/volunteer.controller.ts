@@ -6,6 +6,7 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  Patch,
 } from '@nestjs/common';
 import { VolunteerService } from './volunteer.service';
 import { CreateVolunteerDto } from './volunteer.dto';
@@ -32,5 +33,20 @@ export class VolunteerController {
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     return this.volunteerService.remove(id);
+  }
+
+  @Patch(':id/approve')
+  async approve(@Param('id', ParseIntPipe) id: number) {
+    return this.volunteerService.approveVolunteer(id);
+  }
+
+  @Patch(':id/activate')
+  async activate(@Param('id', ParseIntPipe) id: number) {
+    return this.volunteerService.activateVolunteer(id);
+  }
+
+  @Post('login')
+  async login(@Body() body: { email: string; password: string }) {
+    return this.volunteerService.login(body.email, body.password);
   }
 }

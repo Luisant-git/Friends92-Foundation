@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Trash2, Eye } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getVolunteers, deleteVolunteer } from '../api/Volunteer';
+import { getVolunteers, deleteVolunteer, approveVolunteer, activateVolunteer } from '../api/Volunteer';
 
 const AdminVolunteerPage = () => {
   const [volunteers, setVolunteers] = useState([]);
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [filterDepartment, setFilterDepartment] = useState('');
+  const [filterService, setFilterService] = useState('');
 
   useEffect(() => {
     fetchVolunteers();
@@ -36,24 +36,46 @@ const AdminVolunteerPage = () => {
     }
   };
 
+  const handleApprove = async (id) => {
+    try {
+      await approveVolunteer(id);
+      toast.success('Volunteer approved! Selection email sent.');
+      fetchVolunteers();
+    } catch (err) {
+      toast.error('Failed to approve volunteer');
+    }
+  };
+
+  const handleActivate = async (id) => {
+    try {
+      await activateVolunteer(id);
+      toast.success('Volunteer activated! Activation email sent.');
+      fetchVolunteers();
+    } catch (err) {
+      toast.error('Failed to activate volunteer');
+    }
+  };
+
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Volunteer Management</h1>
+        <h1 className="text-2xl font-bold">Volunteer Requests</h1>
         <select
-          value={filterDepartment}
-          onChange={(e) => setFilterDepartment(e.target.value)}
+          value={filterService}
+          onChange={(e) => setFilterService(e.target.value)}
           className="px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
         >
-          <option value="">All Departments</option>
-          <option value="CSE">CSE</option>
-          <option value="ECE">ECE</option>
-          <option value="EEE">EEE</option>
-          <option value="MECH">MECH</option>
-          <option value="CIVIL">CIVIL</option>
-          <option value="IT">IT</option>
+          <option value="">All Services</option>
+          <option value="Education & Tutoring">Education & Tutoring</option>
+          <option value="Skill Development">Skill Development</option>
+          <option value="Career Counseling">Career Counseling</option>
+          <option value="Event Management">Event Management</option>
+          <option value="Fundraising">Fundraising</option>
+          <option value="Social Media & Marketing">Social Media & Marketing</option>
+          <option value="Community Outreach">Community Outreach</option>
+          <option value="Administrative Support">Administrative Support</option>
         </select>
       </div>
 
@@ -97,7 +119,7 @@ const AdminVolunteerPage = () => {
               )}
               <div className="grid md:grid-cols-2 gap-4">
                 <div><strong>Name:</strong> {selectedVolunteer.name}</div>
-                <div><strong>Department:</strong> {selectedVolunteer.department}</div>
+                <div><strong>Service Area:</strong> {selectedVolunteer.service}</div>
                 <div><strong>Mobile 1:</strong> {selectedVolunteer.mobile1}</div>
                 <div><strong>Mobile 2:</strong> {selectedVolunteer.mobile2 || '-'}</div>
                 <div><strong>Email:</strong> {selectedVolunteer.email}</div>
@@ -108,7 +130,6 @@ const AdminVolunteerPage = () => {
               </div>
               <div><strong>Permanent Address:</strong> {selectedVolunteer.permanentAddress}</div>
               <div><strong>Services Offered:</strong> {selectedVolunteer.servicesOffered}</div>
-              {selectedVolunteer.remarks && <div><strong>Remarks:</strong> {selectedVolunteer.remarks}</div>}
             </div>
           </div>
         </div>
@@ -122,35 +143,61 @@ const AdminVolunteerPage = () => {
               <th className="p-3">Name</th>
               <th className="p-3 hidden md:table-cell">Email</th>
               <th className="p-3 hidden sm:table-cell">Mobile</th>
-              <th className="p-3 hidden lg:table-cell">Profession</th>
+              <th className="p-3 hidden lg:table-cell">Status</th>
               <th className="p-3">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {volunteers.filter(v => !filterDepartment || v.department === filterDepartment).map((volunteer, index) => (
+            {volunteers.filter(v => !filterService || v.service === filterService).map((volunteer, index) => (
               <tr key={volunteer.id} className="border-t hover:bg-gray-50">
                 <td className="p-3">{index + 1}</td>
                 <td className="p-3">{volunteer.name}</td>
                 <td className="p-3 hidden md:table-cell">{volunteer.email}</td>
                 <td className="p-3 hidden sm:table-cell">{volunteer.mobile1}</td>
-                <td className="p-3 hidden lg:table-cell">{volunteer.profession}</td>
-                <td className="p-3 flex gap-4">
+                <td className="p-3 hidden lg:table-cell">
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    volunteer.isActive ? 'bg-green-100 text-green-800' : 
+                    volunteer.password ? 'bg-yellow-100 text-yellow-800' : 
+                    'bg-gray-100 text-gray-800'
+                  }`}>
+                    {volunteer.isActive ? 'Active' : volunteer.password ? 'Approved' : 'Pending'}
+                  </span>
+                </td>
+                <td className="p-3 flex gap-2 flex-wrap">
                   <button
                     onClick={() => setSelectedVolunteer(volunteer)}
                     className="text-blue-600 hover:text-blue-800 transition"
+                    title="View Details"
                   >
                     <Eye size={20} />
                   </button>
+                  {!volunteer.password && (
+                    <button
+                      onClick={() => handleApprove(volunteer.id)}
+                      className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
+                    >
+                      Approve
+                    </button>
+                  )}
+                  {volunteer.password && !volunteer.isActive && (
+                    <button
+                      onClick={() => handleActivate(volunteer.id)}
+                      className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
+                    >
+                      Activate
+                    </button>
+                  )}
                   <button
                     onClick={() => { setDeleteId(volunteer.id); setShowDeleteModal(true); }}
                     className="text-red-600 hover:text-red-800 transition"
+                    title="Delete"
                   >
                     <Trash2 size={20} />
                   </button>
                 </td>
               </tr>
             ))}
-            {volunteers.filter(v => !filterDepartment || v.department === filterDepartment).length === 0 && (
+            {volunteers.filter(v => !filterService || v.service === filterService).length === 0 && (
               <tr>
                 <td colSpan="6" className="p-4 text-center text-gray-500">
                   No volunteers registered yet

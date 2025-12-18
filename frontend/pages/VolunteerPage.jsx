@@ -5,7 +5,7 @@ import { uploadImage } from '../api/Upload';
 const VolunteerPage = () => {
   const [form, setForm] = useState({
     name: '',
-    department: '',
+    service: '',
     mobile1: '',
     mobile2: '',
     email: '',
@@ -20,13 +20,13 @@ const VolunteerPage = () => {
     businessAddress: '',
     permanentAddress: '',
     servicesOffered: '',
-    remarks: '',
     photoUrl: ''
   });
   
   const [photoFile, setPhotoFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [willProvideServices, setWillProvideServices] = useState(false);
 
   const handlePhotoChange = async (e) => {
     const file = e.target.files[0];
@@ -43,7 +43,7 @@ const VolunteerPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.mobile1 || !form.department) {
+    if (!form.name || !form.email || !form.mobile1 || !form.service) {
       alert('Please fill all required fields');
       return;
     }
@@ -54,7 +54,7 @@ const VolunteerPage = () => {
       setShowSuccess(true);
       setForm({
         name: '',
-        department: '',
+        service: '',
         mobile1: '',
         mobile2: '',
         email: '',
@@ -69,7 +69,6 @@ const VolunteerPage = () => {
         businessAddress: '',
         permanentAddress: '',
         servicesOffered: '',
-        remarks: '',
         photoUrl: ''
       });
       setPhotoFile(null);
@@ -107,20 +106,22 @@ const VolunteerPage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Department *</label>
+                <label className="block text-sm font-medium mb-2">Service Area *</label>
                 <select
-                  value={form.department}
-                  onChange={(e) => setForm({ ...form, department: e.target.value })}
+                  value={form.service}
+                  onChange={(e) => setForm({ ...form, service: e.target.value })}
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
                   required
                 >
-                  <option value="">Select Department</option>
-                  <option value="CSE">CSE</option>
-                  <option value="ECE">ECE</option>
-                  <option value="EEE">EEE</option>
-                  <option value="MECH">MECH</option>
-                  <option value="CIVIL">CIVIL</option>
-                  <option value="IT">IT</option>
+                  <option value="">Select Service</option>
+                  <option value="Education & Tutoring">Education & Tutoring</option>
+                  <option value="Skill Development">Skill Development</option>
+                  <option value="Career Counseling">Career Counseling</option>
+                  <option value="Event Management">Event Management</option>
+                  <option value="Fundraising">Fundraising</option>
+                  <option value="Social Media & Marketing">Social Media & Marketing</option>
+                  <option value="Community Outreach">Community Outreach</option>
+                  <option value="Administrative Support">Administrative Support</option>
                 </select>
               </div>
 
@@ -262,24 +263,35 @@ const VolunteerPage = () => {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-2">Willing to provide services to friends & Alumni</label>
-              <textarea
-                value={form.servicesOffered}
-                onChange={(e) => setForm({ ...form, servicesOffered: e.target.value })}
-                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                rows="3"
-              />
-            </div>
+            <div className="border-t pt-6">
+              <div className="flex items-center gap-3 mb-4">
+                <input
+                  type="checkbox"
+                  id="willProvideServices"
+                  checked={willProvideServices}
+                  onChange={(e) => {
+                    setWillProvideServices(e.target.checked);
+                    if (!e.target.checked) setForm({ ...form, servicesOffered: '' });
+                  }}
+                  className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500"
+                />
+                <label htmlFor="willProvideServices" className="text-sm font-medium cursor-pointer">
+                  Are you willing to provide services to friends & alumni?
+                </label>
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-2">Remarks</label>
-              <textarea
-                value={form.remarks}
-                onChange={(e) => setForm({ ...form, remarks: e.target.value })}
-                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                rows="2"
-              />
+              {willProvideServices && (
+                <div>
+                  <label className="block text-sm font-medium mb-2">What kind of services can you provide? Please describe here:</label>
+                  <textarea
+                    value={form.servicesOffered}
+                    onChange={(e) => setForm({ ...form, servicesOffered: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500"
+                    rows="3"
+                    placeholder="E.g., Career guidance, mentorship, technical training, business consultation, etc."
+                  />
+                </div>
+              )}
             </div>
 
             <div>

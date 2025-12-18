@@ -5,7 +5,7 @@ export class CreateVolunteerDto {
   name: string;
 
   @IsString()
-  department: string;
+  service: string;
 
   @IsString()
   mobile1: string;
@@ -57,10 +57,6 @@ export class CreateVolunteerDto {
 
   @IsString()
   servicesOffered: string;
-
-  @IsOptional()
-  @IsString()
-  remarks?: string;
 
   @IsOptional()
   @IsString()

@@ -23,3 +23,29 @@ export const deleteVolunteer = async (id) => {
   if (!response.ok) throw new Error('Failed to delete volunteer');
   return response.json();
 };
+
+export const approveVolunteer = async (id) => {
+  const response = await fetch(`${API_BASE_URL}/volunteer/${id}/approve`, {
+    method: 'PATCH',
+  });
+  if (!response.ok) throw new Error('Failed to approve volunteer');
+  return response.json();
+};
+
+export const activateVolunteer = async (id) => {
+  const response = await fetch(`${API_BASE_URL}/volunteer/${id}/activate`, {
+    method: 'PATCH',
+  });
+  if (!response.ok) throw new Error('Failed to activate volunteer');
+  return response.json();
+};
+
+export const volunteerLogin = async (email, password) => {
+  const response = await fetch(`${API_BASE_URL}/volunteer/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  if (!response.ok) throw new Error('Invalid credentials');
+  return response.json();
+};

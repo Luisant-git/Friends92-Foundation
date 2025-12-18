@@ -32,6 +32,10 @@ import AdminTrust from './pages/AdminTrust';
 import TeamPage from './pages/TeamPage';
 import VolunteerPage from './pages/VolunteerPage';
 import AdminVolunteerPage from './pages/AdminVolunteerPage';
+import VolunteerLoginPage from './pages/VolunteerLoginPage';
+import VolunteerDashboard from './pages/VolunteerDashboard';
+import VolunteerProfile from './pages/VolunteerProfile';
+import VolunteerLayout from './components/VolunteerLayout';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -184,6 +188,13 @@ const App = () => {
             <Footer />
           </div>
         } />
+        <Route path="/volunteer/login" element={<VolunteerLoginPage />} />
+        
+        {/* Volunteer Routes with Volunteer Layout */}
+        <Route path="/volunteer" element={<VolunteerLayout />}>
+          <Route path="dashboard" element={<VolunteerDashboard />} />
+          <Route path="profile" element={<VolunteerProfile />} />
+        </Route>
 
         {/* Admin Login Route */}
         <Route path="/admin/login" element={<AdminLoginPage />} />
