@@ -17,13 +17,21 @@ const VolunteerProfile = () => {
       <h2 className="text-2xl font-bold mb-6">My Profile</h2>
       
       <div className="space-y-4">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center text-white text-3xl font-bold">
-            {volunteer.name.charAt(0).toUpperCase()}
-          </div>
-          <div>
-            <h3 className="text-xl font-bold">{volunteer.name}</h3>
-            <p className="text-gray-600">{volunteer.email}</p>
+        <div className="flex items-center gap-6 mb-6">
+          {volunteer.photoUrl ? (
+            <img
+              src={volunteer.photoUrl}
+              alt={volunteer.name}
+              className="w-32 h-32 object-cover"
+            />
+          ) : (
+            <div className="w-32 h-32 bg-blue-500 flex items-center justify-center text-white text-5xl font-bold">
+              {volunteer.name.charAt(0).toUpperCase()}
+            </div>
+          )}
+          <div className="hidden md:flex flex-col flex-1 min-w-0">
+            <h3 className="text-2xl font-bold break-words">{volunteer.name}</h3>
+            <p className="text-gray-600 text-lg break-all">{volunteer.email}</p>
           </div>
         </div>
 
@@ -39,8 +47,16 @@ const VolunteerProfile = () => {
               <p className="font-medium">{volunteer.email}</p>
             </div>
             <div>
-              <label className="text-sm text-gray-500">Volunteer ID</label>
-              <p className="font-medium">#{volunteer.id}</p>
+              <label className="text-sm text-gray-500">Service Area</label>
+              <p className="font-medium">{volunteer.service || 'N/A'}</p>
+            </div>
+            <div>
+              <label className="text-sm text-gray-500">Mobile</label>
+              <p className="font-medium">{volunteer.mobile1 || 'N/A'}</p>
+            </div>
+            <div>
+              <label className="text-sm text-gray-500">Profession</label>
+              <p className="font-medium">{volunteer.profession || 'N/A'}</p>
             </div>
             <div>
               <label className="text-sm text-gray-500">Status</label>

@@ -90,6 +90,7 @@ export class VolunteerService {
     const isValid = await bcrypt.compare(password, volunteer.password);
     if (!isValid) throw new Error('Invalid credentials');
 
-    return { id: volunteer.id, name: volunteer.name, email: volunteer.email };
+    const { password: _, ...volunteerData } = volunteer;
+    return volunteerData;
   }
 }

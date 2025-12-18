@@ -43,7 +43,7 @@ const VolunteerDashboard = () => {
 
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold mb-4">Welcome to Your Volunteer Dashboard!</h2>
-        <p className="text-gray-600 mb-4">Thank you for being part of Friends92 Foundation. Your contribution makes a difference!</p>
+        <p className="text-gray-600 mb-4">Thank you for being part of gptck92trust Foundation. Your contribution makes a difference!</p>
         <p className="text-gray-600">More features coming soon...</p>
       </div>
     </div>

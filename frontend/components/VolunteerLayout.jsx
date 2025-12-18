@@ -4,7 +4,7 @@ import MenuIcon from './icons/MenuIcon';
 import XIcon from './icons/XIcon';
 
 const VolunteerLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [volunteer, setVolunteer] = useState(null);
@@ -42,12 +42,22 @@ const VolunteerLayout = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-800 text-white transition-all duration-300 flex flex-col`}>
+      <aside className={`${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-gray-800 text-white transition-transform duration-300 flex flex-col`}>
         <div className="p-4 flex items-center justify-between border-b border-gray-700">
-          {sidebarOpen && <h2 className="text-xl font-bold">Volunteer Panel</h2>}
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-gray-700 rounded">
-            {sidebarOpen ? <XIcon className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
+          <h2 className="text-xl font-bold">Volunteer Panel</h2>
+          <button onClick={() => setSidebarOpen(false)} className="p-2 hover:bg-gray-700 rounded lg:hidden">
+            <XIcon className="w-5 h-5" />
           </button>
         </div>
         
@@ -56,23 +66,27 @@ const VolunteerLayout = () => {
             <Link
               key={item.path}
               to={item.path}
+              onClick={() => setSidebarOpen(false)}
               className={`flex items-center gap-3 p-3 mb-2 rounded hover:bg-gray-700 transition ${
                 location.pathname === item.path ? 'bg-gray-700' : ''
               }`}
             >
               <span>{item.icon}</span>
-              {sidebarOpen && <span>{item.label}</span>}
+              <span>{item.label}</span>
             </Link>
           ))}
         </nav>
 
         <div className="p-4 border-t border-gray-700">
           <button
-            onClick={() => setShowLogoutModal(true)}
+            onClick={() => {
+              setSidebarOpen(false);
+              setShowLogoutModal(true);
+            }}
             className="w-full flex items-center gap-3 p-3 rounded hover:bg-red-600 transition bg-red-500"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-            {sidebarOpen && <span>Logout</span>}
+            <span>Logout</span>
           </button>
         </div>
       </aside>
@@ -105,7 +119,13 @@ const VolunteerLayout = () => {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Navbar */}
         <header className="bg-white shadow-md p-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-800">Volunteer Dashboard</h1>
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 hover:bg-gray-100 rounded lg:hidden"
+          >
+            <MenuIcon className="w-6 h-6" />
+          </button>
+          <h1 className="hidden lg:block text-2xl font-bold text-gray-800">Volunteer Dashboard</h1>
           <div className="relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
