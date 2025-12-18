@@ -133,7 +133,9 @@ const Header = () => {
               <NavLink
                 to="/services"
                 className={linkClass}
-                style={({ isActive }) => (isActive ? activeLinkStyle : undefined)}
+                style={({ isActive }) =>
+                  isActive ? activeLinkStyle : undefined
+                }
               >
                 Services
               </NavLink>
@@ -169,7 +171,7 @@ const Header = () => {
                 <ChevronDown className="w-3 h-3 ml-1" />
               </button>
               {isServicesDropdownOpen && (
-                <div 
+                <div
                   className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-lg border border-gray-200 py-2 min-w-48 z-50"
                   onMouseEnter={() => setIsServicesDropdownOpen(true)}
                   onMouseLeave={() => setIsServicesDropdownOpen(false)}
@@ -217,8 +219,6 @@ const Header = () => {
             Contact us
           </NavLink>
         </li>
-
-
       </ul>
     );
   };
@@ -233,7 +233,7 @@ const Header = () => {
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
                 <MdMail className="w-4 h-4" />
-                <span>friends92foundation@gmail.com</span>
+                <span>gptck92trust@gmail.com</span>
               </div>
               <div className="w-px h-4 bg-white/40"></div>
               <div className="flex items-center gap-2">
@@ -254,7 +254,7 @@ const Header = () => {
           <div className="md:hidden flex flex-col items-center gap-1.5 text-white text-xs">
             <div className="flex items-center justify-center gap-1.5 w-full">
               <MdMail className="w-3.5 h-3.5 flex-shrink-0" />
-              <span className="text-xs">friends92foundation@gmail.com</span>
+              <span className="text-xs">gptck92trust@gmail.com</span>
             </div>
 
             <div className="flex items-center justify-center gap-1.5 w-full">

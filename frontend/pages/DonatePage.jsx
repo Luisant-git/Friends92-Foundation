@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Heart, Shield, RefreshCw, Gift } from 'lucide-react';
+import React, { useState } from "react";
+import { Heart, Shield, RefreshCw, Gift } from "lucide-react";
 
 const DonatePage = () => {
-  const [donationType, setDonationType] = useState('one-time');
-  const [amount, setAmount] = useState('');
-  const [customAmount, setCustomAmount] = useState('');
+  const [donationType, setDonationType] = useState("one-time");
+  const [amount, setAmount] = useState("");
+  const [customAmount, setCustomAmount] = useState("");
   const [matchingGift, setMatchingGift] = useState(false);
 
   const suggestedAmounts = [500, 1000, 2500, 5000, 10000];
@@ -14,11 +14,12 @@ const DonatePage = () => {
     1000: "Supports skill training for 2 students",
     2500: "Sponsors education for 3 children for a month",
     5000: "Funds personality development program for 10 students",
-    10000: "Supports complete education for 1 child for a year"
+    10000: "Supports complete education for 1 child for a year",
   };
 
   const selectedAmount = customAmount || amount;
-  const impact = impactStatements[selectedAmount] || "Your contribution makes a difference";
+  const impact =
+    impactStatements[selectedAmount] || "Your contribution makes a difference";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,8 +32,12 @@ const DonatePage = () => {
         {/* Header */}
         <div className="text-center mb-10">
           <Heart className="w-16 h-16 text-green-600 mx-auto mb-4" />
-          <h1 className="text-4xl font-bold text-gray-800 mb-3">Make a Difference Today</h1>
-          <p className="text-gray-600 text-lg">Your generosity transforms lives and builds futures</p>
+          <h1 className="text-4xl font-bold text-gray-800 mb-3">
+            Make a Difference Today
+          </h1>
+          <p className="text-gray-600 text-lg">
+            Your generosity transforms lives and builds futures
+          </p>
         </div>
 
         {/* Main Form Card */}
@@ -40,26 +45,28 @@ const DonatePage = () => {
           <form onSubmit={handleSubmit}>
             {/* Donation Type */}
             <div className="mb-8">
-              <label className="block text-gray-700 font-semibold mb-4">Donation Type</label>
+              <label className="block text-gray-700 font-semibold mb-4">
+                Donation Type
+              </label>
               <div className="flex gap-4">
                 <button
                   type="button"
-                  onClick={() => setDonationType('one-time')}
+                  onClick={() => setDonationType("one-time")}
                   className={`flex-1 py-3 px-6 rounded-lg font-medium transition ${
-                    donationType === 'one-time'
-                      ? 'bg-green-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    donationType === "one-time"
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
                   One-Time
                 </button>
                 <button
                   type="button"
-                  onClick={() => setDonationType('recurring')}
+                  onClick={() => setDonationType("recurring")}
                   className={`flex-1 py-3 px-6 rounded-lg font-medium transition flex items-center justify-center gap-2 ${
-                    donationType === 'recurring'
-                      ? 'bg-green-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    donationType === "recurring"
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
                   <RefreshCw className="w-4 h-4" />
@@ -70,17 +77,22 @@ const DonatePage = () => {
 
             {/* Suggested Amounts */}
             <div className="mb-8">
-              <label className="block text-gray-700 font-semibold mb-4">Select Amount (₹)</label>
+              <label className="block text-gray-700 font-semibold mb-4">
+                Select Amount (₹)
+              </label>
               <div className="grid grid-cols-3 md:grid-cols-5 gap-3 mb-4">
                 {suggestedAmounts.map((amt) => (
                   <button
                     key={amt}
                     type="button"
-                    onClick={() => { setAmount(amt); setCustomAmount(''); }}
+                    onClick={() => {
+                      setAmount(amt);
+                      setCustomAmount("");
+                    }}
                     className={`py-3 px-4 rounded-lg font-medium transition ${
                       amount === amt && !customAmount
-                        ? 'bg-green-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? "bg-green-600 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
                     ₹{amt}
@@ -91,7 +103,10 @@ const DonatePage = () => {
                 type="number"
                 placeholder="Enter custom amount"
                 value={customAmount}
-                onChange={(e) => { setCustomAmount(e.target.value); setAmount(''); }}
+                onChange={(e) => {
+                  setCustomAmount(e.target.value);
+                  setAmount("");
+                }}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
             </div>
@@ -108,7 +123,9 @@ const DonatePage = () => {
 
             {/* Donor Information */}
             <div className="mb-8 space-y-4">
-              <h3 className="text-gray-700 font-semibold mb-4">Your Information</h3>
+              <h3 className="text-gray-700 font-semibold mb-4">
+                Your Information
+              </h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <input
                   type="text"
@@ -146,8 +163,12 @@ const DonatePage = () => {
                   className="mt-1 w-5 h-5 text-green-600 rounded focus:ring-2 focus:ring-green-500"
                 />
                 <div>
-                  <p className="font-semibold text-gray-800">Double Your Impact!</p>
-                  <p className="text-sm text-gray-600">Check if your employer offers matching gift programs</p>
+                  <p className="font-semibold text-gray-800">
+                    Double Your Impact!
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Check if your employer offers matching gift programs
+                  </p>
                 </div>
               </label>
             </div>
@@ -157,7 +178,11 @@ const DonatePage = () => {
               <Shield className="w-5 h-5 text-gray-600 mt-0.5 flex-shrink-0" />
               <div className="text-sm text-gray-600">
                 <p className="font-semibold text-gray-800 mb-1">Tax Benefits</p>
-                <p>Donations to Friends92 Foundation are eligible for 80G tax deduction. You will receive a tax receipt via email within 48 hours.</p>
+                <p>
+                  Donations to Friends92 Foundation are eligible for 80G tax
+                  deduction. You will receive a tax receipt via email within 48
+                  hours.
+                </p>
               </div>
             </div>
 
@@ -168,7 +193,7 @@ const DonatePage = () => {
               className="w-full bg-green-600 text-white py-4 rounded-lg font-semibold text-lg hover:bg-green-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <Heart className="w-5 h-5" />
-              Donate ₹{selectedAmount || '0'}
+              Donate ₹{selectedAmount || "0"}
             </button>
 
             <p className="text-center text-sm text-gray-500 mt-4">
@@ -180,7 +205,15 @@ const DonatePage = () => {
 
         {/* Additional Info */}
         <div className="mt-8 text-center text-gray-600">
-          <p>For queries, contact us at <a href="mailto:friends92foundation@gmail.com" className="text-green-600 hover:underline">friends92foundation@gmail.com</a></p>
+          <p>
+            For queries, contact us at{" "}
+            <a
+              href="mailto:gptck92trust@gmail.com"
+              className="text-green-600 hover:underline"
+            >
+              gptck92trust@gmail.com
+            </a>
+          </p>
         </div>
       </div>
     </div>
