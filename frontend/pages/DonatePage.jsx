@@ -179,7 +179,7 @@ const DonatePage = () => {
               <div className="text-sm text-gray-600">
                 <p className="font-semibold text-gray-800 mb-1">Tax Benefits</p>
                 <p>
-                  Donations to Friends92 Foundation are eligible for 80G tax
+                  Donations to Gptck92Trust Foundation are eligible for 80G tax
                   deduction. You will receive a tax receipt via email within 48
                   hours.
                 </p>
