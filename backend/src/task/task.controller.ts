@@ -1,0 +1,50 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
+import { TaskService } from './task.service';
+import { CreateTaskDto, UpdateTaskStatusDto } from './task.dto';
+
+@Controller('task')
+export class TaskController {
+  constructor(private readonly taskService: TaskService) {}
+
+  @Post()
+  async create(@Body() createTaskDto: CreateTaskDto) {
+    return this.taskService.create(createTaskDto);
+  }
+
+  @Get()
+  async findAll() {
+    return this.taskService.findAll();
+  }
+
+  @Get('volunteer/:volunteerId')
+  async findByVolunteer(@Param('volunteerId', ParseIntPipe) volunteerId: number) {
+    return this.taskService.findByVolunteer(volunteerId);
+  }
+
+  @Get('completed')
+  async findCompleted() {
+    return this.taskService.findCompleted();
+  }
+
+  @Patch(':id/status')
+  async updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateTaskStatusDto: UpdateTaskStatusDto,
+  ) {
+    return this.taskService.updateStatus(id, updateTaskStatusDto);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return this.taskService.delete(id);
+  }
+}

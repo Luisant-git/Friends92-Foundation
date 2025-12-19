@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Trash2, Eye } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getVolunteers, deleteVolunteer, approveVolunteer, activateVolunteer } from '../api/Volunteer';
+import { getVolunteers, deleteVolunteer, toggleVolunteerActive } from '../api/Volunteer';
 
-const AdminVolunteerPage = () => {
+const AdminVolunteerManagement = () => {
   const [volunteers, setVolunteers] = useState([]);
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showToggleModal, setShowToggleModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [toggleVolunteer, setToggleVolunteer] = useState(null);
   const [filterService, setFilterService] = useState('');
 
   useEffect(() => {
@@ -18,7 +20,7 @@ const AdminVolunteerPage = () => {
   const fetchVolunteers = async () => {
     try {
       const data = await getVolunteers();
-      setVolunteers(data.filter(v => !v.password));
+      setVolunteers(data.filter(v => v.password));
     } catch (err) {
       console.error(err);
     }
@@ -36,23 +38,15 @@ const AdminVolunteerPage = () => {
     }
   };
 
-  const handleApprove = async (id) => {
+  const confirmToggle = async () => {
     try {
-      await approveVolunteer(id);
-      toast.success('Volunteer approved! Selection email sent.');
+      await toggleVolunteerActive(toggleVolunteer.id);
+      toast.success(`Volunteer ${toggleVolunteer.isActive ? 'deactivated' : 'activated'} successfully!`);
       fetchVolunteers();
+      setShowToggleModal(false);
+      setToggleVolunteer(null);
     } catch (err) {
-      toast.error('Failed to approve volunteer');
-    }
-  };
-
-  const handleActivate = async (id) => {
-    try {
-      await activateVolunteer(id);
-      toast.success('Volunteer activated! Activation email sent.');
-      fetchVolunteers();
-    } catch (err) {
-      toast.error('Failed to activate volunteer');
+      toast.error('Failed to toggle volunteer status');
     }
   };
 
@@ -61,7 +55,7 @@ const AdminVolunteerPage = () => {
       <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Volunteer Requests</h1>
+        <h1 className="text-2xl font-bold">Volunteer Management</h1>
         <select
           value={filterService}
           onChange={(e) => setFilterService(e.target.value)}
@@ -78,6 +72,33 @@ const AdminVolunteerPage = () => {
           <option value="Administrative Support">Administrative Support</option>
         </select>
       </div>
+
+      {showToggleModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold mb-4">Confirm Status Change</h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to {toggleVolunteer?.isActive ? 'deactivate' : 'activate'} this volunteer?
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => { setShowToggleModal(false); setToggleVolunteer(null); }}
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmToggle}
+                className={`px-4 py-2 text-white rounded ${
+                  toggleVolunteer?.isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
+                }`}
+              >
+                {toggleVolunteer?.isActive ? 'Deactivate' : 'Activate'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -155,13 +176,14 @@ const AdminVolunteerPage = () => {
                 <td className="p-3 hidden md:table-cell">{volunteer.email}</td>
                 <td className="p-3 hidden sm:table-cell">{volunteer.mobile1}</td>
                 <td className="p-3 hidden lg:table-cell">
-                  <span className={`px-2 py-1 rounded text-xs ${
-                    volunteer.isActive ? 'bg-green-100 text-green-800' : 
-                    volunteer.password ? 'bg-yellow-100 text-yellow-800' : 
-                    'bg-gray-100 text-gray-800'
-                  }`}>
-                    {volunteer.isActive ? 'Active' : volunteer.password ? 'Approved' : 'Pending'}
-                  </span>
+                  <button
+                    onClick={() => { setToggleVolunteer(volunteer); setShowToggleModal(true); }}
+                    className={`px-3 py-1 rounded text-xs cursor-pointer transition ${
+                      volunteer.isActive ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-red-100 text-red-800 hover:bg-red-200'
+                    }`}
+                  >
+                    {volunteer.isActive ? 'Active' : 'Inactive'}
+                  </button>
                 </td>
                 <td className="p-3 flex gap-2 flex-wrap">
                   <button
@@ -171,22 +193,6 @@ const AdminVolunteerPage = () => {
                   >
                     <Eye size={20} />
                   </button>
-                  {!volunteer.password && (
-                    <button
-                      onClick={() => handleApprove(volunteer.id)}
-                      className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
-                    >
-                      Approve
-                    </button>
-                  )}
-                  {volunteer.password && !volunteer.isActive && (
-                    <button
-                      onClick={() => handleActivate(volunteer.id)}
-                      className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
-                    >
-                      Activate
-                    </button>
-                  )}
                   <button
                     onClick={() => { setDeleteId(volunteer.id); setShowDeleteModal(true); }}
                     className="text-red-600 hover:text-red-800 transition"
@@ -200,7 +206,7 @@ const AdminVolunteerPage = () => {
             {volunteers.filter(v => !filterService || v.service === filterService).length === 0 && (
               <tr>
                 <td colSpan="6" className="p-4 text-center text-gray-500">
-                  No volunteers registered yet
+                  No active volunteers yet
                 </td>
               </tr>
             )}
@@ -211,4 +217,4 @@ const AdminVolunteerPage = () => {
   );
 };
 
-export default AdminVolunteerPage;
+export default AdminVolunteerManagement;

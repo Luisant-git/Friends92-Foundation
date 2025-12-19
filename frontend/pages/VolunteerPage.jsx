@@ -73,7 +73,14 @@ const VolunteerPage = () => {
       });
       setPhotoFile(null);
     } catch (error) {
-      alert('Failed to submit form');
+      console.log('Error caught:', error);
+      console.log('Error message:', error.message);
+      const errorMessage = error.message || 'Failed to submit form';
+      if (errorMessage.includes('Email already exists')) {
+        alert('This email is already registered. Please use a different email.');
+      } else {
+        alert(errorMessage);
+      }
     } finally {
       setLoading(false);
     }

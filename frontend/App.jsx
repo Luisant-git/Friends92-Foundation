@@ -32,10 +32,15 @@ import AdminTrust from './pages/AdminTrust';
 import TeamPage from './pages/TeamPage';
 import VolunteerPage from './pages/VolunteerPage';
 import AdminVolunteerPage from './pages/AdminVolunteerPage';
+import AdminVolunteerManagement from './pages/AdminVolunteerManagement';
 import VolunteerLoginPage from './pages/VolunteerLoginPage';
 import VolunteerDashboard from './pages/VolunteerDashboard';
 import VolunteerProfile from './pages/VolunteerProfile';
+import VolunteerResetPassword from './pages/VolunteerResetPassword';
 import VolunteerLayout from './components/VolunteerLayout';
+import AdminAssignTaskPage from './pages/AdminAssignTaskPage';
+import AdminCompletedTasksPage from './pages/AdminCompletedTasksPage';
+import VolunteerTasksPage from './pages/VolunteerTasksPage';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -189,10 +194,12 @@ const App = () => {
           </div>
         } />
         <Route path="/volunteer/login" element={<VolunteerLoginPage />} />
+        <Route path="/volunteer/reset-password/:token" element={<VolunteerResetPassword />} />
         
         {/* Volunteer Routes with Volunteer Layout */}
         <Route path="/volunteer" element={<VolunteerLayout />}>
           <Route path="dashboard" element={<VolunteerDashboard />} />
+          <Route path="tasks" element={<VolunteerTasksPage />} />
           <Route path="profile" element={<VolunteerProfile />} />
         </Route>
 
@@ -208,7 +215,10 @@ const App = () => {
           <Route path="events" element={<AdminEventsPage />} />
           <Route path="team" element={<AdminTeam />} />
           <Route path="trust" element={<AdminTrust />} />
-          <Route path="volunteer" element={<AdminVolunteerPage />} />
+          <Route path="volunteer-requests" element={<AdminVolunteerPage />} />
+          <Route path="volunteer-management" element={<AdminVolunteerManagement />} />
+          <Route path="assign-task" element={<AdminAssignTaskPage />} />
+          <Route path="completed-tasks" element={<AdminCompletedTasksPage />} />
         </Route>
 
         <Route path="*" element={

@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { X, User, Phone, MapPin, GraduationCap, Calendar } from "lucide-react";
 import { createAlumni } from "../api/Alumini";
-import SearchableDropdown from "../components/SearchableDropdown";
-import toast from "react-hot-toast";
 
-export default function AlumniRegister({ isOpen, onClose }) {
+const AluminiRegister = () => {
   const [form, setForm] = useState({
     name: "",
     department: "",
@@ -13,7 +10,8 @@ export default function AlumniRegister({ isOpen, onClose }) {
     city: "",
   });
 
-  const [errors, setErrors] = useState({ mobile: "" });
+  const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const currentYear = new Date().getFullYear();
   const years = Array.from(
@@ -26,131 +24,141 @@ export default function AlumniRegister({ isOpen, onClose }) {
     e.preventDefault();
 
     if (!/^\d{10}$/.test(form.mobile)) {
-      setErrors({ mobile: "Mobile number must be exactly 10 digits" });
-      toast.error("Mobile number must be exactly 10 digits.");
+      alert("Mobile number must be exactly 10 digits");
       return;
     }
 
+    setLoading(true);
     try {
       const res = await createAlumni({ ...form, year: Number(form.year) });
 
       if (res?.success === false) {
-        toast.error(res.message || "Registration failed");
+        alert(res.message || "Registration failed");
         return;
       }
 
-      toast.success("Registered Successfully!");
-
-      onClose();
+      setShowSuccess(true);
       window.dispatchEvent(new Event("alumniListUpdated"));
       setForm({ name: "", department: "", year: "", mobile: "", city: "" });
     } catch (err) {
-      toast.error("Registration Failed!");
+      alert("Registration Failed!");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!isOpen) return null;
-
-  // Common input classes
-  const inputClass = `
-    w-full pl-10 pr-3 py-3
-    border-2 border-black
-    text-black font-normal
-    placeholder-black placeholder-opacity-70
-    rounded-lg
-    focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500
-    transition-all duration-300 ease-in-out
-  `;
-
   return (
-    <div className="fixed inset-0 flex items-start md:items-center justify-center bg-black/40 backdrop-blur-sm z-50 p-4 overflow-y-auto">
-      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl p-6 sm:p-8 relative">
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-400 hover:text-gray-700"
-        >
-          <X className="w-6 h-6" />
-        </button>
+    <div className="min-h-screen bg-gray-50">
+      <section className="bg-slate-700 text-white py-20">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-5xl font-bold mb-4">Alumni Section</h1>
+          <p className="text-xl text-blue-100">Connect with your alma mater</p>
+        </div>
+      </section>
 
-        {/* Heading */}
-        <h2 className="text-2xl sm:text-3xl font-semibold text-[#16a34a] text-center mb-6">
-          Alumni Registration
-        </h2>
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="bg-white rounded-lg shadow-md p-8">
+          <h2 className="text-2xl font-bold mb-6">Alumni Registration Form</h2>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium mb-2">Name *</label>
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name */}
-          <div className="relative">
-            <User className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              required
-              className={inputClass}
-            />
-          </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Department *</label>
+                <select
+                  value={form.department}
+                  onChange={(e) => setForm({ ...form, department: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Select Department</option>
+                  {departments.map((dept) => (
+                    <option key={dept} value={dept}>{dept}</option>
+                  ))}
+                </select>
+              </div>
 
-          {/* Department Dropdown */}
-          <SearchableDropdown
-            icon={GraduationCap}
-            placeholder="Select Department"
-            options={departments}
-            value={form.department}
-            onChange={(value) => setForm({ ...form, department: value })}
-          />
+              <div>
+                <label className="block text-sm font-medium mb-2">Year *</label>
+                <select
+                  value={form.year}
+                  onChange={(e) => setForm({ ...form, year: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Select Year</option>
+                  {years.map((year) => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
+              </div>
 
-          {/* Year Dropdown */}
-          <SearchableDropdown
-            icon={Calendar}
-            placeholder="Select Year"
-            options={years}
-            value={form.year}
-            onChange={(value) => setForm({ ...form, year: value })}
-          />
+              <div>
+                <label className="block text-sm font-medium mb-2">Mobile Number *</label>
+                <input
+                  type="tel"
+                  value={form.mobile}
+                  onChange={(e) => setForm({ ...form, mobile: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
 
-          {/* Mobile */}
-          <div className="relative">
-            <Phone className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
-            <input
-              type="tel"
-              placeholder="Mobile Number"
-              value={form.mobile}
-              onChange={(e) => setForm({ ...form, mobile: e.target.value })}
-              required
-              className={`${inputClass} ${
-                errors.mobile ? "border-red-500" : ""
-              }`}
-            />
-            {errors.mobile && (
-              <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>
-            )}
-          </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Current Location *</label>
+                <input
+                  type="text"
+                  value={form.city}
+                  onChange={(e) => setForm({ ...form, city: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+            </div>
 
-          {/* City */}
-          <div className="relative">
-            <MapPin className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Current Location"
-              value={form.city}
-              onChange={(e) => setForm({ ...form, city: e.target.value })}
-              required
-              className={inputClass}
-            />
-          </div>
-
-          {/* Submit */}
-          <button
-            type="submit"
-            className="w-full bg-[#16a34a] text-white py-3 rounded-lg font-semibold hover:bg-[#15803d] transition"
-          >
-            Register
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
+            >
+              {loading ? 'Submitting...' : 'Submit'}
+            </button>
+          </form>
+        </div>
       </div>
+
+      {showSuccess && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md mx-4 text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold mb-2">Success!</h3>
+            <p className="text-gray-600 mb-6">Your alumni registration has been submitted successfully.</p>
+            <button
+              onClick={() => setShowSuccess(false)}
+              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default AluminiRegister;

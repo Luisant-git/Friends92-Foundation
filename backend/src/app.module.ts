@@ -13,9 +13,10 @@ import { ServicesModule } from './services/services.module';
 import { TeamModule } from './team/team.module';
 import { TrustModule } from './trust/trust.module';
 import { VolunteerModule } from './volunteer/volunteer.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
-  imports: [AdminModule, BannerModule, UploadModule, AlumniModule, GalleryModule, PlacementModule, CategoryModule, EventsModule, ServicesModule, TeamModule, TrustModule, VolunteerModule],
+  imports: [AdminModule, BannerModule, UploadModule, AlumniModule, GalleryModule, PlacementModule, CategoryModule, EventsModule, ServicesModule, TeamModule, TrustModule, VolunteerModule, TaskModule],
   controllers: [AppController],
   providers: [AppService],
 })

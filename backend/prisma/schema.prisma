@@ -137,6 +137,7 @@ model Volunteer {
   permanentAddress    String
   servicesOffered     String
   photoUrl            String?
+  tasks               Task[]
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
@@ -162,5 +163,24 @@ model Trust {
   isActive     Boolean @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model Task {
+  id              Int        @id @default(autoincrement())
+  title           String
+  description     String
+  volunteerId     Int
+  volunteer       Volunteer  @relation(fields: [volunteerId], references: [id])
+  status          TaskStatus @default(PENDING)
+  volunteerComment String?
+  deadline        DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
 }
 

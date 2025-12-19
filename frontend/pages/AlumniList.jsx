@@ -59,7 +59,7 @@ export default function ViewAlumni() {
             options={departments}
             value={filters.department}
             onChange={(value) => setFilters({ ...filters, department: value })}
-            className="w-full sm:w-60 px-3 py-2 border-2 border-blue-700 rounded-md placeholder-blue-700 placeholder-opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-800 font-semibold"
+            className="w-full sm:w-60 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
           />
 
           {/* Year dropdown */}
@@ -68,7 +68,7 @@ export default function ViewAlumni() {
             options={years}
             value={filters.year}
             onChange={(value) => setFilters({ ...filters, year: value })}
-            className="w-full sm:w-60 px-3 py-2 border-2 border-blue-700 rounded-md placeholder-blue-700 placeholder-opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-800 font-semibold"
+            className="w-full sm:w-60 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
           />
 
           {/* Search Button */}

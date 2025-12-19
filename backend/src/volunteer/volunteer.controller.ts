@@ -7,6 +7,8 @@ import {
   Param,
   ParseIntPipe,
   Patch,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { VolunteerService } from './volunteer.service';
 import { CreateVolunteerDto } from './volunteer.dto';
@@ -17,7 +19,20 @@ export class VolunteerController {
 
   @Post()
   async create(@Body() createVolunteerDto: CreateVolunteerDto) {
-    return this.volunteerService.create(createVolunteerDto);
+    try {
+      return await this.volunteerService.create(createVolunteerDto);
+    } catch (error) {
+      if (error.message === 'Email already exists') {
+        throw new HttpException(
+          { statusCode: 400, message: 'Email already exists' },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      throw new HttpException(
+        { statusCode: 500, message: 'Internal server error' },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get()
@@ -48,5 +63,20 @@ export class VolunteerController {
   @Post('login')
   async login(@Body() body: { email: string; password: string }) {
     return this.volunteerService.login(body.email, body.password);
+  }
+
+  @Patch(':id/toggle-active')
+  async toggleActive(@Param('id', ParseIntPipe) id: number) {
+    return this.volunteerService.toggleActive(id);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() body: { email: string }) {
+    return this.volunteerService.resetPassword(body.email);
+  }
+
+  @Post('update-password')
+  async updatePassword(@Body() body: { token: string; volunteerId: number; newPassword: string }) {
+    return this.volunteerService.updatePassword(body.token, body.volunteerId, body.newPassword);
   }
 }

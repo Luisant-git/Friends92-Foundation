@@ -12,6 +12,14 @@ export class VolunteerService {
   ) {}
 
   async create(createVolunteerDto: CreateVolunteerDto) {
+    const existing = await this.prisma.volunteer.findUnique({
+      where: { email: createVolunteerDto.email },
+    });
+
+    if (existing) {
+      throw new Error('Email already exists');
+    }
+
     return this.prisma.volunteer.create({
       data: {
         ...createVolunteerDto,
@@ -92,5 +100,38 @@ export class VolunteerService {
 
     const { password: _, ...volunteerData } = volunteer;
     return volunteerData;
+  }
+
+  async toggleActive(id: number) {
+    const volunteer = await this.prisma.volunteer.findUnique({ where: { id } });
+    if (!volunteer) throw new Error('Volunteer not found');
+
+    return this.prisma.volunteer.update({
+      where: { id },
+      data: { isActive: !volunteer.isActive },
+    });
+  }
+
+  async resetPassword(email: string) {
+    const volunteer = await this.prisma.volunteer.findUnique({ where: { email } });
+    if (!volunteer || !volunteer.password) {
+      throw new Error('Volunteer not found or not approved');
+    }
+
+    const resetToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/volunteer/reset-password/${resetToken}`;
+
+    await this.emailService.sendPasswordResetEmail(email, volunteer.name, resetUrl);
+
+    return { message: 'Password reset link sent to your email.', token: resetToken, volunteerId: volunteer.id };
+  }
+
+  async updatePassword(token: string, volunteerId: number, newPassword: string) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    
+    return this.prisma.volunteer.update({
+      where: { id: volunteerId },
+      data: { password: hashedPassword },
+    });
   }
 }

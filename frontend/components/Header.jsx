@@ -10,13 +10,11 @@ import {
 } from "react-icons/fa";
 import Friends92Logo from "./icons/Logo";
 import LoginModal from "./LoginModal";
-import AlumniRegister from "../pages/AluminiRegister";
 import { loginAdmin } from "../api/Login.js";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,6 +32,7 @@ const Header = () => {
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsServicesDropdownOpen(false);
+    setIsAlumniDropdownOpen(false);
   }, [location]);
 
   const handleLogin = async (username, password) => {
@@ -55,6 +54,7 @@ const Header = () => {
   };
 
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const [isAlumniDropdownOpen, setIsAlumniDropdownOpen] = useState(false);
 
   const NavLinks = ({ isMobile }) => {
     const navClass = isMobile
@@ -172,7 +172,7 @@ const Header = () => {
               </button>
               {isServicesDropdownOpen && (
                 <div
-                  className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-lg border border-gray-200 py-2 min-w-48 z-50"
+                  className="absolute top-full left-0 mt-0 bg-white shadow-lg rounded-lg border border-gray-200 py-2 min-w-48 z-50"
                   onMouseEnter={() => setIsServicesDropdownOpen(true)}
                   onMouseLeave={() => setIsServicesDropdownOpen(false)}
                 >
@@ -193,6 +193,60 @@ const Header = () => {
                     className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
                   >
                     Placement
+                  </NavLink>
+                </div>
+              )}
+            </>
+          )}
+        </li>
+
+        {/* Alumni Dropdown */}
+        <li className={isMobile ? "" : "relative group"}>
+          {isMobile ? (
+            <div className="flex flex-col space-y-1">
+              <span className={linkClass}>Alumni</span>
+              <div className="ml-4 flex flex-col space-y-1">
+                <NavLink
+                  to="/alumni/register"
+                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                >
+                  Register Alumni
+                </NavLink>
+                <NavLink
+                  to="/alumni/view"
+                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                >
+                  View Alumni
+                </NavLink>
+              </div>
+            </div>
+          ) : (
+            <>
+              <button
+                className="flex items-center text-gray-600 hover:text-green-600 transition text-sm px-2 py-1.5 font-medium whitespace-nowrap"
+                onMouseEnter={() => setIsAlumniDropdownOpen(true)}
+                onMouseLeave={() => setIsAlumniDropdownOpen(false)}
+              >
+                Alumni
+                <ChevronDown className="w-3 h-3 ml-1" />
+              </button>
+              {isAlumniDropdownOpen && (
+                <div
+                  className="absolute top-full left-0 mt-0 bg-white shadow-lg rounded-lg border border-gray-200 py-2 min-w-48 z-50"
+                  onMouseEnter={() => setIsAlumniDropdownOpen(true)}
+                  onMouseLeave={() => setIsAlumniDropdownOpen(false)}
+                >
+                  <NavLink
+                    to="/alumni/register"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                  >
+                    Register Alumni
+                  </NavLink>
+                  <NavLink
+                    to="/alumni/view"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                  >
+                    View Alumni
                   </NavLink>
                 </div>
               )}
@@ -333,13 +387,6 @@ const Header = () => {
         onClose={() => setIsLoginModalOpen(false)}
         onLogin={handleLogin}
       />
-
-      {showModal && (
-        <AlumniRegister
-          isOpen={showModal}
-          onClose={() => setShowModal(false)}
-        />
-      )}
     </>
   );
 };

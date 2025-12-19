@@ -66,4 +66,25 @@ export class EmailService {
 
     await this.transporter.sendMail(mailOptions);
   }
+
+  async sendPasswordResetEmail(email: string, name: string, resetUrl: string) {
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Reset Your Volunteer Password',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #16a34a;">Password Reset Request</h2>
+          <p>Hi ${name},</p>
+          <p>We received a request to reset your password. Click the button below to create a new password:</p>
+          <a href="${resetUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 20px 0;">Reset Password</a>
+          <p>If you didn't request this, please ignore this email.</p>
+          <p>This link will expire in 24 hours.</p>
+          <p>Best regards,<br>Friends92 Foundation Team</p>
+        </div>
+      `,
+    };
+
+    await this.transporter.sendMail(mailOptions);
+  }
 }

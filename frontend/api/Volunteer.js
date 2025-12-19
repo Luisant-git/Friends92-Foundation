@@ -6,8 +6,22 @@ export const createVolunteer = async (volunteerData) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(volunteerData),
   });
-  if (!response.ok) throw new Error('Failed to create volunteer');
-  return response.json();
+  
+  console.log('Response status:', response.status);
+  console.log('Response ok:', response.ok);
+  
+  const data = await response.json().catch((e) => {
+    console.log('JSON parse error:', e);
+    return { message: 'Failed to create volunteer' };
+  });
+  
+  console.log('Response data:', data);
+  
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to create volunteer');
+  }
+  
+  return data;
 };
 
 export const getVolunteers = async () => {
@@ -47,5 +61,33 @@ export const volunteerLogin = async (email, password) => {
     body: JSON.stringify({ email, password }),
   });
   if (!response.ok) throw new Error('Invalid credentials');
+  return response.json();
+};
+
+export const toggleVolunteerActive = async (id) => {
+  const response = await fetch(`${API_BASE_URL}/volunteer/${id}/toggle-active`, {
+    method: 'PATCH',
+  });
+  if (!response.ok) throw new Error('Failed to toggle volunteer status');
+  return response.json();
+};
+
+export const resetVolunteerPassword = async (email) => {
+  const response = await fetch(`${API_BASE_URL}/volunteer/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+  if (!response.ok) throw new Error('Failed to reset password');
+  return response.json();
+};
+
+export const updateVolunteerPassword = async (token, volunteerId, newPassword) => {
+  const response = await fetch(`${API_BASE_URL}/volunteer/update-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, volunteerId, newPassword }),
+  });
+  if (!response.ok) throw new Error('Failed to update password');
   return response.json();
 };
