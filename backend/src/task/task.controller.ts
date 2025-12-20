@@ -25,14 +25,14 @@ export class TaskController {
     return this.taskService.findAll();
   }
 
-  @Get('volunteer/:volunteerId')
-  async findByVolunteer(@Param('volunteerId', ParseIntPipe) volunteerId: number) {
-    return this.taskService.findByVolunteer(volunteerId);
-  }
-
   @Get('completed')
   async findCompleted() {
     return this.taskService.findCompleted();
+  }
+
+  @Get('volunteer/:volunteerId')
+  async findByVolunteer(@Param('volunteerId', ParseIntPipe) volunteerId: number) {
+    return this.taskService.findByVolunteer(volunteerId);
   }
 
   @Patch(':id/status')
