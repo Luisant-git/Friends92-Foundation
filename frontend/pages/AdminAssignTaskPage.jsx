@@ -155,6 +155,23 @@ const AdminAssignTaskPage = () => {
               </div>
 
               <div>
+                <label className="block text-sm font-medium mb-2">Task Type</label>
+                <select
+                  value={formData.taskType}
+                  onChange={(e) => setFormData({ ...formData, taskType: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Select Task Type</option>
+                  <option value="Education">Education</option>
+                  <option value="Health">Health</option>
+                  <option value="Environment">Environment</option>
+                  <option value="Women & Child Welfare">Women & Child Welfare</option>
+                  <option value="Disaster Relief">Disaster Relief</option>
+                </select>
+              </div>
+
+              <div>
                 <label className="block text-sm font-medium mb-2">Task Title</label>
                 <input
                   type="text"

@@ -37,3 +37,17 @@ export const updateTaskStatus = async (id, status, comment) => {
   if (!response.ok) throw new Error('Failed to update task');
   return response.json();
 };
+
+export const verifyTask = async (id) => {
+  const response = await fetch(`${API_BASE_URL}/task/${id}/verify`, {
+    method: 'PATCH',
+  });
+  if (!response.ok) throw new Error('Failed to verify task');
+  return response.json();
+};
+
+export const getVerifiedTasks = async () => {
+  const response = await fetch(`${API_BASE_URL}/task/verified`);
+  if (!response.ok) throw new Error('Failed to fetch verified tasks');
+  return response.json();
+};

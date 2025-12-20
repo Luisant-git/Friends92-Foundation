@@ -40,6 +40,7 @@ import VolunteerResetPassword from './pages/VolunteerResetPassword';
 import VolunteerLayout from './components/VolunteerLayout';
 import AdminAssignTaskPage from './pages/AdminAssignTaskPage';
 import AdminCompletedTasksPage from './pages/AdminCompletedTasksPage';
+import AdminVerifiedTasksPage from './pages/AdminVerifiedTasksPage';
 import VolunteerTasksPage from './pages/VolunteerTasksPage';
 
 const ScrollToTop = () => {
@@ -219,6 +220,7 @@ const App = () => {
           <Route path="volunteer-management" element={<AdminVolunteerManagement />} />
           <Route path="assign-task" element={<AdminAssignTaskPage />} />
           <Route path="completed-tasks" element={<AdminCompletedTasksPage />} />
+          <Route path="verified-tasks" element={<AdminVerifiedTasksPage />} />
         </Route>
 
         <Route path="*" element={

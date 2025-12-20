@@ -4,6 +4,7 @@ export enum TaskStatus {
   PENDING = 'PENDING',
   IN_PROGRESS = 'IN_PROGRESS',
   COMPLETED = 'COMPLETED',
+  VERIFIED = 'VERIFIED',
 }
 
 export class CreateTaskDto {
@@ -19,6 +20,10 @@ export class CreateTaskDto {
   @IsOptional()
   @IsString()
   deadline?: string;
+
+  @IsOptional()
+  @IsString()
+  taskType?: string;
 }
 
 export class UpdateTaskStatusDto {

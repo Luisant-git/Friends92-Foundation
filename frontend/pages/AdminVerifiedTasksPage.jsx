@@ -1,40 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { getCompletedTasks, verifyTask } from '../api/Task';
+import { getVerifiedTasks } from '../api/Task';
 
-const AdminCompletedTasksPage = () => {
+const AdminVerifiedTasksPage = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [viewTask, setViewTask] = useState(null);
 
   useEffect(() => {
-    fetchCompletedTasks();
+    fetchVerifiedTasks();
   }, []);
 
-  const fetchCompletedTasks = async () => {
+  const fetchVerifiedTasks = async () => {
     try {
-      const data = await getCompletedTasks();
+      const data = await getVerifiedTasks();
       setTasks(data);
     } catch (err) {
-      setError('Failed to load completed tasks');
+      setError('Failed to load verified tasks');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleVerify = async (id) => {
-    try {
-      await verifyTask(id);
-      fetchCompletedTasks();
-    } catch (err) {
-      setError('Failed to verify task');
     }
   };
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div>
-        <h1 className="text-2xl font-bold mb-6">Completed Tasks</h1>
+        <h1 className="text-2xl font-bold mb-6">Verified Tasks</h1>
 
         {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
 
@@ -51,7 +42,7 @@ const AdminCompletedTasksPage = () => {
                   <th className="p-3">Assigned Date</th>
                   <th className="p-3">Deadline</th>
                   <th className="p-3">Completed</th>
-                  <th className="p-3">Actions</th>
+                  <th className="p-3">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -69,15 +60,9 @@ const AdminCompletedTasksPage = () => {
                     <td className="p-3">
                       <button
                         onClick={() => setViewTask(task)}
-                        className="text-blue-600 hover:text-blue-800 mr-2"
+                        className="text-blue-600 hover:text-blue-800"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                      </button>
-                      <button
-                        onClick={() => handleVerify(task.id)}
-                        className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
-                      >
-                        Verify
                       </button>
                     </td>
                   </tr>
@@ -85,7 +70,7 @@ const AdminCompletedTasksPage = () => {
                 {tasks.length === 0 && (
                   <tr>
                     <td colSpan="7" className="p-4 text-center text-gray-500">
-                      No completed tasks yet
+                      No verified tasks yet
                     </td>
                   </tr>
                 )}
@@ -128,6 +113,12 @@ const AdminCompletedTasksPage = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Volunteer Comment</label>
                 <p className="text-gray-900 whitespace-pre-wrap">{viewTask.volunteerComment || 'No comment'}</p>
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                  Verified
+                </span>
+              </div>
             </div>
             <div className="flex justify-end mt-6">
               <button
@@ -144,4 +135,4 @@ const AdminCompletedTasksPage = () => {
   );
 };
 
-export default AdminCompletedTasksPage;
+export default AdminVerifiedTasksPage;

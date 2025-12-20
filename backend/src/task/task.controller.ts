@@ -30,6 +30,11 @@ export class TaskController {
     return this.taskService.findCompleted();
   }
 
+  @Get('verified')
+  async findVerified() {
+    return this.taskService.findVerified();
+  }
+
   @Get('volunteer/:volunteerId')
   async findByVolunteer(@Param('volunteerId', ParseIntPipe) volunteerId: number) {
     return this.taskService.findByVolunteer(volunteerId);
@@ -41,6 +46,11 @@ export class TaskController {
     @Body() updateTaskStatusDto: UpdateTaskStatusDto,
   ) {
     return this.taskService.updateStatus(id, updateTaskStatusDto);
+  }
+
+  @Patch(':id/verify')
+  async verifyTask(@Param('id', ParseIntPipe) id: number) {
+    return this.taskService.verifyTask(id);
   }
 
   @Delete(':id')

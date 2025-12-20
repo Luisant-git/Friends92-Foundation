@@ -40,6 +40,24 @@ export class TaskService {
     });
   }
 
+  async findVerified() {
+    return this.prisma.task.findMany({
+      where: {
+        status: 'VERIFIED',
+      },
+      include: { volunteer: true },
+      orderBy: { updatedAt: 'desc' },
+    });
+  }
+
+  async verifyTask(id: number) {
+    return this.prisma.task.update({
+      where: { id },
+      data: { status: 'VERIFIED' },
+      include: { volunteer: true },
+    });
+  }
+
   async updateStatus(id: number, updateTaskStatusDto: UpdateTaskStatusDto) {
     return this.prisma.task.update({
       where: { id },

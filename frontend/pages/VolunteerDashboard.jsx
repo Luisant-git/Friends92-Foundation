@@ -5,12 +5,13 @@ const VolunteerDashboard = () => {
   const [stats, setStats] = useState({
     totalTasks: 0,
     completedTasks: 0,
-    pendingTasks: 0
+    pendingTasks: 0,
+    verifiedTasks: 0
   });
   const [tasks, setTasks] = useState([]);
 
-  const completionPercentage = stats.totalTasks > 0 
-    ? Math.round((stats.completedTasks / stats.totalTasks) * 100) 
+  const verificationPercentage = stats.totalTasks > 0 
+    ? Math.round((stats.verifiedTasks / stats.totalTasks) * 100) 
     : 0;
 
   useEffect(() => {
@@ -26,7 +27,8 @@ const VolunteerDashboard = () => {
       setStats({
         totalTasks: taskData.length,
         completedTasks: taskData.filter(t => t.status === 'COMPLETED').length,
-        pendingTasks: taskData.filter(t => t.status !== 'COMPLETED').length
+        pendingTasks: taskData.filter(t => t.status !== 'COMPLETED' && t.status !== 'VERIFIED').length,
+        verifiedTasks: taskData.filter(t => t.status === 'VERIFIED').length
       });
     } catch (err) {
       console.error('Failed to load stats', err);
@@ -35,7 +37,7 @@ const VolunteerDashboard = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -71,11 +73,23 @@ const VolunteerDashboard = () => {
             </div>
           </div>
         </div>
+
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-500 text-sm">Verified Tasks</p>
+              <h3 className="text-3xl font-bold text-gray-800">{stats.verifiedTasks}</h3>
+            </div>
+            <div className="bg-teal-100 p-3 rounded-full">
+              <svg className="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-10 gap-6 mb-6">
         <div className="md:col-span-3 bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4">Task Completion Progress</h2>
+          <h2 className="text-xl font-bold mb-4">Task Verified Progress</h2>
           <div className="flex items-center justify-center">
             <div className="relative w-48 h-48">
               <svg className="transform -rotate-90 w-48 h-48">
@@ -95,12 +109,12 @@ const VolunteerDashboard = () => {
                   strokeWidth="16"
                   fill="none"
                   strokeDasharray={`${2 * Math.PI * 80}`}
-                  strokeDashoffset={`${2 * Math.PI * 80 * (1 - completionPercentage / 100)}`}
+                  strokeDashoffset={`${2 * Math.PI * 80 * (1 - verificationPercentage / 100)}`}
                   strokeLinecap="round"
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-4xl font-bold text-gray-800">{completionPercentage}%</span>
+                <span className="text-4xl font-bold text-gray-800">{verificationPercentage}%</span>
               </div>
             </div>
           </div>
@@ -112,7 +126,7 @@ const VolunteerDashboard = () => {
             {tasks.slice(0, 5).map((task, index) => {
               const maxHeight = 200;
               const deadlineDate = task.deadline ? new Date(task.deadline).getTime() : 0;
-              const completedDate = task.status === 'COMPLETED' ? new Date(task.updatedAt).getTime() : 0;
+              const completedDate = (task.status === 'COMPLETED' || task.status === 'VERIFIED') ? new Date(task.updatedAt).getTime() : 0;
               const heightRatio = deadlineDate > 0 ? Math.min((completedDate / deadlineDate) * maxHeight, maxHeight) : 0;
               
               return (
@@ -123,7 +137,7 @@ const VolunteerDashboard = () => {
                       style={{ height: `${Math.max(deadlineDate > 0 ? 100 : 20, 20)}px` }}
                       title={`Deadline: ${task.deadline ? new Date(task.deadline).toLocaleDateString('en-GB') : 'N/A'}`}
                     ></div>
-                    {task.status === 'COMPLETED' && (
+                    {(task.status === 'COMPLETED' || task.status === 'VERIFIED') && (
                       <div 
                         className="w-12 bg-green-500 rounded-t" 
                         style={{ height: `${Math.max(heightRatio, 20)}px` }}

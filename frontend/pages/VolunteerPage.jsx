@@ -121,14 +121,11 @@ const VolunteerPage = () => {
                   required
                 >
                   <option value="">Select Service</option>
-                  <option value="Education & Tutoring">Education & Tutoring</option>
-                  <option value="Skill Development">Skill Development</option>
-                  <option value="Career Counseling">Career Counseling</option>
-                  <option value="Event Management">Event Management</option>
-                  <option value="Fundraising">Fundraising</option>
-                  <option value="Social Media & Marketing">Social Media & Marketing</option>
-                  <option value="Community Outreach">Community Outreach</option>
-                  <option value="Administrative Support">Administrative Support</option>
+                  <option value="Education">Education</option>
+                  <option value="Health">Health</option>
+                  <option value="Environment">Environment</option>
+                  <option value="Women & Child Welfare">Women & Child Welfare</option>
+                  <option value="Disaster Relief">Disaster Relief</option>
                 </select>
               </div>
 
