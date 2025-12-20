@@ -63,7 +63,10 @@ const VolunteerTasksPage = () => {
                 </span>
               </div>
               <p className="text-gray-600 mb-4">{task.description}</p>
-              {task.deadline && <p className="text-sm text-gray-500 mb-4">Deadline: {new Date(task.deadline).toLocaleDateString('en-GB')}</p>}
+              <div className="flex gap-4 text-sm text-gray-500 mb-4">
+                <p>Assigned: {new Date(task.createdAt).toLocaleDateString('en-GB')}</p>
+                {task.deadline && <p>Deadline: {new Date(task.deadline).toLocaleDateString('en-GB')}</p>}
+              </div>
 
               {task.status !== 'COMPLETED' && (
                 <div className="flex gap-2">

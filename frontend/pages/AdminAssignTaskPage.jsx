@@ -90,6 +90,7 @@ const AdminAssignTaskPage = () => {
                 <th className="p-3">S.No</th>
                 <th className="p-3">Task Title</th>
                 <th className="p-3">Volunteer</th>
+                <th className="p-3">Assigned Date</th>
                 <th className="p-3">Deadline</th>
                 <th className="p-3">Status</th>
                 <th className="p-3">Action</th>
@@ -104,6 +105,7 @@ const AdminAssignTaskPage = () => {
                     <div>{task.volunteer.name}</div>
                     <div className="text-sm text-gray-500">{task.volunteer.email}</div>
                   </td>
+                  <td className="p-3 text-sm">{new Date(task.createdAt).toLocaleDateString('en-GB')}</td>
                   <td className="p-3 text-sm">{task.deadline ? new Date(task.deadline).toLocaleDateString('en-GB') : 'N/A'}</td>
                   <td className="p-3">
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(task.status)}`}>
@@ -122,7 +124,7 @@ const AdminAssignTaskPage = () => {
               ))}
               {tasks.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="p-4 text-center text-gray-500">
+                  <td colSpan="7" className="p-4 text-center text-gray-500">
                     No assigned tasks yet
                   </td>
                 </tr>
@@ -222,6 +224,10 @@ const AdminAssignTaskPage = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Volunteer</label>
                 <p className="text-gray-900">{viewTask.volunteer.name} ({viewTask.volunteer.email})</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Assigned Date</label>
+                <p className="text-gray-900">{new Date(viewTask.createdAt).toLocaleDateString('en-GB')}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Deadline</label>
