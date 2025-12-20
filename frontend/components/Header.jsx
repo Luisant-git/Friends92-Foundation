@@ -107,13 +107,12 @@ const Header = () => {
         </li>
 
         <li>
-          <NavLink
-            to="/volunteer"
+          <a
+            href="#volunteer"
             className={linkClass}
-            style={({ isActive }) => (isActive ? activeLinkStyle : undefined)}
           >
             Volunteer Section
-          </NavLink>
+          </a>
         </li>
 
         <li>

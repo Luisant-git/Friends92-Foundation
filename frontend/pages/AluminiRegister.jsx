@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { createAlumni } from "../api/Alumini";
+import { createVolunteer } from "../api/Volunteer";
+import { uploadImage } from "../api/Upload";
 
 const AluminiRegister = () => {
   const [form, setForm] = useState({
@@ -8,10 +10,27 @@ const AluminiRegister = () => {
     year: "",
     mobile: "",
     city: "",
+    mobile2: "",
+    email: "",
+    profession: "",
+    companyName: "",
+    designation: "",
+    companyDepartment: "",
+    companyPlace: "",
+    businessName: "",
+    natureOfBusiness: "",
+    businessPlace: "",
+    businessAddress: "",
+    permanentAddress: "",
+    servicesOffered: "",
+    photoUrl: "",
+    service: ""
   });
 
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [willProvideServices, setWillProvideServices] = useState(false);
+  const [photoFile, setPhotoFile] = useState(null);
 
   const currentYear = new Date().getFullYear();
   const years = Array.from(
@@ -19,6 +38,19 @@ const AluminiRegister = () => {
     (_, i) => 1970 + i
   );
   const departments = ["DAE", "DCE", "DCSE", "DEE", "DECE", "DIT", "DME"];
+
+  const handlePhotoChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPhotoFile(file);
+      try {
+        const result = await uploadImage(file);
+        setForm({ ...form, photoUrl: result.url });
+      } catch (error) {
+        console.error('Upload error:', error);
+      }
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,16 +62,40 @@ const AluminiRegister = () => {
 
     setLoading(true);
     try {
-      const res = await createAlumni({ ...form, year: Number(form.year) });
+      const res = await createAlumni({ name: form.name, department: form.department, year: Number(form.year), mobile: form.mobile, city: form.city });
 
       if (res?.success === false) {
         alert(res.message || "Registration failed");
         return;
       }
 
+      if (willProvideServices) {
+        await createVolunteer({
+          name: form.name,
+          service: form.service,
+          mobile1: form.mobile,
+          mobile2: form.mobile2,
+          email: form.email,
+          profession: form.profession,
+          companyName: form.companyName,
+          designation: form.designation,
+          companyDepartment: form.companyDepartment,
+          companyPlace: form.companyPlace,
+          businessName: form.businessName,
+          natureOfBusiness: form.natureOfBusiness,
+          businessPlace: form.businessPlace,
+          businessAddress: form.businessAddress,
+          permanentAddress: form.permanentAddress,
+          servicesOffered: form.servicesOffered,
+          photoUrl: form.photoUrl
+        });
+      }
+
       setShowSuccess(true);
       window.dispatchEvent(new Event("alumniListUpdated"));
-      setForm({ name: "", department: "", year: "", mobile: "", city: "" });
+      setForm({ name: "", department: "", year: "", mobile: "", city: "", mobile2: "", email: "", profession: "", companyName: "", designation: "", companyDepartment: "", companyPlace: "", businessName: "", natureOfBusiness: "", businessPlace: "", businessAddress: "", permanentAddress: "", servicesOffered: "", photoUrl: "", service: "" });
+      setWillProvideServices(false);
+      setPhotoFile(null);
     } catch (err) {
       alert("Registration Failed!");
       console.error(err);
@@ -69,6 +125,18 @@ const AluminiRegister = () => {
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Email *</label>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
                   required
                 />
@@ -115,6 +183,17 @@ const AluminiRegister = () => {
                 />
               </div>
 
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Mobile Number 2</label>
+                <input
+                  type="tel"
+                  value={form.mobile2}
+                  onChange={(e) => setForm({ ...form, mobile2: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
               <div>
                 <label className="block text-sm font-medium mb-2">Current Location *</label>
                 <input
@@ -125,6 +204,113 @@ const AluminiRegister = () => {
                   required
                 />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Profession</label>
+                <input
+                  type="text"
+                  value={form.profession}
+                  onChange={(e) => setForm({ ...form, profession: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            <div className="border-t pt-6" id="volunteer">
+              <div className="flex items-center gap-3 mb-4">
+                <input
+                  type="checkbox"
+                  id="willProvideServices"
+                  checked={willProvideServices}
+                  onChange={(e) => setWillProvideServices(e.target.checked)}
+                  className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500"
+                />
+                <label htmlFor="willProvideServices" className="text-sm font-medium cursor-pointer">
+                  Are you willing to provide services to friends & alumni?
+                </label>
+              </div>
+
+              {willProvideServices && (
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Service Area *</label>
+                    <select
+                      value={form.service}
+                      onChange={(e) => setForm({ ...form, service: e.target.value })}
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500"
+                      required={willProvideServices}
+                    >
+                      <option value="">Select Service</option>
+                      <option value="Education">Education</option>
+                      <option value="Health">Health</option>
+                      <option value="Environment">Environment</option>
+                      <option value="Women & Child Welfare">Women & Child Welfare</option>
+                      <option value="Disaster Relief">Disaster Relief</option>
+                    </select>
+                  </div>
+
+                  <div className="border-t pt-4">
+                    <h3 className="font-semibold mb-4">If Employee</h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Company Name</label>
+                        <input type="text" value={form.companyName} onChange={(e) => setForm({ ...form, companyName: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Designation</label>
+                        <input type="text" value={form.designation} onChange={(e) => setForm({ ...form, designation: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Department</label>
+                        <input type="text" value={form.companyDepartment} onChange={(e) => setForm({ ...form, companyDepartment: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Place</label>
+                        <input type="text" value={form.companyPlace} onChange={(e) => setForm({ ...form, companyPlace: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-4">
+                    <h3 className="font-semibold mb-4">If Entrepreneur</h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Business Name</label>
+                        <input type="text" value={form.businessName} onChange={(e) => setForm({ ...form, businessName: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Nature of Business</label>
+                        <input type="text" value={form.natureOfBusiness} onChange={(e) => setForm({ ...form, natureOfBusiness: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Place</label>
+                        <input type="text" value={form.businessPlace} onChange={(e) => setForm({ ...form, businessPlace: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Business Address</label>
+                    <textarea value={form.businessAddress} onChange={(e) => setForm({ ...form, businessAddress: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" rows="2" />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Permanent Address</label>
+                    <textarea value={form.permanentAddress} onChange={(e) => setForm({ ...form, permanentAddress: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" rows="2" />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">What kind of services can you provide?</label>
+                    <textarea value={form.servicesOffered} onChange={(e) => setForm({ ...form, servicesOffered: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" rows="3" placeholder="E.g., Career guidance, mentorship, technical training, business consultation, etc." />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Photo</label>
+                    <input type="file" accept="image/*" onChange={handlePhotoChange} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-green-50 file:text-green-700 file:cursor-pointer hover:file:bg-green-100" />
+                    {form.photoUrl && <img src={form.photoUrl} alt="Preview" className="mt-3 w-20 h-20 object-cover rounded border" />}
+                  </div>
+                </div>
+              )}
             </div>
 
             <button
@@ -159,6 +345,6 @@ const AluminiRegister = () => {
       )}
     </div>
   );
-};
+}
 
 export default AluminiRegister;

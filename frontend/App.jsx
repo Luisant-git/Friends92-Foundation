@@ -187,13 +187,7 @@ const App = () => {
             <Footer />
           </div>
         } />
-        <Route path="/volunteer" element={
-          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
-            <Header />
-            <main className="flex-grow"><VolunteerPage /></main>
-            <Footer />
-          </div>
-        } />
+
         <Route path="/volunteer/login" element={<VolunteerLoginPage />} />
         <Route path="/volunteer/reset-password/:token" element={<VolunteerResetPassword />} />
         
