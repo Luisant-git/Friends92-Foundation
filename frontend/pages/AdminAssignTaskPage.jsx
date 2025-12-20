@@ -87,6 +87,7 @@ const AdminAssignTaskPage = () => {
           <table className="min-w-full bg-white rounded-lg shadow-md border">
             <thead>
               <tr className="bg-blue-50 text-left">
+                <th className="p-3">S.No</th>
                 <th className="p-3">Task Title</th>
                 <th className="p-3">Volunteer</th>
                 <th className="p-3">Deadline</th>
@@ -95,8 +96,9 @@ const AdminAssignTaskPage = () => {
               </tr>
             </thead>
             <tbody>
-              {tasks.map(task => (
+              {tasks.map((task, index) => (
                 <tr key={task.id} className="border-t hover:bg-gray-50">
+                  <td className="p-3">{index + 1}</td>
                   <td className="p-3">{task.title}</td>
                   <td className="p-3">
                     <div>{task.volunteer.name}</div>
@@ -120,7 +122,7 @@ const AdminAssignTaskPage = () => {
               ))}
               {tasks.length === 0 && (
                 <tr>
-                  <td colSpan="5" className="p-4 text-center text-gray-500">
+                  <td colSpan="6" className="p-4 text-center text-gray-500">
                     No assigned tasks yet
                   </td>
                 </tr>
