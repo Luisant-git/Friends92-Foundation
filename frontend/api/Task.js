@@ -28,11 +28,11 @@ export const getCompletedTasks = async () => {
   return response.json();
 };
 
-export const updateTaskStatus = async (id, status, comment) => {
+export const updateTaskStatus = async (id, status, comment, imageUrls, impactTitle, impactDescription, impactField) => {
   const response = await fetch(`${API_BASE_URL}/task/${id}/status`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ status, volunteerComment: comment }),
+    body: JSON.stringify({ status, volunteerComment: comment, imageUrls, impactTitle, impactDescription, impactField }),
   });
   if (!response.ok) throw new Error('Failed to update task');
   return response.json();

@@ -90,14 +90,14 @@ const AluminiRegister = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Year *</label>
+                <label className="block text-sm font-medium mb-2">Passed Out Year *</label>
                 <select
                   value={form.year}
                   onChange={(e) => setForm({ ...form, year: e.target.value })}
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
                   required
                 >
-                  <option value="">Select Year</option>
+                  <option value="">Select Passed Out Year</option>
                   {years.map((year) => (
                     <option key={year} value={year}>{year}</option>
                   ))}

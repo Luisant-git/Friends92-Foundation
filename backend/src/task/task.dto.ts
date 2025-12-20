@@ -33,4 +33,19 @@ export class UpdateTaskStatusDto {
   @IsOptional()
   @IsString()
   volunteerComment?: string;
+
+  @IsOptional()
+  imageUrls?: string[];
+
+  @IsOptional()
+  @IsString()
+  impactTitle?: string;
+
+  @IsOptional()
+  @IsString()
+  impactDescription?: string;
+
+  @IsOptional()
+  @IsString()
+  impactField?: string;
 }

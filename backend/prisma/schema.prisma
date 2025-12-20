@@ -173,6 +173,10 @@ model Task {
   volunteer       Volunteer  @relation(fields: [volunteerId], references: [id])
   status          TaskStatus @default(PENDING)
   volunteerComment String?
+  imageUrls       String[]
+  impactTitle     String?
+  impactDescription String?
+  impactField     String?
   deadline        DateTime?
   taskType        String?
   createdAt       DateTime   @default(now())

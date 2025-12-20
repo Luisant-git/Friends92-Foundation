@@ -7,6 +7,11 @@ const VolunteerTasksPage = () => {
   const [error, setError] = useState('');
   const [selectedTask, setSelectedTask] = useState(null);
   const [comment, setComment] = useState('');
+  const [images, setImages] = useState([null, null, null]);
+  const [uploading, setUploading] = useState(false);
+  const [impactTitle, setImpactTitle] = useState('');
+  const [impactDescription, setImpactDescription] = useState('');
+  const [impactField, setImpactField] = useState('');
 
   useEffect(() => {
     fetchTasks();
@@ -22,12 +27,43 @@ const VolunteerTasksPage = () => {
     }
   };
 
+  const handleImageUpload = async (file, index) => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/upload/image`, {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+      setImages(prev => {
+        const newImages = [...prev];
+        const emptyIndex = newImages.findIndex(img => img === null);
+        if (emptyIndex !== -1) {
+          newImages[emptyIndex] = data.url;
+        }
+        return newImages;
+      });
+    } catch (err) {
+      setError('Failed to upload image');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleStatusUpdate = async (taskId, status) => {
     setLoading(true);
     setError('');
     try {
-      await updateTaskStatus(taskId, status, comment);
+      const validImageUrls = images.filter(url => url !== null);
+      await updateTaskStatus(taskId, status, comment, validImageUrls, impactTitle, impactDescription, impactField);
       setComment('');
+      setImages([null, null, null]);
+      setImpactTitle('');
+      setImpactDescription('');
+      setImpactField('');
       setSelectedTask(null);
       fetchTasks();
     } catch (err) {
@@ -96,6 +132,17 @@ const VolunteerTasksPage = () => {
                   <p className="text-sm text-gray-600">{task.volunteerComment}</p>
                 </div>
               )}
+
+              {task.imageUrls && task.imageUrls.length > 0 && (
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">Uploaded Images:</p>
+                  <div className="flex gap-2">
+                    {task.imageUrls.map((url, idx) => (
+                      <img key={idx} src={url} alt={`Task ${idx + 1}`} className="w-20 h-20 object-cover rounded" />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
 
@@ -107,19 +154,54 @@ const VolunteerTasksPage = () => {
 
       {selectedTask && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full">
             <h3 className="text-xl font-bold mb-4">Complete Task</h3>
-            <p className="text-gray-600 mb-4">Add a comment about the completed task:</p>
+            <input
+              type="text"
+              value={impactTitle}
+              onChange={(e) => setImpactTitle(e.target.value)}
+              placeholder="Title"
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 mb-3"
+            />
             <textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Enter your comment..."
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 mb-4"
+              value={impactDescription}
+              onChange={(e) => setImpactDescription(e.target.value)}
+              placeholder="Description"
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 mb-3"
               rows="4"
             />
+            <textarea
+              value={impactField}
+              onChange={(e) => setImpactField(e.target.value)}
+              placeholder="Impact"
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 mb-3"
+              rows="4"
+            />
+            <p className="text-sm font-medium text-gray-700 mb-2">Upload Images (up to 3):</p>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file && images.filter(img => img).length < 3) {
+                  handleImageUpload(file, 0);
+                }
+                e.target.value = '';
+              }}
+              disabled={images.filter(img => img).length >= 3}
+              className="w-full mb-2"
+            />
+            {uploading && <p className="text-sm text-blue-600 mb-2">Uploading...</p>}
+            {images.some(img => img) && (
+              <div className="flex gap-2 mb-4">
+                {images.filter(img => img).map((img, idx) => (
+                  <img key={idx} src={img} alt={`Upload ${idx + 1}`} className="w-20 h-20 object-cover rounded" />
+                ))}
+              </div>
+            )}
             <div className="flex gap-3 justify-end">
               <button
-                onClick={() => { setSelectedTask(null); setComment(''); }}
+                onClick={() => { setSelectedTask(null); setComment(''); setImages([null, null, null]); setImpactTitle(''); setImpactDescription(''); setImpactField(''); }}
                 className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
               >
                 Cancel

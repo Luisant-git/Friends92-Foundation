@@ -64,6 +64,10 @@ export class TaskService {
       data: {
         status: updateTaskStatusDto.status as any,
         volunteerComment: updateTaskStatusDto.volunteerComment,
+        imageUrls: updateTaskStatusDto.imageUrls || [],
+        impactTitle: updateTaskStatusDto.impactTitle,
+        impactDescription: updateTaskStatusDto.impactDescription,
+        impactField: updateTaskStatusDto.impactField,
       },
       include: { volunteer: true },
     });

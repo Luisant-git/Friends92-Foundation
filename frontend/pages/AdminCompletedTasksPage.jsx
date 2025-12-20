@@ -100,34 +100,34 @@ const AdminCompletedTasksPage = () => {
           <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <h3 className="text-2xl font-bold mb-4">Task Details</h3>
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                <p className="text-gray-900">{viewTask.title}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <p className="text-gray-900 whitespace-pre-wrap">{viewTask.description}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Volunteer</label>
-                <p className="text-gray-900">{viewTask.volunteer.name} ({viewTask.volunteer.email})</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Assigned Date</label>
-                <p className="text-gray-900">{new Date(viewTask.createdAt).toLocaleDateString('en-GB')}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Deadline</label>
-                <p className="text-gray-900">{viewTask.deadline ? new Date(viewTask.deadline).toLocaleDateString('en-GB') : 'N/A'}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Completed On</label>
-                <p className="text-gray-900">{new Date(viewTask.updatedAt).toLocaleDateString('en-GB')}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Volunteer Comment</label>
-                <p className="text-gray-900 whitespace-pre-wrap">{viewTask.volunteerComment || 'No comment'}</p>
-              </div>
+              {viewTask.impactTitle && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                  <p className="text-gray-900">{viewTask.impactTitle}</p>
+                </div>
+              )}
+              {viewTask.impactDescription && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <p className="text-gray-900 whitespace-pre-wrap">{viewTask.impactDescription}</p>
+                </div>
+              )}
+              {viewTask.impactField && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Impact</label>
+                  <p className="text-gray-900 whitespace-pre-wrap">{viewTask.impactField}</p>
+                </div>
+              )}
+              {viewTask.imageUrls && viewTask.imageUrls.length > 0 && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Images</label>
+                  <div className="flex gap-2 flex-wrap">
+                    {viewTask.imageUrls.map((url, idx) => (
+                      <img key={idx} src={url} alt={`Task ${idx + 1}`} className="w-32 h-32 object-cover rounded" />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="flex justify-end mt-6">
               <button
