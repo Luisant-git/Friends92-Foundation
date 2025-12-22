@@ -189,13 +189,21 @@ const VolunteerTasksPage = () => {
                 e.target.value = '';
               }}
               disabled={images.filter(img => img).length >= 3}
-              className="w-full mb-2"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:cursor-pointer hover:file:bg-blue-100 mb-2"
             />
             {uploading && <p className="text-sm text-blue-600 mb-2">Uploading...</p>}
             {images.some(img => img) && (
               <div className="flex gap-2 mb-4">
-                {images.filter(img => img).map((img, idx) => (
-                  <img key={idx} src={img} alt={`Upload ${idx + 1}`} className="w-20 h-20 object-cover rounded" />
+                {images.map((img, idx) => img && (
+                  <div key={idx} className="relative">
+                    <img src={img} alt={`Upload ${idx + 1}`} className="w-20 h-20 object-cover rounded" />
+                    <button
+                      onClick={() => setImages(prev => prev.map((item, i) => i === idx ? null : item))}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                    >
+                      ×
+                    </button>
+                  </div>
                 ))}
               </div>
             )}
