@@ -40,7 +40,7 @@ export class ReportsController {
     }),
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
-    const baseUrl = process.env.UPLOAD_URL;
+    const baseUrl = process.env.UPLOAD_URL || '';
     return {
       filename: file.filename,
       url: `${baseUrl}/${file.filename}`,
@@ -68,7 +68,7 @@ export class ReportsController {
     }),
   )
   create(@Body() createReportDto: CreateReportDto, @UploadedFile() file?: Express.Multer.File) {
-    const baseUrl = process.env.UPLOAD_URL;
+    const baseUrl = process.env.UPLOAD_URL || '';
     const reportData = {
       ...createReportDto,
       fileUrl: file ? `${baseUrl.replace('/uploads', '')}/reports/download/${file.filename}` : createReportDto.fileUrl,
