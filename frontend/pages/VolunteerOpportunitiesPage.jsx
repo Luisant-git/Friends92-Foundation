@@ -43,7 +43,11 @@ const VolunteerOpportunitiesPage = () => {
                     {volunteer.impactField && (
                       <div className="bg-green-50 border-l-4 border-green-500 p-4">
                         <h4 className="text-green-600 font-bold text-sm mb-2">IMPACT</h4>
-                        <p className="text-gray-700 text-sm whitespace-pre-wrap">{volunteer.impactField}</p>
+                        <div className="text-gray-700 text-sm space-y-1">
+                          {volunteer.impactField.split('\n').filter(line => line.trim()).map((line, idx) => (
+                            <div key={idx}>{line}</div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
