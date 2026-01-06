@@ -44,7 +44,7 @@ export class ReportsController {
     return {
       filename: file.filename,
       url: `${baseUrl}/${file.filename}`,
-      downloadUrl: `http://localhost:${process.env.PORT || 3040}/reports/download/${file.filename}`,
+      downloadUrl: `${baseUrl.replace('/uploads', '')}/reports/download/${file.filename}`,
       size: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
     };
   }
@@ -71,7 +71,7 @@ export class ReportsController {
     const baseUrl = process.env.UPLOAD_URL;
     const reportData = {
       ...createReportDto,
-      fileUrl: file ? `http://localhost:${process.env.PORT || 3040}/reports/download/${file.filename}` : createReportDto.fileUrl,
+      fileUrl: file ? `${baseUrl.replace('/uploads', '')}/reports/download/${file.filename}` : createReportDto.fileUrl,
       size: file ? `${(file.size / (1024 * 1024)).toFixed(2)} MB` : createReportDto.size,
     };
     return this.reportsService.create(reportData);
