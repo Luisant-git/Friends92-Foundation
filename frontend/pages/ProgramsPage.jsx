@@ -1,22 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { CheckCircle } from 'lucide-react';
-import { getVerifiedTasks } from '../api/Task';
 
 const ProgramsPage = () => {
-  const [volunteers, setVolunteers] = useState([]);
-
-  useEffect(() => {
-    fetchVerifiedTasks();
-  }, []);
-
-  const fetchVerifiedTasks = async () => {
-    try {
-      const tasks = await getVerifiedTasks();
-      setVolunteers(tasks);
-    } catch (err) {
-      console.error('Failed to load verified tasks');
-    }
-  };
 
   const programs = [
     {
@@ -104,39 +89,6 @@ const ProgramsPage = () => {
               <div key={index} className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-xl transition">
                 <div className="text-3xl font-bold text-green-600 mb-2">{stat.number}</div>
                 <div className="text-gray-600 text-sm">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Volunteer Section - Dynamic */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-800 sm:text-4xl mb-4">Volunteer Opportunities</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Join our verified volunteer programs and make a real difference in the community.</p>
-          </div>
-          <div className="space-y-8">
-            {volunteers.map((volunteer) => (
-              <div key={volunteer.id} className="bg-white rounded-xl border border-gray-200 shadow-lg p-8">
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="grid grid-cols-3 gap-2">
-                    {volunteer.imageUrls && volunteer.imageUrls.slice(0, 3).map((url, idx) => (
-                      <img key={idx} src={url} alt={`${volunteer.impactTitle || volunteer.title} ${idx + 1}`} className="w-full h-48 object-cover rounded-lg" />
-                    ))}
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-800 mb-4">{volunteer.impactTitle || volunteer.title}</h3>
-                    <p className="text-gray-700 mb-6 leading-relaxed">{volunteer.impactDescription || volunteer.description}</p>
-                    {volunteer.impactField && (
-                      <div className="bg-green-50 border-l-4 border-green-500 p-4">
-                        <h4 className="text-green-600 font-bold text-sm mb-2">IMPACT</h4>
-                        <p className="text-gray-700 text-sm whitespace-pre-wrap">{volunteer.impactField}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
               </div>
             ))}
           </div>

@@ -22,6 +22,7 @@ import AdminPlacementPage from './pages/AdminPlacementPage';
 import PlacementPage from './pages/PlacementPage';
 import ProgramsPage from './pages/ProgramsPage';
 import SuccessStoriesPage from './pages/SuccessStoriesPage';
+import VolunteerOpportunitiesPage from './pages/VolunteerOpportunitiesPage';
 import ContactPage from './pages/ContactPage';
 import EventsPage from './pages/EventsPage';
 import EventDetailPage from './pages/EventDetailPage';
@@ -89,6 +90,13 @@ const App = () => {
           <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
             <Header />
             <main className="flex-grow"><SuccessStoriesPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/volunteer-opportunities" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><VolunteerOpportunitiesPage /></main>
             <Footer />
           </div>
         } />

@@ -150,7 +150,7 @@ const DonatePage = () => {
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
               </div>
-              <div className="mt-4">
+              {/* <div className="mt-4">
                 <label className="block text-gray-700 text-sm font-medium mb-2">
                   Receipt Delivery Preference
                 </label>
@@ -164,7 +164,7 @@ const DonatePage = () => {
                     <span className="text-gray-700">WhatsApp</span>
                   </label>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Matching Gift */}
@@ -194,7 +194,7 @@ const DonatePage = () => {
                 <p className="font-semibold text-gray-800 mb-1">Tax Benefits</p>
                 <p>
                   Donations to Gptck92Trust Foundation are eligible for 80G tax
-                  deduction. Tax receipt will be sent via your preferred method (Email/WhatsApp) within 48 hours.
+                  deduction. Tax receipt will be sent via your preferred method within 48 hours.
                 </p>
               </div>
             </div>
