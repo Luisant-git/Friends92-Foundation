@@ -10,6 +10,10 @@ async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  // Set body parser limits for file uploads
+  app.use(require('express').json({ limit: '10mb' }));
+  app.use(require('express').urlencoded({ limit: '10mb', extended: true }));
+
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads',
   });

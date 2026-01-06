@@ -13,6 +13,7 @@ const AluminiRegister = () => {
     mobile2: "",
     email: "",
     profession: "",
+    bloodGroup: "",
     companyName: "",
     designation: "",
     companyDepartment: "",
@@ -93,7 +94,7 @@ const AluminiRegister = () => {
 
       setShowSuccess(true);
       window.dispatchEvent(new Event("alumniListUpdated"));
-      setForm({ name: "", department: "", year: "", mobile: "", city: "", mobile2: "", email: "", profession: "", companyName: "", designation: "", companyDepartment: "", companyPlace: "", businessName: "", natureOfBusiness: "", businessPlace: "", businessAddress: "", permanentAddress: "", servicesOffered: "", photoUrl: "", service: "" });
+      setForm({ name: "", department: "", year: "", mobile: "", city: "", mobile2: "", email: "", profession: "", bloodGroup: "", companyName: "", designation: "", companyDepartment: "", companyPlace: "", businessName: "", natureOfBusiness: "", businessPlace: "", businessAddress: "", permanentAddress: "", servicesOffered: "", photoUrl: "", service: "" });
       setWillProvideServices(false);
       setPhotoFile(null);
     } catch (err) {
@@ -214,6 +215,102 @@ const AluminiRegister = () => {
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Blood Group</label>
+                <select
+                  value={form.bloodGroup}
+                  onChange={(e) => setForm({ ...form, bloodGroup: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select Blood Group</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                </select>
+              </div>
+
+              <div className="md:col-span-2">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="bloodDonor"
+                    className="w-4 h-4 text-red-600 rounded focus:ring-2 focus:ring-red-500"
+                  />
+                  <label htmlFor="bloodDonor" className="text-sm font-medium cursor-pointer">
+                    Are you willing to donate blood in emergency situations?
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Volunteer Fields - Always Visible */}
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium mb-2">Photo</label>
+                <input type="file" accept="image/*" onChange={handlePhotoChange} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-green-50 file:text-green-700 file:cursor-pointer hover:file:bg-green-100" />
+                {form.photoUrl && <img src={form.photoUrl} alt="Preview" className="mt-3 w-20 h-20 object-cover rounded border" />}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">What kind of services can you provide?</label>
+                <textarea value={form.servicesOffered} onChange={(e) => setForm({ ...form, servicesOffered: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" rows="3" placeholder="E.g., Career guidance, mentorship, technical training, business consultation, etc." />
+              </div>
+
+              <div className="border-t pt-4">
+                <h3 className="font-semibold mb-4">If Employee</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Company Name</label>
+                    <input type="text" value={form.companyName} onChange={(e) => setForm({ ...form, companyName: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Designation</label>
+                    <input type="text" value={form.designation} onChange={(e) => setForm({ ...form, designation: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Department</label>
+                    <input type="text" value={form.companyDepartment} onChange={(e) => setForm({ ...form, companyDepartment: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Place</label>
+                    <input type="text" value={form.companyPlace} onChange={(e) => setForm({ ...form, companyPlace: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t pt-4">
+                <h3 className="font-semibold mb-4">If Entrepreneur</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Business Name</label>
+                    <input type="text" value={form.businessName} onChange={(e) => setForm({ ...form, businessName: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Nature of Business</label>
+                    <input type="text" value={form.natureOfBusiness} onChange={(e) => setForm({ ...form, natureOfBusiness: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Place</label>
+                    <input type="text" value={form.businessPlace} onChange={(e) => setForm({ ...form, businessPlace: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Business Address</label>
+                <textarea value={form.businessAddress} onChange={(e) => setForm({ ...form, businessAddress: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" rows="2" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Permanent Address</label>
+                <textarea value={form.permanentAddress} onChange={(e) => setForm({ ...form, permanentAddress: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" rows="2" />
+              </div>
             </div>
 
             <div className="border-t pt-6" id="volunteer">
@@ -247,67 +344,6 @@ const AluminiRegister = () => {
                       <option value="Women & Child Welfare">Women & Child Welfare</option>
                       <option value="Disaster Relief">Disaster Relief</option>
                     </select>
-                  </div>
-
-                  <div className="border-t pt-4">
-                    <h3 className="font-semibold mb-4">If Employee</h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Company Name</label>
-                        <input type="text" value={form.companyName} onChange={(e) => setForm({ ...form, companyName: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Designation</label>
-                        <input type="text" value={form.designation} onChange={(e) => setForm({ ...form, designation: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Department</label>
-                        <input type="text" value={form.companyDepartment} onChange={(e) => setForm({ ...form, companyDepartment: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Place</label>
-                        <input type="text" value={form.companyPlace} onChange={(e) => setForm({ ...form, companyPlace: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border-t pt-4">
-                    <h3 className="font-semibold mb-4">If Entrepreneur</h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Business Name</label>
-                        <input type="text" value={form.businessName} onChange={(e) => setForm({ ...form, businessName: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Nature of Business</label>
-                        <input type="text" value={form.natureOfBusiness} onChange={(e) => setForm({ ...form, natureOfBusiness: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Place</label>
-                        <input type="text" value={form.businessPlace} onChange={(e) => setForm({ ...form, businessPlace: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Business Address</label>
-                    <textarea value={form.businessAddress} onChange={(e) => setForm({ ...form, businessAddress: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" rows="2" />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Permanent Address</label>
-                    <textarea value={form.permanentAddress} onChange={(e) => setForm({ ...form, permanentAddress: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" rows="2" />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">What kind of services can you provide?</label>
-                    <textarea value={form.servicesOffered} onChange={(e) => setForm({ ...form, servicesOffered: e.target.value })} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500" rows="3" placeholder="E.g., Career guidance, mentorship, technical training, business consultation, etc." />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Photo</label>
-                    <input type="file" accept="image/*" onChange={handlePhotoChange} className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-green-50 file:text-green-700 file:cursor-pointer hover:file:bg-green-100" />
-                    {form.photoUrl && <img src={form.photoUrl} alt="Preview" className="mt-3 w-20 h-20 object-cover rounded border" />}
                   </div>
                 </div>
               )}

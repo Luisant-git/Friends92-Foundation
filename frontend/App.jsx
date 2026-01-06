@@ -30,6 +30,7 @@ import AdminTeam from './pages/AdminTeam';
 import DonatePage from './pages/DonatePage';
 import AdminTrust from './pages/AdminTrust';
 import TeamPage from './pages/TeamPage';
+import TransparencyPage from './pages/TransparencyPage';
 import VolunteerPage from './pages/VolunteerPage';
 import AdminVolunteerPage from './pages/AdminVolunteerPage';
 import AdminVolunteerManagement from './pages/AdminVolunteerManagement';
@@ -42,6 +43,8 @@ import AdminAssignTaskPage from './pages/AdminAssignTaskPage';
 import AdminCompletedTasksPage from './pages/AdminCompletedTasksPage';
 import AdminVerifiedTasksPage from './pages/AdminVerifiedTasksPage';
 import VolunteerTasksPage from './pages/VolunteerTasksPage';
+import AdminReports from './pages/AdminReports';
+import AdminFinancial from './pages/AdminFinancial';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -187,6 +190,13 @@ const App = () => {
             <Footer />
           </div>
         } />
+        <Route path="/trust" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><TransparencyPage /></main>
+            <Footer />
+          </div>
+        } />
 
         <Route path="/volunteer/login" element={<VolunteerLoginPage />} />
         <Route path="/volunteer/reset-password/:token" element={<VolunteerResetPassword />} />
@@ -215,6 +225,8 @@ const App = () => {
           <Route path="assign-task" element={<AdminAssignTaskPage />} />
           <Route path="completed-tasks" element={<AdminCompletedTasksPage />} />
           <Route path="verified-tasks" element={<AdminVerifiedTasksPage />} />
+          <Route path="reports" element={<AdminReports />} />
+          <Route path="financial" element={<AdminFinancial />} />
         </Route>
 
         <Route path="*" element={

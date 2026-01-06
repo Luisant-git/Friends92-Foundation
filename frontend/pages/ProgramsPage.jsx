@@ -3,7 +3,7 @@ import { CheckCircle } from 'lucide-react';
 import { getVerifiedTasks } from '../api/Task';
 
 const ProgramsPage = () => {
-  const [programs, setPrograms] = useState([]);
+  const [volunteers, setVolunteers] = useState([]);
 
   useEffect(() => {
     fetchVerifiedTasks();
@@ -12,11 +12,44 @@ const ProgramsPage = () => {
   const fetchVerifiedTasks = async () => {
     try {
       const tasks = await getVerifiedTasks();
-      setPrograms(tasks);
+      setVolunteers(tasks);
     } catch (err) {
       console.error('Failed to load verified tasks');
     }
   };
+
+  const programs = [
+    {
+      id: 1,
+      title: 'Education',
+      description: 'Empowering communities through quality education and skill development programs. We provide scholarships, learning materials, and infrastructure support to ensure every child has access to education.',
+      impact: '5,000+ students educated with scholarships and learning resources'
+    },
+    {
+      id: 2,
+      title: 'Health',
+      description: 'Delivering essential healthcare services and promoting wellness in underserved areas. Our medical camps, health awareness programs, and free consultations ensure accessible healthcare for all.',
+      impact: '25,000+ medical consultations and health check-ups conducted'
+    },
+    {
+      id: 3,
+      title: 'Environment',
+      description: 'Protecting our planet through tree plantation drives, waste management initiatives, and environmental awareness campaigns. Building a sustainable future for generations to come.',
+      impact: '50,000+ trees planted and environmental conservation projects'
+    },
+    {
+      id: 4,
+      title: 'Women and Child Welfare',
+      description: 'Empowering women through skill training, entrepreneurship support, and ensuring child safety and development. Creating opportunities for women to become self-reliant and protecting children\'s rights.',
+      impact: '3,000+ women empowered through skill training and support programs'
+    },
+    {
+      id: 5,
+      title: 'Disaster Relief',
+      description: 'Providing immediate assistance and long-term rehabilitation support during natural calamities and emergencies. Our rapid response teams ensure timely aid reaches affected communities.',
+      impact: '10+ disaster relief operations supporting thousands of families'
+    }
+  ];
 
   const impact = [
     { number: '15,000+', label: 'Families Helped' },
@@ -37,32 +70,23 @@ const ProgramsPage = () => {
         </div>
       </section>
 
-      {/* Programs Section - matching HomePage service cards pattern */}
+      {/* Core Initiatives Section - Static */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl mb-4">Core Initiatives</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-gray-800 sm:text-4xl mb-4">Core Initiatives</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">Our comprehensive programs address the most pressing challenges in our communities through targeted interventions and sustainable solutions.</p>
           </div>
-          <div className="space-y-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {programs.map((program) => (
-              <div key={program.id} className="bg-white rounded-xl border border-gray-200 shadow-lg p-8">
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="grid grid-cols-3 gap-2">
-                    {program.imageUrls && program.imageUrls.slice(0, 3).map((url, idx) => (
-                      <img key={idx} src={url} alt={`${program.impactTitle || program.title} ${idx + 1}`} className="w-full h-48 object-cover rounded-lg" />
-                    ))}
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-800 mb-4">{program.impactTitle || program.title}</h3>
-                    <p className="text-gray-700 mb-6 leading-relaxed">{program.impactDescription || program.description}</p>
-                    {program.impactField && (
-                      <div className="bg-green-50 border-l-4 border-green-500 p-4">
-                        <h4 className="text-green-600 font-bold text-sm mb-2">IMPACT</h4>
-                        <p className="text-gray-700 text-sm whitespace-pre-wrap">{program.impactField}</p>
-                      </div>
-                    )}
-                  </div>
+              <div key={program.id} className="bg-white rounded-xl border border-gray-200 shadow-lg p-6 hover:shadow-xl transition">
+                <div className="flex items-center mb-4">
+                  <CheckCircle className="w-8 h-8 text-green-600 mr-3" />
+                  <h3 className="text-2xl font-bold text-gray-800">{program.title}</h3>
+                </div>
+                <p className="text-gray-700 mb-4 leading-relaxed">{program.description}</p>
+                <div className="bg-green-50 border-l-4 border-green-500 p-4">
+                  <p className="text-gray-700 text-sm font-semibold">{program.impact}</p>
                 </div>
               </div>
             ))}
@@ -86,8 +110,41 @@ const ProgramsPage = () => {
         </div>
       </section>
 
-      {/* Call to Action Section - matching project's green theme */}
-      <section className="py-16">
+      {/* Volunteer Section - Dynamic */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-800 sm:text-4xl mb-4">Volunteer Opportunities</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">Join our verified volunteer programs and make a real difference in the community.</p>
+          </div>
+          <div className="space-y-8">
+            {volunteers.map((volunteer) => (
+              <div key={volunteer.id} className="bg-white rounded-xl border border-gray-200 shadow-lg p-8">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="grid grid-cols-3 gap-2">
+                    {volunteer.imageUrls && volunteer.imageUrls.slice(0, 3).map((url, idx) => (
+                      <img key={idx} src={url} alt={`${volunteer.impactTitle || volunteer.title} ${idx + 1}`} className="w-full h-48 object-cover rounded-lg" />
+                    ))}
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4">{volunteer.impactTitle || volunteer.title}</h3>
+                    <p className="text-gray-700 mb-6 leading-relaxed">{volunteer.impactDescription || volunteer.description}</p>
+                    {volunteer.impactField && (
+                      <div className="bg-green-50 border-l-4 border-green-500 p-4">
+                        <h4 className="text-green-600 font-bold text-sm mb-2">IMPACT</h4>
+                        <p className="text-gray-700 text-sm whitespace-pre-wrap">{volunteer.impactField}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action Section */}
+      <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold text-gray-800 mb-6">Get Involved</h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">

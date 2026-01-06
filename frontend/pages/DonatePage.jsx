@@ -12,7 +12,7 @@ const DonatePage = () => {
   const impactStatements = {
     500: "Provides school supplies for 1 child for a year",
     1000: "Supports skill training for 2 students",
-    2500: "Sponsors education for 3 children for a month",
+    2500: "Topper prize for 3 children",
     5000: "Funds personality development program for 10 students",
     10000: "Supports complete education for 1 child for a year",
   };
@@ -134,15 +134,14 @@ const DonatePage = () => {
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
                 <input
-                  type="email"
-                  placeholder="Email Address *"
+                  type="tel"
+                  placeholder="Phone Number *"
                   required
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
                 <input
-                  type="tel"
-                  placeholder="Phone Number *"
-                  required
+                  type="email"
+                  placeholder="Email Address (optional)"
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
                 <input
@@ -151,10 +150,25 @@ const DonatePage = () => {
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
               </div>
+              <div className="mt-4">
+                <label className="block text-gray-700 text-sm font-medium mb-2">
+                  Receipt Delivery Preference
+                </label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500" />
+                    <span className="text-gray-700">Email</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500" />
+                    <span className="text-gray-700">WhatsApp</span>
+                  </label>
+                </div>
+              </div>
             </div>
 
             {/* Matching Gift */}
-            <div className="mb-8 p-4 bg-blue-50 rounded-lg">
+            {/* <div className="mb-8 p-4 bg-blue-50 rounded-lg">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -171,7 +185,7 @@ const DonatePage = () => {
                   </p>
                 </div>
               </label>
-            </div>
+            </div> */}
 
             {/* Tax Information */}
             <div className="mb-8 p-4 bg-gray-50 rounded-lg flex items-start gap-3">
@@ -180,8 +194,7 @@ const DonatePage = () => {
                 <p className="font-semibold text-gray-800 mb-1">Tax Benefits</p>
                 <p>
                   Donations to Gptck92Trust Foundation are eligible for 80G tax
-                  deduction. You will receive a tax receipt via email within 48
-                  hours.
+                  deduction. Tax receipt will be sent via your preferred method (Email/WhatsApp) within 48 hours.
                 </p>
               </div>
             </div>

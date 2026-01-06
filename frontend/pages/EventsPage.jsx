@@ -122,21 +122,14 @@ export default function EventsPage() {
                       className={`aspect-square p-2 rounded-lg border-2 transition relative ${
                         isSelected
                           ? 'bg-green-600 text-white border-green-600'
+                          : dayEvents.length > 0
+                          ? 'bg-green-100 border-green-400 text-green-800 font-semibold'
                           : isToday
                           ? 'border-green-600 text-green-600 font-bold'
                           : 'border-gray-200 hover:border-green-300 hover:bg-green-50'
                       }`}
                     >
                       <span className="text-sm font-medium">{day}</span>
-                      {dayEvents.length > 0 && (
-                        <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex gap-1">
-                          {dayEvents.slice(0, 3).map((_, idx) => (
-                            <div key={idx} className={`w-1.5 h-1.5 rounded-full ${
-                              isSelected ? 'bg-white' : 'bg-green-600'
-                            }`} />
-                          ))}
-                        </div>
-                      )}
                     </button>
                   );
                 })}
