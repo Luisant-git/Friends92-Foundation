@@ -47,6 +47,9 @@ import VolunteerTasksPage from './pages/VolunteerTasksPage';
 import AdminReports from './pages/AdminReports';
 import AdminFinancial from './pages/AdminFinancial';
 import AdminAlumni from './pages/AdminAlumni';
+import AdminBlogPage from './pages/AdminBlogPage';
+import BlogPage from './pages/BlogPage';
+import BlogDetailPage from './pages/BlogDetailPage';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -98,6 +101,20 @@ const App = () => {
           <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
             <Header />
             <main className="flex-grow"><VolunteerOpportunitiesPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/blog" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><BlogPage /></main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/blog/:id" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><BlogDetailPage /></main>
             <Footer />
           </div>
         } />
@@ -237,6 +254,7 @@ const App = () => {
           <Route path="reports" element={<AdminReports />} />
           <Route path="financial" element={<AdminFinancial />} />
           <Route path="alumni" element={<AdminAlumni />} />
+          <Route path="blog" element={<AdminBlogPage />} />
         </Route>
 
         <Route path="*" element={

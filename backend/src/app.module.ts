@@ -16,9 +16,10 @@ import { VolunteerModule } from './volunteer/volunteer.module';
 import { TaskModule } from './task/task.module';
 import { ReportsModule } from './reports/reports.module';
 import { FinancialModule } from './financial/financial.module';
+import { BlogModule } from './blog/blog.module';
 
 @Module({
-  imports: [AdminModule, BannerModule, UploadModule, AlumniModule, GalleryModule, PlacementModule, CategoryModule, EventsModule, ServicesModule, TeamModule, TrustModule, VolunteerModule, TaskModule, ReportsModule, FinancialModule],
+  imports: [AdminModule, BannerModule, UploadModule, AlumniModule, GalleryModule, PlacementModule, CategoryModule, EventsModule, ServicesModule, TeamModule, TrustModule, VolunteerModule, TaskModule, ReportsModule, FinancialModule, BlogModule],
   controllers: [AppController],
   providers: [AppService],
 })

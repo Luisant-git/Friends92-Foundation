@@ -228,3 +228,14 @@ model Financial {
   updatedAt  DateTime @updatedAt
 }
 
+model Blog {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  content     String?
+  imageUrl    String?
+  videoUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
