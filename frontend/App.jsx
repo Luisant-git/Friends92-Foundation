@@ -46,6 +46,7 @@ import AdminVerifiedTasksPage from './pages/AdminVerifiedTasksPage';
 import VolunteerTasksPage from './pages/VolunteerTasksPage';
 import AdminReports from './pages/AdminReports';
 import AdminFinancial from './pages/AdminFinancial';
+import AdminAlumni from './pages/AdminAlumni';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -235,6 +236,7 @@ const App = () => {
           <Route path="verified-tasks" element={<AdminVerifiedTasksPage />} />
           <Route path="reports" element={<AdminReports />} />
           <Route path="financial" element={<AdminFinancial />} />
+          <Route path="alumni" element={<AdminAlumni />} />
         </Route>
 
         <Route path="*" element={

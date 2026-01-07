@@ -63,7 +63,31 @@ const AluminiRegister = () => {
 
     setLoading(true);
     try {
-      const res = await createAlumni({ name: form.name, department: form.department, year: Number(form.year), mobile: form.mobile, city: form.city });
+      const res = await createAlumni({
+        name: form.name,
+        email: form.email,
+        department: form.department,
+        year: Number(form.year),
+        mobile: form.mobile,
+        mobile2: form.mobile2,
+        city: form.city,
+        profession: form.profession,
+        serviceArea: form.service,
+        bloodGroup: form.bloodGroup,
+        willingToDonateBlood: document.getElementById('bloodDonor')?.checked ? 'Yes' : 'No',
+        photo: form.photoUrl,
+        servicesCanProvide: form.servicesOffered,
+        companyName: form.companyName,
+        designation: form.designation,
+        employeeDepartment: form.companyDepartment,
+        employeePlace: form.companyPlace,
+        businessName: form.businessName,
+        natureOfBusiness: form.natureOfBusiness,
+        businessPlace: form.businessPlace,
+        businessAddress: form.businessAddress,
+        permanentAddress: form.permanentAddress,
+        willingToProvideServices: willProvideServices ? 'Yes' : 'No'
+      });
 
       if (res?.success === false) {
         alert(res.message || "Registration failed");
@@ -214,6 +238,23 @@ const AluminiRegister = () => {
                   onChange={(e) => setForm({ ...form, profession: e.target.value })}
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Service Area *</label>
+                <select
+                  value={form.service}
+                  onChange={(e) => setForm({ ...form, service: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Select Service Area</option>
+                  <option value="Education">Education</option>
+                  <option value="Health">Health</option>
+                  <option value="Environment">Environment</option>
+                  <option value="Women & Child Welfare">Women & Child Welfare</option>
+                  <option value="Disaster Relief">Disaster Relief</option>
+                </select>
               </div>
 
               <div>

@@ -115,6 +115,12 @@ const Header = () => {
               <span className={linkClass}>Volunteer Section</span>
               <div className="ml-4 flex flex-col space-y-1">
                 <NavLink
+                  to="/volunteer/login"
+                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                >
+                  Volunteer Login
+                </NavLink>
+                <NavLink
                   to="/volunteer-opportunities"
                   className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
                 >
@@ -138,6 +144,12 @@ const Header = () => {
                   onMouseEnter={() => setIsVolunteerDropdownOpen(true)}
                   onMouseLeave={() => setIsVolunteerDropdownOpen(false)}
                 >
+                  <NavLink
+                    to="/volunteer/login"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                  >
+                    Volunteer Login
+                  </NavLink>
                   <NavLink
                     to="/volunteer-opportunities"
                     className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
