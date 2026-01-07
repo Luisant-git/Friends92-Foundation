@@ -48,21 +48,24 @@ const ProgramsPage = () => {
   const realTimeImpact = [
     {
       id: 1,
-      title: 'Students Educated',
+      title: 'Education Initiative',
       image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500',
-      number: '5,000+'
+      metric: '5,000+',
+      impact: 'Provided scholarships, learning materials, and infrastructure support to underprivileged students across rural and urban areas. Our program includes free textbooks, digital learning tools, and mentorship to ensure quality education reaches every child regardless of their economic background.'
     },
     {
       id: 2,
-      title: 'Medical Consultations',
+      title: 'Healthcare Outreach',
       image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500',
-      number: '25,000+'
+      metric: '25,000+',
+      impact: 'Conducted free medical consultations, health check-ups, and awareness programs in underserved rural communities. Our mobile health camps provide essential medicines, diagnostic services, and preventive care to families who lack access to basic healthcare facilities.'
     },
     {
       id: 3,
-      title: 'Trees Planted',
+      title: 'Green Earth Campaign',
       image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500',
-      number: '50,000+'
+      metric: '50,000+',
+      impact: 'Planted trees across multiple regions through community-driven plantation drives to combat climate change and restore ecological balance. Our initiative includes ongoing maintenance, environmental education workshops, and creating green spaces in urban areas for sustainable development.'
     }
   ];
 
@@ -129,8 +132,9 @@ const ProgramsPage = () => {
                 <img src={item.image} alt={item.title} className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-800 mb-3">{item.title}</h3>
-                  <div className="bg-green-50 border-l-4 border-green-500 p-3">
-                    <p className="text-green-600 font-bold text-2xl">{item.number}</p>
+                  <div className="bg-green-50 border-l-4 border-green-500 p-4">
+                    <p className="text-green-600 font-bold text-2xl mb-3">{item.metric}</p>
+                    <p className="text-gray-600 text-sm leading-relaxed">{item.impact}</p>
                   </div>
                 </div>
               </div>
