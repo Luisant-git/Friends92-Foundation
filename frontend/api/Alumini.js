@@ -64,3 +64,19 @@ export const filterAlumni = async (department, year) => {
     throw error;
   }
 };
+
+// Update alumni
+export const updateAlumni = async (id, data) => {
+  try {
+    const res = await fetch(`${API_URL}/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to update alumni");
+    return await res.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
