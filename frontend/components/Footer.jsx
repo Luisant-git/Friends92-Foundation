@@ -58,6 +58,22 @@ const Footer = () => {
                   Projects
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="#"
+                  className="text-slate-300 hover:text-sky-400 transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="#"
+                  className="text-slate-300 hover:text-sky-400 transition-colors"
+                >
+                  Return & Refund
+                </Link>
+              </li>
             </ul>
           </div>
 
