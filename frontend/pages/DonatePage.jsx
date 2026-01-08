@@ -1,11 +1,21 @@
 import React, { useState } from "react";
 import { Heart, Shield, RefreshCw, Gift } from "lucide-react";
+import { createDonation } from "../api/Donation";
+import Toast from "../components/common/Toast";
 
 const DonatePage = () => {
   const [donationType, setDonationType] = useState("one-time");
   const [amount, setAmount] = useState("");
   const [customAmount, setCustomAmount] = useState("");
   const [matchingGift, setMatchingGift] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    pan: ""
+  });
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const suggestedAmounts = [500, 1000, 2500, 5000, 10000];
 
@@ -21,9 +31,36 @@ const DonatePage = () => {
   const impact =
     impactStatements[selectedAmount] || "Your contribution makes a difference";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Processing ${donationType} donation of ₹${selectedAmount}`);
+    if (!selectedAmount || !formData.name || !formData.phone) {
+      setToast({ message: "Please fill in required fields", type: "error" });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const donationData = {
+        amount: parseInt(selectedAmount),
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email || "",
+        message: formData.pan ? `PAN: ${formData.pan}` : null
+      };
+
+      await createDonation(donationData);
+      setToast({ message: `Thank you! Your donation of ₹${selectedAmount} has been processed successfully.`, type: "success" });
+      
+      // Reset form
+      setAmount("");
+      setCustomAmount("");
+      setFormData({ name: "", phone: "", email: "", pan: "" });
+    } catch (error) {
+      setToast({ message: "Failed to process donation. Please try again.", type: "error" });
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -131,22 +168,30 @@ const DonatePage = () => {
                   type="text"
                   placeholder="Full Name *"
                   required
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
                 <input
                   type="tel"
                   placeholder="Phone Number *"
                   required
+                  value={formData.phone}
+                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
                 <input
                   type="email"
                   placeholder="Email Address (optional)"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
                 <input
                   type="text"
                   placeholder="PAN Number (for tax receipt)"
+                  value={formData.pan}
+                  onChange={(e) => setFormData({...formData, pan: e.target.value})}
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
               </div>
@@ -202,11 +247,11 @@ const DonatePage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={!selectedAmount}
+              disabled={!selectedAmount || loading}
               className="w-full bg-green-600 text-white py-4 rounded-lg font-semibold text-lg hover:bg-green-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <Heart className="w-5 h-5" />
-              Donate ₹{selectedAmount || "0"}
+              {loading ? "Processing..." : `Donate ₹${selectedAmount || "0"}`}
             </button>
 
             <p className="text-center text-sm text-gray-500 mt-4">
@@ -229,6 +274,13 @@ const DonatePage = () => {
           </p>
         </div>
       </div>
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 };

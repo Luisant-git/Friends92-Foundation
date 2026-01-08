@@ -48,6 +48,7 @@ import AdminReports from './pages/AdminReports';
 import AdminFinancial from './pages/AdminFinancial';
 import AdminAlumni from './pages/AdminAlumni';
 import AdminBlogPage from './pages/AdminBlogPage';
+import AdminDonorsPage from './pages/AdminDonorsPage';
 import BlogPage from './pages/BlogPage';
 import BlogDetailPage from './pages/BlogDetailPage';
 
@@ -253,6 +254,7 @@ const App = () => {
           <Route path="verified-tasks" element={<AdminVerifiedTasksPage />} />
           <Route path="reports" element={<AdminReports />} />
           <Route path="financial" element={<AdminFinancial />} />
+          <Route path="donors" element={<AdminDonorsPage />} />
           <Route path="alumni" element={<AdminAlumni />} />
           <Route path="blog" element={<AdminBlogPage />} />
         </Route>

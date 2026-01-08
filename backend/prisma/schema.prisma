@@ -239,3 +239,13 @@ model Blog {
   updatedAt   DateTime @updatedAt
 }
 
+model Donation {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String
+  phone       String
+  amount      Float
+  message     String?
+  createdAt   DateTime @default(now())
+}
+
