@@ -1,7 +1,9 @@
 import React from 'react';
 import { Star, Calendar, MapPin } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const SuccessStoriesPage = () => {
+  const navigate = useNavigate();
   const successStories = [
     {
       name: 'Priya Sharma',
@@ -150,10 +152,10 @@ const SuccessStoriesPage = () => {
             Every success story starts with someone who believes in the power of change. Join us in creating more stories of hope and transformation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-secondary text-white px-8 py-3 rounded-full text-lg hover:bg-secondary/90 transition">
+            <button onClick={() => navigate('/contact')} className="bg-secondary text-white px-8 py-3 rounded-full text-lg hover:bg-secondary/90 transition">
               Share Your Story
             </button>
-            <button className="border-2 border-secondary text-secondary px-8 py-3 rounded-full text-lg hover:bg-secondary hover:text-white transition">
+            <button onClick={() => navigate('/contact')} className="border-2 border-secondary text-secondary px-8 py-3 rounded-full text-lg hover:bg-secondary hover:text-white transition">
               Support Our Mission
             </button>
           </div>

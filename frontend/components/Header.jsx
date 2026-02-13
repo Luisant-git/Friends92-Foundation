@@ -57,9 +57,6 @@ const Header = () => {
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isAlumniDropdownOpen, setIsAlumniDropdownOpen] = useState(false);
   const [isVolunteerDropdownOpen, setIsVolunteerDropdownOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
-  const [mobileAlumniOpen, setMobileAlumniOpen] = useState(false);
-  const [mobileVolunteerOpen, setMobileVolunteerOpen] = useState(false);
 
   const NavLinks = ({ isMobile }) => {
     const navClass = isMobile
@@ -115,29 +112,21 @@ const Header = () => {
         <li className={isMobile ? "" : "relative group"}>
           {isMobile ? (
             <div className="flex flex-col space-y-1">
-              <button
-                onClick={() => setMobileVolunteerOpen(!mobileVolunteerOpen)}
-                className="flex items-center justify-between text-gray-600 hover:text-primary transition text-sm px-2 py-1.5 font-medium"
-              >
-                Volunteer Section
-                <ChevronDown className={`w-3 h-3 transition-transform ${mobileVolunteerOpen ? 'rotate-180' : ''}`} />
-              </button>
-              {mobileVolunteerOpen && (
-                <div className="ml-4 flex flex-col space-y-1">
-                  <NavLink
-                    to="/volunteer/login"
-                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                  >
-                    Volunteer Login
-                  </NavLink>
-                  <NavLink
-                    to="/volunteer-opportunities"
-                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                  >
-                    Testimonials
-                  </NavLink>
-                </div>
-              )}
+              <span className={linkClass}>Volunteer Section</span>
+              <div className="ml-4 flex flex-col space-y-1">
+                <NavLink
+                  to="/volunteer/login"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                >
+                  Volunteer Login
+                </NavLink>
+                <NavLink
+                  to="/volunteer-opportunities"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                >
+                  Testimonials
+                </NavLink>
+              </div>
             </div>
           ) : (
             <>
@@ -187,35 +176,35 @@ const Header = () => {
         <li className={isMobile ? "" : "relative group"}>
           {isMobile ? (
             <div className="flex flex-col space-y-1">
-              <button
-                onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                className="flex items-center justify-between text-gray-600 hover:text-primary transition text-sm px-2 py-1.5 font-medium"
+              <NavLink
+                to="/services"
+                className={linkClass}
+                style={({ isActive }) =>
+                  isActive ? activeLinkStyle : undefined
+                }
               >
                 Services
-                <ChevronDown className={`w-3 h-3 transition-transform ${mobileServicesOpen ? 'rotate-180' : ''}`} />
-              </button>
-              {mobileServicesOpen && (
-                <div className="ml-4 flex flex-col space-y-1">
-                  <NavLink
-                    to="/services/skill-development"
-                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                  >
-                    Skill Development
-                  </NavLink>
-                  <NavLink
-                    to="/services/personality-development"
-                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                  >
-                    Personality Development
-                  </NavLink>
-                  <NavLink
-                    to="/placement"
-                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                  >
-                    Placement
-                  </NavLink>
-                </div>
-              )}
+              </NavLink>
+              <div className="ml-4 flex flex-col space-y-1">
+                <NavLink
+                  to="/services/skill-development"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                >
+                  Skill Development
+                </NavLink>
+                <NavLink
+                  to="/services/personality-development"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                >
+                  Personality Development
+                </NavLink>
+                <NavLink
+                  to="/placement"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                >
+                  Placement
+                </NavLink>
+              </div>
             </div>
           ) : (
             <>
@@ -261,29 +250,21 @@ const Header = () => {
         <li className={isMobile ? "" : "relative group"}>
           {isMobile ? (
             <div className="flex flex-col space-y-1">
-              <button
-                onClick={() => setMobileAlumniOpen(!mobileAlumniOpen)}
-                className="flex items-center justify-between text-gray-600 hover:text-primary transition text-sm px-2 py-1.5 font-medium"
-              >
-                Alumni
-                <ChevronDown className={`w-3 h-3 transition-transform ${mobileAlumniOpen ? 'rotate-180' : ''}`} />
-              </button>
-              {mobileAlumniOpen && (
-                <div className="ml-4 flex flex-col space-y-1">
-                  <NavLink
-                    to="/alumni/register"
-                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                  >
-                    Register Alumni
-                  </NavLink>
-                  <NavLink
-                    to="/alumni/view"
-                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                  >
-                    View Alumni
-                  </NavLink>
-                </div>
-              )}
+              <span className={linkClass}>Alumni</span>
+              <div className="ml-4 flex flex-col space-y-1">
+                <NavLink
+                  to="/alumni/register"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                >
+                  Register Alumni
+                </NavLink>
+                <NavLink
+                  to="/alumni/view"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                >
+                  View Alumni
+                </NavLink>
+              </div>
             </div>
           ) : (
             <>
@@ -370,14 +351,14 @@ const Header = () => {
           </div>
 
           {/* Mobile Layout - Single Row */}
-          <div className="md:hidden flex items-center justify-between text-white text-[10px] gap-2">
-            <div className="flex items-center gap-1 min-w-0 flex-1">
+          <div className="md:hidden flex items-center justify-between text-white text-[10px]">
+            <div className="flex items-center gap-1">
               <MdMail className="w-3 h-3 flex-shrink-0" />
               <span className="truncate">gptck92trust@gmail.com</span>
             </div>
-            <div className="flex items-center gap-1 flex-shrink-0">
+            <div className="flex items-center gap-1">
               <MdPhone className="w-3 h-3 flex-shrink-0" />
-              <span className="whitespace-nowrap">+91 98765 43210</span>
+              <span>+91 98765 43210</span>
             </div>
           </div>
         </div>
@@ -405,13 +386,13 @@ const Header = () => {
             </nav>
             <NavLink
               to="/donate"
-              className="bg-secondary text-white px-5 py-1.5 rounded-full text-sm hover:bg-secondary/90 transition flex-shrink-0"
+              className="bg-secondary text-white px-5 py-1.5 rounded-full text-sm hover:bg-primary transition flex-shrink-0"
             >
               Donate Now
             </NavLink>
             <NavLink
               to="/volunteer-opportunities"
-              className="border-2 border-primary text-primary px-5 py-1.5 rounded-full text-sm hover:bg-primary/10 transition flex-shrink-0"
+              className="bg-primary text-white px-5 py-1.5 rounded-full text-sm hover:bg-secondary transition flex-shrink-0"
             >
               Volunteer Now
             </NavLink>
@@ -436,13 +417,13 @@ const Header = () => {
             <div className="mt-4 flex flex-col gap-3">
               <NavLink
                 to="/donate"
-                className="w-full bg-secondary text-white py-2 rounded-full text-base block text-center hover:bg-secondary/90 transition"
+                className="w-full bg-secondary text-white py-2 rounded-full text-base block text-center hover:bg-primary transition"
               >
                 Donate Now
               </NavLink>
               <NavLink
                 to="/volunteer-opportunities"
-                className="w-full border-2 border-primary text-primary py-2 rounded-full text-base block text-center hover:bg-primary/10 transition"
+                className="w-full bg-primary text-white py-2 rounded-full text-base block text-center hover:bg-secondary transition"
               >
                 Volunteer Now
               </NavLink>

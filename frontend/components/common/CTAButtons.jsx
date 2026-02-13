@@ -5,7 +5,7 @@ export const DonateButton = ({ variant = "primary", size = "md", className = "" 
   const baseStyles = "font-semibold rounded-full transition inline-flex items-center justify-center";
   
   const variants = {
-    primary: "bg-secondary text-white hover:bg-secondary/90",
+    primary: "bg-secondary text-white hover:bg-primary",
     secondary: "bg-white text-secondary border-2 border-secondary hover:bg-secondary/10",
     outline: "border-2 border-white text-white hover:bg-white/10"
   };
@@ -26,12 +26,12 @@ export const DonateButton = ({ variant = "primary", size = "md", className = "" 
   );
 };
 
-export const VolunteerButton = ({ variant = "secondary", size = "md", className = "" }) => {
+export const VolunteerButton = ({ variant = "primary", size = "md", className = "" }) => {
   const baseStyles = "font-semibold rounded-full transition inline-flex items-center justify-center";
   
   const variants = {
-    primary: "bg-secondary text-white hover:bg-secondary/90",
-    secondary: "bg-white text-secondary border-2 border-secondary hover:bg-secondary/10",
+    primary: "bg-primary text-white hover:bg-secondary",
+    secondary: "bg-white text-primary border-2 border-primary hover:bg-secondary hover:text-white hover:border-secondary",
     outline: "border-2 border-white text-white hover:bg-white/10"
   };
   

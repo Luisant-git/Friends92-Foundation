@@ -257,7 +257,7 @@ const ContactPage = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-secondary text-white py-3 px-6 rounded-full shadow-md hover:shadow-lg hover:bg-secondary/90 transition flex items-center justify-center gap-2 font-medium"
+                  className="w-full bg-secondary text-white py-3 px-6 rounded-full shadow-md hover:shadow-lg hover:bg-primary transition flex items-center justify-center gap-2 font-medium"
                 >
                   <Send className="w-5 h-5" />
                   Send Message
@@ -279,17 +279,18 @@ const ContactPage = () => {
             </p>
           </div>
 
-          {/* Map Placeholder */}
+          {/* Google Map */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="h-96 bg-gray-200 flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500 text-lg font-body">Interactive Map</p>
-                <p className="text-gray-400 text-sm font-body">
-                  No.3/153, A3, R.N. Complex, Azad Nagar, Krishnagiri - 635 001
-                </p>
-              </div>
-            </div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.8!2d78.2!3d12.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDMwJzAwLjAiTiA3OMKwMTInMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="GPTCK 92 Trust Location"
+            ></iframe>
           </div>
         </div>
       </section>

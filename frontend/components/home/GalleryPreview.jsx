@@ -36,7 +36,7 @@ const GalleryPreview = () => {
           ))}
         </div>
         <div className="text-center mt-8">
-          <Link to="/gallery" className="inline-block bg-secondary text-white px-8 py-3 rounded-full shadow-md hover:shadow-lg font-semibold hover:bg-secondary/90 transition">
+          <Link to="/gallery" className="inline-block bg-secondary text-white px-8 py-3 rounded-full shadow-md hover:shadow-lg font-semibold hover:bg-primary transition">
             View Full Gallery
           </Link>
         </div>

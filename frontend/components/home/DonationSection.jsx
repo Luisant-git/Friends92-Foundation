@@ -41,7 +41,7 @@ const DonationSection = () => {
         </div>
 
         <div className="text-center mb-8">
-          <Link to="/donate" className="inline-block bg-secondary text-white px-8 py-3 rounded-full shadow-md hover:shadow-lg font-semibold hover:bg-secondary/90 transition-colors">
+          <Link to="/donate" className="inline-block bg-secondary text-white px-8 py-3 rounded-full shadow-md hover:shadow-lg font-semibold hover:bg-primary transition-colors">
             Support a Student's Future
           </Link>
           <p className="text-sm text-gray-500 italic mt-3 font-body">

@@ -46,7 +46,7 @@ const LatestEvents = () => {
           ))}
         </div>
         <div className="text-center mt-8">
-          <Link to="/events" className="inline-block bg-secondary text-white px-8 py-3 rounded-lg font-semibold hover:bg-secondary/90 transition">
+          <Link to="/events" className="inline-block bg-secondary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary transition">
             View All Events
           </Link>
         </div>

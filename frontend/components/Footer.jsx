@@ -7,12 +7,12 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-white">
       {/* CTA Section at top of footer */}
-      <div className="bg-primary/90 py-8">
+      <div className="bg-white py-8">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
-              <h3 className="text-2xl font-bold mb-2 font-heading">Ready to Make an Impact?</h3>
-              <p className="text-slate-300 font-body">Join us in creating positive change in our communities</p>
+              <h3 className="text-2xl font-bold mb-2 font-heading text-primary">Ready to Make an Impact?</h3>
+              <p className="text-gray-600 font-body">Join us in creating positive change in our communities</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <DonateButton size="md" />
@@ -32,8 +32,7 @@ const Footer = () => {
               </span>
             </h3>
             <p className="text-white/80 leading-relaxed font-body">
-              Fostering a community of learners and innovators, dedicated to
-              excellence in education and research for a better future.
+              Founded in 1992, Gptck92 trust emerged from a shared vision among classmates to create lasting positive change in our community.
             </p>
           </div>
 
@@ -61,7 +60,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/services"
+                  to="/services/skill-development"
                   className="text-slate-300 hover:text-secondary transition-colors"
                 >
                   Services
@@ -69,20 +68,20 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/projects/live"
+                  to="/programs"
                   className="text-slate-300 hover:text-secondary transition-colors"
                 >
-                  Projects
+                  Programs
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   to="/blog"
                   className="text-slate-300 hover:text-secondary transition-colors"
                 >
                   Blog
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   to="#"
@@ -107,24 +106,27 @@ const Footer = () => {
             <h4 className="text-lg font-semibold text-white mb-4">
               Contact Us
             </h4>
-            <address className="not-italic text-white/80 space-y-3">
+            <div className="text-white/80 space-y-3">
+              <p className="font-semibold text-white">GPTCK 92 Trust (Alumni Foundation)</p>
               <p className="flex items-start gap-2">
                 <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <span>123 University Drive, Knowledge City, 12345</span>
-              </p>
-              <p className="flex items-center gap-2">
-                <Mail className="w-5 h-5 flex-shrink-0" />
-                <a href="mailto:gptck92trust@gmail.com" className="hover:text-secondary">
-                  gptck92trust@gmail.com
-                </a>
+                <span className="text-sm">Registered Office: No.3/153, A3, R.N. Complex, Azad Nagar, Venkatapuram, Bynapalli Village, Krishnagiri – 635 001, Tamil Nadu, India.</span>
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="w-5 h-5 flex-shrink-0" />
-                <a href="tel:+919876543210" className="hover:text-secondary">
-                  +91 98765 43210
+                <span className="text-sm">
+                  <a href="tel:+919750089000" className="hover:text-secondary">9750089000</a> / 
+                  <a href="tel:+917200868391" className="hover:text-secondary">7200868391</a> / 
+                  <a href="tel:+917010836510" className="hover:text-secondary">7010836510</a>
+                </span>
+              </p>
+              <p className="flex items-center gap-2">
+                <Mail className="w-5 h-5 flex-shrink-0" />
+                <a href="mailto:gptck92trust@gmail.com" className="hover:text-secondary text-sm">
+                  gptck92trust@gmail.com
                 </a>
               </p>
-            </address>
+            </div>
           </div>
 
           {/* Column 4: Social Media */}
