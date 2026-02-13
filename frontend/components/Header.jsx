@@ -57,6 +57,9 @@ const Header = () => {
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isAlumniDropdownOpen, setIsAlumniDropdownOpen] = useState(false);
   const [isVolunteerDropdownOpen, setIsVolunteerDropdownOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mobileAlumniOpen, setMobileAlumniOpen] = useState(false);
+  const [mobileVolunteerOpen, setMobileVolunteerOpen] = useState(false);
 
   const NavLinks = ({ isMobile }) => {
     const navClass = isMobile
@@ -112,21 +115,29 @@ const Header = () => {
         <li className={isMobile ? "" : "relative group"}>
           {isMobile ? (
             <div className="flex flex-col space-y-1">
-              <span className={linkClass}>Volunteer Section</span>
-              <div className="ml-4 flex flex-col space-y-1">
-                <NavLink
-                  to="/volunteer/login"
-                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                >
-                  Volunteer Login
-                </NavLink>
-                <NavLink
-                  to="/volunteer-opportunities"
-                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                >
-                  Testimonials
-                </NavLink>
-              </div>
+              <button
+                onClick={() => setMobileVolunteerOpen(!mobileVolunteerOpen)}
+                className="flex items-center justify-between text-gray-600 hover:text-primary transition text-sm px-2 py-1.5 font-medium"
+              >
+                Volunteer Section
+                <ChevronDown className={`w-3 h-3 transition-transform ${mobileVolunteerOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {mobileVolunteerOpen && (
+                <div className="ml-4 flex flex-col space-y-1">
+                  <NavLink
+                    to="/volunteer/login"
+                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                  >
+                    Volunteer Login
+                  </NavLink>
+                  <NavLink
+                    to="/volunteer-opportunities"
+                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                  >
+                    Testimonials
+                  </NavLink>
+                </div>
+              )}
             </div>
           ) : (
             <>
@@ -176,35 +187,35 @@ const Header = () => {
         <li className={isMobile ? "" : "relative group"}>
           {isMobile ? (
             <div className="flex flex-col space-y-1">
-              <NavLink
-                to="/services"
-                className={linkClass}
-                style={({ isActive }) =>
-                  isActive ? activeLinkStyle : undefined
-                }
+              <button
+                onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                className="flex items-center justify-between text-gray-600 hover:text-primary transition text-sm px-2 py-1.5 font-medium"
               >
                 Services
-              </NavLink>
-              <div className="ml-4 flex flex-col space-y-1">
-                <NavLink
-                  to="/services/skill-development"
-                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                >
-                  Skill Development
-                </NavLink>
-                <NavLink
-                  to="/services/personality-development"
-                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                >
-                  Personality Development
-                </NavLink>
-                <NavLink
-                  to="/placement"
-                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                >
-                  Placement
-                </NavLink>
-              </div>
+                <ChevronDown className={`w-3 h-3 transition-transform ${mobileServicesOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {mobileServicesOpen && (
+                <div className="ml-4 flex flex-col space-y-1">
+                  <NavLink
+                    to="/services/skill-development"
+                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                  >
+                    Skill Development
+                  </NavLink>
+                  <NavLink
+                    to="/services/personality-development"
+                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                  >
+                    Personality Development
+                  </NavLink>
+                  <NavLink
+                    to="/placement"
+                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                  >
+                    Placement
+                  </NavLink>
+                </div>
+              )}
             </div>
           ) : (
             <>
@@ -250,21 +261,29 @@ const Header = () => {
         <li className={isMobile ? "" : "relative group"}>
           {isMobile ? (
             <div className="flex flex-col space-y-1">
-              <span className={linkClass}>Alumni</span>
-              <div className="ml-4 flex flex-col space-y-1">
-                <NavLink
-                  to="/alumni/register"
-                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                >
-                  Register Alumni
-                </NavLink>
-                <NavLink
-                  to="/alumni/view"
-                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
-                >
-                  View Alumni
-                </NavLink>
-              </div>
+              <button
+                onClick={() => setMobileAlumniOpen(!mobileAlumniOpen)}
+                className="flex items-center justify-between text-gray-600 hover:text-primary transition text-sm px-2 py-1.5 font-medium"
+              >
+                Alumni
+                <ChevronDown className={`w-3 h-3 transition-transform ${mobileAlumniOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {mobileAlumniOpen && (
+                <div className="ml-4 flex flex-col space-y-1">
+                  <NavLink
+                    to="/alumni/register"
+                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                  >
+                    Register Alumni
+                  </NavLink>
+                  <NavLink
+                    to="/alumni/view"
+                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                  >
+                    View Alumni
+                  </NavLink>
+                </div>
+              )}
             </div>
           ) : (
             <>
@@ -350,23 +369,15 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Mobile Layout - Stacked Lines */}
-          <div className="md:hidden flex flex-col items-center gap-1.5 text-white text-xs">
-            <div className="flex items-center justify-center gap-1.5 w-full">
-              <MdMail className="w-3.5 h-3.5 flex-shrink-0" />
-              <span className="text-xs">gptck92trust@gmail.com</span>
+          {/* Mobile Layout - Single Row */}
+          <div className="md:hidden flex items-center justify-between text-white text-[10px] gap-2">
+            <div className="flex items-center gap-1 min-w-0 flex-1">
+              <MdMail className="w-3 h-3 flex-shrink-0" />
+              <span className="truncate">gptck92trust@gmail.com</span>
             </div>
-
-            <div className="flex items-center justify-center gap-1.5 w-full">
-              <MdPhone className="w-3.5 h-3.5 flex-shrink-0" />
-              <span className="text-xs">+91 98765 43210</span>
-            </div>
-
-            <div className="flex items-center justify-center gap-3 pt-1">
-              <FaFacebookF className="w-3.5 h-3.5 hover:text-gray-200 transition cursor-pointer" />
-              <FaInstagram className="w-3.5 h-3.5 hover:text-gray-200 transition cursor-pointer" />
-              <FaTwitter className="w-3.5 h-3.5 hover:text-gray-200 transition cursor-pointer" />
-              <FaLinkedinIn className="w-3.5 h-3.5 hover:text-gray-200 transition cursor-pointer" />
+            <div className="flex items-center gap-1 flex-shrink-0">
+              <MdPhone className="w-3 h-3 flex-shrink-0" />
+              <span className="whitespace-nowrap">+91 98765 43210</span>
             </div>
           </div>
         </div>

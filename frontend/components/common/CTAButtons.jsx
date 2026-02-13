@@ -11,9 +11,9 @@ export const DonateButton = ({ variant = "primary", size = "md", className = "" 
   };
   
   const sizes = {
-    sm: "px-4 py-2 text-sm",
-    md: "px-5 py-2.5 text-base",
-    lg: "px-6 py-3 text-base"
+    sm: "px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm",
+    md: "px-4 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base",
+    lg: "px-4 py-2 text-sm sm:px-6 sm:py-3 sm:text-base"
   };
 
   return (
@@ -36,9 +36,9 @@ export const VolunteerButton = ({ variant = "secondary", size = "md", className 
   };
   
   const sizes = {
-    sm: "px-4 py-2 text-sm",
-    md: "px-5 py-2.5 text-base",
-    lg: "px-6 py-3 text-base"
+    sm: "px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm",
+    md: "px-4 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base",
+    lg: "px-4 py-2 text-sm sm:px-6 sm:py-3 sm:text-base"
   };
 
   return (
@@ -53,7 +53,7 @@ export const VolunteerButton = ({ variant = "secondary", size = "md", className 
 
 export const CTAButtonGroup = ({ size = "md", className = "" }) => {
   return (
-    <div className={`flex flex-wrap gap-4 ${className}`}>
+    <div className={`flex flex-wrap gap-2 sm:gap-4 ${className}`}>
       <DonateButton size={size} />
       <VolunteerButton size={size} />
     </div>

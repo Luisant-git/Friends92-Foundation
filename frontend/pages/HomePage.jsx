@@ -51,12 +51,12 @@ const HomePage = () => {
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           >
-            {/* MOBILE — full image, NO CROP */}
+            {/* MOBILE — cover to fill */}
             <img
               src={banner.imageUrl}
               alt="banner"
               loading="eager"
-              className="sm:hidden w-full h-full object-contain pointer-events-none"
+              className="sm:hidden w-full h-full object-cover pointer-events-none"
             />
 
             {/* DESKTOP — cover */}
@@ -75,10 +75,10 @@ const HomePage = () => {
         {/* Hero Content */}
         <div className="absolute inset-0 flex items-center justify-center z-10">
           <div className="text-center px-4 max-w-5xl">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] font-heading">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] font-heading">
               Empowering Communities, Transforming Lives
             </h1>
-            <p className="text-lg md:text-xl mb-8 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] font-body">
+            <p className="text-sm sm:text-base md:text-xl mb-6 sm:mb-8 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] font-body">
               Alumni united for education, health, environment, and social welfare
             </p>
             <CTAButtonGroup size="lg" className="justify-center" />
