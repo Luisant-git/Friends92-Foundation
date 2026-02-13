@@ -64,15 +64,15 @@ const DonatePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-secondary/5 to-white py-12 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10">
-          <Heart className="w-16 h-16 text-green-600 mx-auto mb-4" />
-          <h1 className="text-4xl font-bold text-gray-800 mb-3">
+          <Heart className="w-16 h-16 text-secondary mx-auto mb-4" />
+          <h1 className="text-4xl font-bold text-primary mb-3 font-heading">
             Make a Difference Today
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 text-lg font-body">
             Your generosity transforms lives and builds futures
           </p>
         </div>
@@ -91,7 +91,7 @@ const DonatePage = () => {
                   onClick={() => setDonationType("one-time")}
                   className={`flex-1 py-3 px-6 rounded-lg font-medium transition ${
                     donationType === "one-time"
-                      ? "bg-green-600 text-white"
+                      ? "bg-secondary text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
@@ -102,7 +102,7 @@ const DonatePage = () => {
                   onClick={() => setDonationType("recurring")}
                   className={`flex-1 py-3 px-6 rounded-lg font-medium transition flex items-center justify-center gap-2 ${
                     donationType === "recurring"
-                      ? "bg-green-600 text-white"
+                      ? "bg-secondary text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
@@ -128,7 +128,7 @@ const DonatePage = () => {
                     }}
                     className={`py-3 px-4 rounded-lg font-medium transition ${
                       amount === amt && !customAmount
-                        ? "bg-green-600 text-white"
+                        ? "bg-secondary text-white"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
@@ -144,14 +144,14 @@ const DonatePage = () => {
                   setCustomAmount(e.target.value);
                   setAmount("");
                 }}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
               />
             </div>
 
             {/* Impact Statement */}
             {selectedAmount && (
-              <div className="mb-8 p-4 bg-green-50 border-l-4 border-green-600 rounded">
-                <p className="text-green-800 font-medium flex items-start gap-2">
+              <div className="mb-8 p-4 bg-secondary/5 border-l-4 border-secondary rounded">
+                <p className="text-secondary font-medium flex items-start gap-2 font-body">
                   <Gift className="w-5 h-5 mt-0.5 flex-shrink-0" />
                   <span>{impact}</span>
                 </p>
@@ -160,7 +160,7 @@ const DonatePage = () => {
 
             {/* Donor Information */}
             <div className="mb-8 space-y-4">
-              <h3 className="text-gray-700 font-semibold mb-4">
+              <h3 className="text-gray-700 font-semibold mb-4 font-heading">
                 Your Information
               </h3>
               <div className="grid md:grid-cols-2 gap-4">
@@ -170,7 +170,7 @@ const DonatePage = () => {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                 />
                 <input
                   type="tel"
@@ -178,21 +178,21 @@ const DonatePage = () => {
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                 />
                 <input
                   type="email"
                   placeholder="Email Address (optional)"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                 />
                 <input
                   type="text"
                   placeholder="PAN Number (for tax receipt)"
                   value={formData.pan}
                   onChange={(e) => setFormData({...formData, pan: e.target.value})}
-                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                 />
               </div>
               {/* <div className="mt-4">
@@ -201,11 +201,11 @@ const DonatePage = () => {
                 </label>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500" />
+                    <input type="checkbox" className="w-4 h-4 text-secondary rounded focus:ring-2 focus:ring-secondary" />
                     <span className="text-gray-700">Email</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500" />
+                    <input type="checkbox" className="w-4 h-4 text-secondary rounded focus:ring-2 focus:ring-secondary" />
                     <span className="text-gray-700">WhatsApp</span>
                   </label>
                 </div>
@@ -213,19 +213,19 @@ const DonatePage = () => {
             </div>
 
             {/* Matching Gift */}
-            {/* <div className="mb-8 p-4 bg-blue-50 rounded-lg">
+            {/* <div className="mb-8 p-4 bg-primary/5 rounded-lg">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={matchingGift}
                   onChange={(e) => setMatchingGift(e.target.checked)}
-                  className="mt-1 w-5 h-5 text-green-600 rounded focus:ring-2 focus:ring-green-500"
+                  className="mt-1 w-5 h-5 text-secondary rounded focus:ring-2 focus:ring-secondary"
                 />
                 <div>
-                  <p className="font-semibold text-gray-800">
+                  <p className="font-semibold text-gray-800 font-body">
                     Double Your Impact!
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 font-body">
                     Check if your employer offers matching gift programs
                   </p>
                 </div>
@@ -236,7 +236,7 @@ const DonatePage = () => {
             <div className="mb-8 p-4 bg-gray-50 rounded-lg flex items-start gap-3">
               <Shield className="w-5 h-5 text-gray-600 mt-0.5 flex-shrink-0" />
               <div className="text-sm text-gray-600">
-                <p className="font-semibold text-gray-800 mb-1">Tax Benefits</p>
+                <p className="font-semibold text-gray-800 mb-1 font-body">Tax Benefits</p>
                 <p>
                   Donations to Gptck92Trust Foundation are eligible for 80G tax
                   deduction. Tax receipt will be sent via your preferred method within 48 hours.
@@ -248,13 +248,13 @@ const DonatePage = () => {
             <button
               type="submit"
               disabled={!selectedAmount || loading}
-              className="w-full bg-green-600 text-white py-4 rounded-lg font-semibold text-lg hover:bg-green-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-secondary text-white py-4 rounded-lg font-semibold text-lg hover:bg-secondary/90 transition disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <Heart className="w-5 h-5" />
               {loading ? "Processing..." : `Donate ₹${selectedAmount || "0"}`}
             </button>
 
-            <p className="text-center text-sm text-gray-500 mt-4">
+            <p className="text-center text-sm text-gray-500 mt-4 font-body">
               <Shield className="w-4 h-4 inline mr-1" />
               Secure payment powered by industry-standard encryption
             </p>
@@ -267,7 +267,7 @@ const DonatePage = () => {
             For queries, contact us at{" "}
             <a
               href="mailto:gptck92trust@gmail.com"
-              className="text-green-600 hover:underline"
+              className="text-secondary hover:underline"
             >
               gptck92trust@gmail.com
             </a>
@@ -286,3 +286,10 @@ const DonatePage = () => {
 };
 
 export default DonatePage;
+
+
+
+
+
+
+

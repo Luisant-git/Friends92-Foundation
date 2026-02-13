@@ -39,8 +39,8 @@ const VolunteerResetPassword = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">Reset Password</h2>
+      <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 font-heading">Reset Password</h2>
         
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
@@ -55,7 +55,7 @@ const VolunteerResetPassword = () => {
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-secondary"
               required
             />
           </div>
@@ -66,7 +66,7 @@ const VolunteerResetPassword = () => {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-secondary"
               required
             />
           </div>
@@ -74,7 +74,7 @@ const VolunteerResetPassword = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
+            className="w-full bg-secondary text-white py-3 rounded-lg font-semibold hover:bg-secondary/90 transition disabled:opacity-50"
           >
             {loading ? 'Updating...' : 'Update Password'}
           </button>
@@ -85,3 +85,10 @@ const VolunteerResetPassword = () => {
 };
 
 export default VolunteerResetPassword;
+
+
+
+
+
+
+

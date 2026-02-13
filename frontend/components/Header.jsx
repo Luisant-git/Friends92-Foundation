@@ -25,7 +25,7 @@ const Header = () => {
   }, []);
 
   const activeLinkStyle = {
-    color: "#16a34a",
+    color: "#1E3A8A",
     fontWeight: "600",
   };
 
@@ -64,7 +64,7 @@ const Header = () => {
       : "flex items-center gap-1";
 
     const linkClass =
-      "text-gray-600 hover:text-green-600 transition text-sm px-2 py-1.5 font-medium whitespace-nowrap";
+      "text-gray-600 hover:text-primary transition text-sm px-2 py-1.5 font-medium whitespace-nowrap";
 
     return (
       <ul className={navClass}>
@@ -116,13 +116,13 @@ const Header = () => {
               <div className="ml-4 flex flex-col space-y-1">
                 <NavLink
                   to="/volunteer/login"
-                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
                 >
                   Volunteer Login
                 </NavLink>
                 <NavLink
                   to="/volunteer-opportunities"
-                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
                 >
                   Testimonials
                 </NavLink>
@@ -131,7 +131,7 @@ const Header = () => {
           ) : (
             <>
               <button
-                className="flex items-center text-gray-600 hover:text-green-600 transition text-sm px-2 py-1.5 font-medium whitespace-nowrap"
+                className="flex items-center text-gray-600 hover:text-primary transition text-sm px-2 py-1.5 font-medium whitespace-nowrap"
                 onMouseEnter={() => setIsVolunteerDropdownOpen(true)}
                 onMouseLeave={() => setIsVolunteerDropdownOpen(false)}
               >
@@ -146,13 +146,13 @@ const Header = () => {
                 >
                   <NavLink
                     to="/volunteer/login"
-                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition"
                   >
                     Volunteer Login
                   </NavLink>
                   <NavLink
                     to="/volunteer-opportunities"
-                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition"
                   >
                     Testimonials
                   </NavLink>
@@ -188,19 +188,19 @@ const Header = () => {
               <div className="ml-4 flex flex-col space-y-1">
                 <NavLink
                   to="/services/skill-development"
-                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
                 >
                   Skill Development
                 </NavLink>
                 <NavLink
                   to="/services/personality-development"
-                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
                 >
                   Personality Development
                 </NavLink>
                 <NavLink
                   to="/placement"
-                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
                 >
                   Placement
                 </NavLink>
@@ -209,7 +209,7 @@ const Header = () => {
           ) : (
             <>
               <button
-                className="flex items-center text-gray-600 hover:text-green-600 transition text-sm px-2 py-1.5 font-medium whitespace-nowrap"
+                className="flex items-center text-gray-600 hover:text-primary transition text-sm px-2 py-1.5 font-medium whitespace-nowrap"
                 onMouseEnter={() => setIsServicesDropdownOpen(true)}
                 onMouseLeave={() => setIsServicesDropdownOpen(false)}
               >
@@ -224,19 +224,19 @@ const Header = () => {
                 >
                   <NavLink
                     to="/services/skill-development"
-                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition"
                   >
                     Skill Development
                   </NavLink>
                   <NavLink
                     to="/services/personality-development"
-                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition"
                   >
                     Personality Development
                   </NavLink>
                   <NavLink
                     to="/placement"
-                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition"
                   >
                     Placement
                   </NavLink>
@@ -254,13 +254,13 @@ const Header = () => {
               <div className="ml-4 flex flex-col space-y-1">
                 <NavLink
                   to="/alumni/register"
-                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
                 >
                   Register Alumni
                 </NavLink>
                 <NavLink
                   to="/alumni/view"
-                  className="text-gray-500 hover:text-green-600 transition text-sm px-2 py-1 font-medium"
+                  className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
                 >
                   View Alumni
                 </NavLink>
@@ -269,7 +269,7 @@ const Header = () => {
           ) : (
             <>
               <button
-                className="flex items-center text-gray-600 hover:text-green-600 transition text-sm px-2 py-1.5 font-medium whitespace-nowrap"
+                className="flex items-center text-gray-600 hover:text-primary transition text-sm px-2 py-1.5 font-medium whitespace-nowrap"
                 onMouseEnter={() => setIsAlumniDropdownOpen(true)}
                 onMouseLeave={() => setIsAlumniDropdownOpen(false)}
               >
@@ -284,13 +284,13 @@ const Header = () => {
                 >
                   <NavLink
                     to="/alumni/register"
-                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition"
                   >
                     Register Alumni
                   </NavLink>
                   <NavLink
                     to="/alumni/view"
-                    className="block px-4 py-2 text-sm text-gray-600 hover:text-green-600 hover:bg-gray-50 transition"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition"
                   >
                     View Alumni
                   </NavLink>
@@ -325,8 +325,8 @@ const Header = () => {
 
   return (
     <>
-      {/* Top Green Bar */}
-      <div className="bg-green-600 shadow-sm">
+      {/* Top Primary Bar */}
+      <div className="bg-primary shadow-sm">
         <div className="w-full px-4 md:px-10 py-2">
           {/* Desktop Layout */}
           <div className="hidden md:flex justify-between items-center text-sm text-white">
@@ -381,22 +381,28 @@ const Header = () => {
             className="flex items-center gap-2 flex-shrink-0"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            <Friends92Logo className="w-9 h-9 text-green-600" />
+            <Friends92Logo className="w-9 h-9 text-secondary" />
             <span className="font-bold text-gray-800 text-sm md:text-base">
-              GPTCK <span className="text-green-600">92</span> TRUST
+              GPTCK <span className="text-secondary">92</span> TRUST
             </span>
           </Link>
 
-          {/* Desktop Nav and Donate Button */}
+          {/* Desktop Nav and Buttons */}
           <div className="hidden md:flex items-center gap-4 flex-1 justify-end">
             <nav className="flex items-center">
               <NavLinks isMobile={false} />
             </nav>
             <NavLink
               to="/donate"
-              className="bg-green-600 text-white px-5 py-1.5 rounded-full text-sm hover:bg-green-700 transition flex-shrink-0"
+              className="bg-secondary text-white px-5 py-1.5 rounded-full text-sm hover:bg-secondary/90 transition flex-shrink-0"
             >
               Donate Now
+            </NavLink>
+            <NavLink
+              to="/volunteer-opportunities"
+              className="border-2 border-primary text-primary px-5 py-1.5 rounded-full text-sm hover:bg-primary/10 transition flex-shrink-0"
+            >
+              Volunteer Now
             </NavLink>
           </div>
 
@@ -416,12 +422,18 @@ const Header = () => {
           <div className="md:hidden bg-white shadow-lg absolute left-0 w-full px-4 py-3 z-50">
             <NavLinks isMobile={true} />
 
-            <div className="mt-4">
+            <div className="mt-4 flex flex-col gap-3">
               <NavLink
                 to="/donate"
-                className="w-full bg-green-600 text-white py-2 rounded-full text-base block text-center hover:bg-green-700 transition"
+                className="w-full bg-secondary text-white py-2 rounded-full text-base block text-center hover:bg-secondary/90 transition"
               >
                 Donate Now
+              </NavLink>
+              <NavLink
+                to="/volunteer-opportunities"
+                className="w-full border-2 border-primary text-primary py-2 rounded-full text-base block text-center hover:bg-primary/10 transition"
+              >
+                Volunteer Now
               </NavLink>
             </div>
           </div>

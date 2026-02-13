@@ -37,8 +37,8 @@ export default function EventDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-secondary mx-auto"></div>
+          <p className="mt-4 text-gray-600 font-body">Loading...</p>
         </div>
       </div>
     );
@@ -48,10 +48,10 @@ export default function EventDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Event Not Found</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 font-heading">Event Not Found</h2>
           <button
             onClick={() => navigate('/events')}
-            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+            className="bg-secondary text-white px-6 py-2 rounded-lg hover:bg-secondary/90 transition"
           >
             Back to Events
           </button>
@@ -65,13 +65,13 @@ export default function EventDetailPage() {
       <div className="max-w-4xl mx-auto px-4">
         <button
           onClick={() => navigate('/events')}
-          className="flex items-center gap-2 text-green-600 hover:text-green-700 mb-6 font-medium"
+          className="flex items-center gap-2 text-secondary hover:text-secondary/90 mb-6 font-medium"
         >
           <ArrowLeft className="w-5 h-5" />
           Back to Events
         </button>
 
-        <article className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <article className="bg-white rounded-xl shadow-lg overflow-hidden">
           {event.imageUrl && (
             <div className="w-full h-64 md:h-96">
               <img
@@ -86,8 +86,8 @@ export default function EventDetailPage() {
             <div className="flex items-center justify-between mb-6">
               <span className={`px-4 py-2 rounded-full text-sm font-medium ${
                 event.type === 'event' 
-                  ? 'bg-blue-100 text-blue-800' 
-                  : 'bg-green-100 text-green-800'
+                  ? 'bg-primary/10 text-primary' 
+                  : 'bg-secondary/10 text-secondary'
               }`}>
                 {event.type.charAt(0).toUpperCase() + event.type.slice(1)}
               </span>
@@ -97,7 +97,7 @@ export default function EventDetailPage() {
               </div>
             </div>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 font-heading">
               {event.title}
             </h1>
 
@@ -109,7 +109,7 @@ export default function EventDetailPage() {
             )}
 
             <div className="prose max-w-none mb-8">
-              <p className="text-lg text-gray-700 leading-relaxed mb-6">
+              <p className="text-lg text-gray-700 leading-relaxed mb-6 font-body">
                 {event.description}
               </p>
 
@@ -122,7 +122,7 @@ export default function EventDetailPage() {
 
             {event.videoUrl && (
               <div className="mb-8">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Watch Video</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-4 font-heading">Watch Video</h3>
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <a
                     href={event.videoUrl}
@@ -141,7 +141,7 @@ export default function EventDetailPage() {
             )}
 
             <div className="border-t pt-6">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 font-body">
                 Published on {formatDate(event.createdAt || event.eventDate)}
               </p>
             </div>
@@ -151,3 +151,9 @@ export default function EventDetailPage() {
     </div>
   );
 }
+
+
+
+
+
+

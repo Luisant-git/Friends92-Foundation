@@ -103,10 +103,10 @@ export default function AdminReports() {
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Annual Reports Management</h1>
+        <h1 className="text-2xl font-bold font-heading">Annual Reports Management</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold"
+          className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-semibold"
         >
           Add Report
         </button>
@@ -114,8 +114,8 @@ export default function AdminReports() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h2 className="text-xl font-bold mb-4">{editingItem ? 'Edit Report' : 'Add Report'}</h2>
+          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <h2 className="text-xl font-bold mb-4 font-heading">{editingItem ? 'Edit Report' : 'Add Report'}</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label className="block font-semibold mb-2">Year</label>
@@ -124,7 +124,7 @@ export default function AdminReports() {
                   value={form.year}
                   onChange={(e) => setForm({ ...form, year: e.target.value })}
                   placeholder="e.g., 2023-24"
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -135,7 +135,7 @@ export default function AdminReports() {
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
                   placeholder="Annual Report 2023-24"
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -157,18 +157,18 @@ export default function AdminReports() {
                     {uploading ? 'Uploading...' : 'Choose PDF'}
                   </label>
                   {form.fileUrl && (
-                    <span className="text-green-600 text-sm">✓ File uploaded</span>
+                    <span className="text-secondary text-sm">✓ File uploaded</span>
                   )}
                 </div>
                 {form.size && (
-                  <p className="text-sm text-gray-600 mt-1">File Size: {form.size}</p>
+                  <p className="text-sm text-gray-600 mt-1 font-body">File Size: {form.size}</p>
                 )}
               </div>
               <div className="flex gap-4">
                 <button
                   type="submit"
                   disabled={loading || uploading}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold disabled:opacity-50"
+                  className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-semibold disabled:opacity-50"
                 >
                   {loading ? "Saving..." : editingItem ? "Update" : "Add"}
                 </button>
@@ -187,8 +187,8 @@ export default function AdminReports() {
 
       {deleteId && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
-            <h3 className="text-xl font-bold mb-4">Confirm Delete</h3>
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold mb-4 font-heading">Confirm Delete</h3>
             <p className="mb-6">Are you sure you want to delete this report?</p>
             <div className="flex gap-3 justify-end">
               <button
@@ -209,9 +209,9 @@ export default function AdminReports() {
       )}
 
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg shadow-md border">
+        <table className="min-w-full bg-white rounded-xl shadow-md border">
           <thead>
-            <tr className="bg-blue-50">
+            <tr className="bg-primary/5">
               <th className="p-3 text-left">Year</th>
               <th className="p-3 text-left">Title</th>
               <th className="p-3 text-left">Size</th>
@@ -231,7 +231,7 @@ export default function AdminReports() {
                         href={item.fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-green-600 hover:text-green-800"
+                        className="text-secondary hover:text-secondary"
                         title="Download PDF"
                       >
                         <Download size={20} />
@@ -239,7 +239,7 @@ export default function AdminReports() {
                     )}
                     <button
                       onClick={() => handleEdit(item)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-primary hover:text-primary"
                     >
                       <Edit size={20} />
                     </button>
@@ -265,3 +265,9 @@ export default function AdminReports() {
     </div>
   );
 }
+
+
+
+
+
+

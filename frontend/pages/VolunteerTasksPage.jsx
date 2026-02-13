@@ -76,8 +76,8 @@ const VolunteerTasksPage = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'PENDING': return 'bg-yellow-100 text-yellow-800';
-      case 'IN_PROGRESS': return 'bg-blue-100 text-blue-800';
-      case 'COMPLETED': return 'bg-green-100 text-green-800';
+      case 'IN_PROGRESS': return 'bg-primary/10 text-primary';
+      case 'COMPLETED': return 'bg-secondary/10 text-secondary';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -85,20 +85,20 @@ const VolunteerTasksPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold mb-6">My Tasks</h2>
+        <h2 className="text-3xl font-bold mb-6 font-heading">My Tasks</h2>
 
         {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
 
         <div className="space-y-4">
           {tasks.map(task => (
-            <div key={task.id} className="bg-white rounded-lg shadow-md p-6">
+            <div key={task.id} className="bg-white rounded-xl shadow-md p-6">
               <div className="flex justify-between items-start mb-4">
-                <h3 className="text-xl font-semibold">{task.title}</h3>
+                <h3 className="text-xl font-semibold font-heading">{task.title}</h3>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(task.status)}`}>
                   {task.status}
                 </span>
               </div>
-              <p className="text-gray-600 mb-4">{task.description}</p>
+              <p className="text-gray-600 mb-4 font-body">{task.description}</p>
               <div className="flex gap-4 text-sm text-gray-500 mb-4">
                 <p>Assigned: {new Date(task.createdAt).toLocaleDateString('en-GB')}</p>
                 {task.deadline && <p>Deadline: {new Date(task.deadline).toLocaleDateString('en-GB')}</p>}
@@ -110,7 +110,7 @@ const VolunteerTasksPage = () => {
                     <button
                       onClick={() => handleStatusUpdate(task.id, 'IN_PROGRESS')}
                       disabled={loading}
-                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                      className="px-4 py-2 bg-secondary text-white rounded hover:bg-secondary disabled:opacity-50"
                     >
                       Start Task
                     </button>
@@ -118,7 +118,7 @@ const VolunteerTasksPage = () => {
                   {task.status === 'IN_PROGRESS' && (
                     <button
                       onClick={() => setSelectedTask(task)}
-                      className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                      className="px-4 py-2 bg-secondary text-white rounded hover:bg-secondary/90"
                     >
                       Mark Complete
                     </button>
@@ -128,14 +128,14 @@ const VolunteerTasksPage = () => {
 
               {task.volunteerComment && (
                 <div className="mt-4 p-3 bg-gray-50 rounded">
-                  <p className="text-sm font-medium text-gray-700">Your Comment:</p>
-                  <p className="text-sm text-gray-600">{task.volunteerComment}</p>
+                  <p className="text-sm font-medium text-gray-700 font-body">Your Comment:</p>
+                  <p className="text-sm text-gray-600 font-body">{task.volunteerComment}</p>
                 </div>
               )}
 
               {task.imageUrls && task.imageUrls.length > 0 && (
                 <div className="mt-4">
-                  <p className="text-sm font-medium text-gray-700 mb-2">Uploaded Images:</p>
+                  <p className="text-sm font-medium text-gray-700 mb-2 font-body">Uploaded Images:</p>
                   <div className="flex gap-2">
                     {task.imageUrls.map((url, idx) => (
                       <img key={idx} src={url} alt={`Task ${idx + 1}`} className="w-20 h-20 object-cover rounded" />
@@ -154,30 +154,30 @@ const VolunteerTasksPage = () => {
 
       {selectedTask && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full">
-            <h3 className="text-xl font-bold mb-4">Complete Task</h3>
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full">
+            <h3 className="text-xl font-bold mb-4 font-heading">Complete Task</h3>
             <input
               type="text"
               value={impactTitle}
               onChange={(e) => setImpactTitle(e.target.value)}
               placeholder="Title"
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 mb-3"
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-secondary mb-3"
             />
             <textarea
               value={impactDescription}
               onChange={(e) => setImpactDescription(e.target.value)}
               placeholder="Description"
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 mb-3"
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-secondary mb-3"
               rows="4"
             />
             <textarea
               value={impactField}
               onChange={(e) => setImpactField(e.target.value)}
               placeholder="Impact"
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 mb-3"
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-secondary mb-3"
               rows="4"
             />
-            <p className="text-sm font-medium text-gray-700 mb-2">Upload Images (up to 3):</p>
+            <p className="text-sm font-medium text-gray-700 mb-2 font-body">Upload Images (up to 3):</p>
             <input
               type="file"
               accept="image/*"
@@ -189,9 +189,9 @@ const VolunteerTasksPage = () => {
                 e.target.value = '';
               }}
               disabled={images.filter(img => img).length >= 3}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:cursor-pointer hover:file:bg-blue-100 mb-2"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-primary/5 file:text-primary file:cursor-pointer hover:file:bg-primary/10 mb-2"
             />
-            {uploading && <p className="text-sm text-blue-600 mb-2">Uploading...</p>}
+            {uploading && <p className="text-sm text-primary mb-2 font-body">Uploading...</p>}
             {images.some(img => img) && (
               <div className="flex gap-2 mb-4">
                 {images.map((img, idx) => img && (
@@ -217,7 +217,7 @@ const VolunteerTasksPage = () => {
               <button
                 onClick={() => handleStatusUpdate(selectedTask.id, 'COMPLETED')}
                 disabled={loading}
-                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                className="px-4 py-2 bg-secondary text-white rounded hover:bg-secondary/90 disabled:opacity-50"
               >
                 {loading ? 'Submitting...' : 'Submit'}
               </button>
@@ -230,3 +230,10 @@ const VolunteerTasksPage = () => {
 };
 
 export default VolunteerTasksPage;
+
+
+
+
+
+
+

@@ -60,7 +60,7 @@ const VolunteerLayout = () => {
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-gray-800 text-white transition-transform duration-300 flex flex-col`}>
         <div className="p-4 flex items-center justify-between border-b border-gray-700">
-          <h2 className="text-xl font-bold">Volunteer Panel</h2>
+          <h2 className="text-xl font-bold font-heading">Volunteer Panel</h2>
           <button onClick={() => setSidebarOpen(false)} className="p-2 hover:bg-gray-700 rounded lg:hidden">
             <XIcon className="w-5 h-5" />
           </button>
@@ -99,9 +99,9 @@ const VolunteerLayout = () => {
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Confirm Logout</h3>
-            <p className="text-gray-600 mb-6">Are you sure you want to logout?</p>
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold text-gray-800 mb-4 font-heading">Confirm Logout</h3>
+            <p className="text-gray-600 mb-6 font-body">Are you sure you want to logout?</p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowLogoutModal(false)}
@@ -130,20 +130,20 @@ const VolunteerLayout = () => {
           >
             <MenuIcon className="w-6 h-6" />
           </button>
-          <h1 className="hidden lg:block text-2xl font-bold text-gray-800">Volunteer Dashboard</h1>
+          <h1 className="hidden lg:block text-2xl font-bold text-gray-800 font-heading">Volunteer Dashboard</h1>
           <div className="relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
               className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded transition"
             >
               <span className="text-gray-600">{volunteer.name}</span>
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold">
                 {volunteer.name.charAt(0).toUpperCase()}
               </div>
             </button>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 z-50">
                 <Link
                   to="/volunteer/profile"
                   onClick={() => setShowDropdown(false)}
@@ -177,3 +177,9 @@ const VolunteerLayout = () => {
 };
 
 export default VolunteerLayout;
+
+
+
+
+
+

@@ -68,10 +68,10 @@ const AdminAlumni = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Alumni Management</h1>
+      <h1 className="text-2xl font-bold mb-6 font-heading">Alumni Management</h1>
       
       <div className="bg-white rounded-lg shadow p-4 mb-6">
-        <h2 className="font-semibold mb-4">Filters</h2>
+        <h2 className="font-semibold mb-4 font-heading">Filters</h2>
         <div className="grid md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium mb-2">Passed Out Year</label>
@@ -133,7 +133,7 @@ const AdminAlumni = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{person.year}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{person.city}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm flex gap-2">
-                  <button onClick={() => setViewModal(person)} className="text-blue-600 hover:text-blue-900">
+                  <button onClick={() => setViewModal(person)} className="text-primary hover:text-blue-900">
                     <Eye size={18} />
                   </button>
                   <button onClick={() => handleDelete(person.id)} className="text-red-600 hover:text-red-900">
@@ -148,12 +148,12 @@ const AdminAlumni = () => {
 
       {viewModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">Alumni Details</h2>
+          <div className="bg-white rounded-xl p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 font-heading">Alumni Details</h2>
             
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h3 className="font-bold text-lg text-gray-700 border-b pb-2">Personal Information</h3>
+                <h3 className="font-bold text-lg text-gray-700 border-b pb-2 font-heading">Personal Information</h3>
                 <div><span className="font-semibold">Name:</span> {viewModal.name}</div>
                 <div><span className="font-semibold">Email:</span> {viewModal.email || '-'}</div>
                 <div><span className="font-semibold">Mobile:</span> {viewModal.mobile}</div>
@@ -168,7 +168,7 @@ const AdminAlumni = () => {
               </div>
 
               <div className="space-y-4">
-                <h3 className="font-bold text-lg text-gray-700 border-b pb-2">Professional Information</h3>
+                <h3 className="font-bold text-lg text-gray-700 border-b pb-2 font-heading">Professional Information</h3>
                 <div><span className="font-semibold">Services Can Provide:</span> {viewModal.servicesCanProvide || '-'}</div>
                 
                 {viewModal.companyName && (
@@ -198,7 +198,7 @@ const AdminAlumni = () => {
 
             {viewModal.photo && (
               <div className="mt-6">
-                <h3 className="font-bold text-lg text-gray-700 border-b pb-2 mb-3">Photo</h3>
+                <h3 className="font-bold text-lg text-gray-700 border-b pb-2 mb-3 font-heading">Photo</h3>
                 <img src={viewModal.photo} alt="Alumni" className="w-32 h-32 object-cover rounded" />
               </div>
             )}
@@ -214,3 +214,10 @@ const AdminAlumni = () => {
 };
 
 export default AdminAlumni;
+
+
+
+
+
+
+

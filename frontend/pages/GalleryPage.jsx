@@ -47,7 +47,7 @@ export default function GalleryPage() {
 
   return (
     <div className="max-w-7xl mx-auto p-6 text-center">
-      <h1 className="text-4xl font-bold mb-6">Gallery</h1>
+      <h1 className="text-4xl font-bold mb-6 text-primary font-heading">Gallery</h1>
 
       {/* Category Tabs */}
       <div className="flex flex-wrap justify-center gap-3 mb-8">
@@ -58,7 +58,7 @@ export default function GalleryPage() {
             className={`px-5 py-2 rounded-full text-sm font-medium border transition
               ${
                 activeCategory === cat
-                  ? "bg-green-600 text-white border-green-600"
+                  ? "bg-secondary text-white border-secondary"
                   : "bg-white border-gray-300 text-gray-700 hover:bg-gray-100"
               }`}
           >
@@ -77,7 +77,7 @@ export default function GalleryPage() {
           {filteredGallery.map((item) => (
             <div
               key={item.id}
-              className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl 
+              className="relative overflow-hidden rounded-xl shadow-md hover:shadow-xl 
                          transition-all duration-300 group"
             >
               {item.isVideo ? (
@@ -109,7 +109,7 @@ export default function GalleryPage() {
                 className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent"
               >
                 <div className="text-left">
-                  <h3 className="text-white font-semibold text-lg drop-shadow-lg">
+                  <h3 className="text-white font-semibold text-lg drop-shadow-lg font-heading">
                     {item?.title}
                   </h3>
                 </div>
@@ -129,3 +129,10 @@ export default function GalleryPage() {
     </div>
   );
 }
+
+
+
+
+
+
+

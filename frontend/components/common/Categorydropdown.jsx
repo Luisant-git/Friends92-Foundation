@@ -72,7 +72,7 @@ export default function CategoryDropdown({ value, onChange }) {
         </span>
         <Plus
           size={18}
-          className="text-green-600 hover:text-green-800"
+          className="text-secondary hover:text-secondary"
           onClick={(e) => {
             e.stopPropagation();
             setShowModal(true);
@@ -94,7 +94,7 @@ export default function CategoryDropdown({ value, onChange }) {
                   setShowDropdown(false);
                 }}
                 className={`flex-1 ${
-                  value?.id === cat.id ? "font-semibold text-green-600" : ""
+                  value?.id === cat.id ? "font-semibold text-secondary" : ""
                 }`}
               >
                 {cat.name}
@@ -125,13 +125,13 @@ export default function CategoryDropdown({ value, onChange }) {
             >
               <X size={20} />
             </button>
-            <h2 className="text-lg font-semibold mb-4">Add New Category</h2>
+            <h2 className="text-lg font-semibold mb-4 font-heading">Add New Category</h2>
             <input
               type="text"
               placeholder="Category name"
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
-              className="w-full h-12 border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-green-600 mb-4"
+              className="w-full h-12 border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-secondary mb-4"
             />
             <div className="flex justify-end gap-2">
               <button
@@ -141,7 +141,7 @@ export default function CategoryDropdown({ value, onChange }) {
                 Cancel
               </button>
               <button
-                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                className="bg-secondary hover:bg-secondary text-white px-4 py-2 rounded"
                 onClick={handleAddCategory}
               >
                 Add
@@ -153,3 +153,9 @@ export default function CategoryDropdown({ value, onChange }) {
     </div>
   );
 }
+
+
+
+
+
+

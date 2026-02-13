@@ -108,7 +108,7 @@ export default function ViewAlumni() {
   return (
     <div className="p-4 sm:p-6 md:p-8">
       <div className="max-w-6xl mx-auto bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-gray-200">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-[#16a34a] mb-6 text-center">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-[#16a34a] mb-6 text-center font-heading">
           Alumni List
         </h2>
 
@@ -121,7 +121,7 @@ export default function ViewAlumni() {
             options={departments}
             value={filters.department}
             onChange={(value) => setFilters({ ...filters, department: value })}
-            className="w-full sm:w-60 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:w-60 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
           />
 
           {/* Year dropdown */}
@@ -130,13 +130,13 @@ export default function ViewAlumni() {
             options={years}
             value={filters.year}
             onChange={(value) => setFilters({ ...filters, year: value })}
-            className="w-full sm:w-60 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:w-60 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
           />
 
           {/* Search Button */}
           <button
             onClick={handleSearch}
-            className="w-full sm:w-auto bg-green-700 text-white px-5 py-2 rounded-md hover:bg-primary-800 transition-all"
+            className="w-full sm:w-auto bg-secondary/90 text-white px-5 py-2 rounded-md hover:bg-secondary-800 transition-all"
           >
             Search
           </button>
@@ -152,15 +152,15 @@ export default function ViewAlumni() {
 
         {/* ---------------- RESULTS SECTION ---------------- */}
         {loading ? (
-          <p className="text-center text-gray-500">Loading...</p>
+          <p className="text-center text-gray-500 font-body">Loading...</p>
         ) : !searched ? (
-          <p className="text-center text-gray-400">Search to see results.</p>
+          <p className="text-center text-gray-400 font-body">Search to see results.</p>
         ) : alumniList.length === 0 ? (
-          <p className="text-center text-gray-500">No alumni records found.</p>
+          <p className="text-center text-gray-500 font-body">No alumni records found.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full border border-gray-200 rounded-lg">
-              <thead className="bg-green-100 text-[#166534]">
+              <thead className="bg-secondary/10 text-[#166534]">
                 <tr>
                   <th className="py-2 px-4 border">S.No</th>
                   <th className="py-2 px-4 border">Name</th>
@@ -176,7 +176,7 @@ export default function ViewAlumni() {
                 {alumniList.map((a, index) => (
                   <tr
                     key={a.id}
-                    className="text-center hover:bg-green-50 transition"
+                    className="text-center hover:bg-secondary/5 transition"
                   >
                     <td className="py-2 px-4 border">{index + 1}</td>
                     <td className="py-2 px-4 border">{a.name}</td>
@@ -187,7 +187,7 @@ export default function ViewAlumni() {
                     <td className="py-2 px-4 border">
                       <button
                         onClick={() => handleEdit(a)}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="text-primary hover:text-primary"
                         title="Edit"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -206,8 +206,8 @@ export default function ViewAlumni() {
       {/* Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-xl font-semibold mb-4">Edit Alumni Details</h3>
+          <div className="bg-white rounded-xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-semibold mb-4 font-heading">Edit Alumni Details</h3>
             
             <div className="space-y-4">
               <div>
@@ -284,7 +284,7 @@ export default function ViewAlumni() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={handleSave}
-                className="flex-1 bg-green-600 text-white py-2 rounded-md hover:bg-green-700"
+                className="flex-1 bg-secondary text-white py-2 rounded-md hover:bg-secondary/90"
               >
                 Save
               </button>
@@ -301,3 +301,10 @@ export default function ViewAlumni() {
     </div>
   );
 }
+
+
+
+
+
+
+

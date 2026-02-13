@@ -53,8 +53,8 @@ const VolunteerLoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">Volunteer Login</h2>
+      <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 font-heading">Volunteer Login</h2>
         
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
@@ -63,7 +63,7 @@ const VolunteerLoginPage = () => {
         )}
 
         {success && (
-          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">
+          <div className="bg-secondary/5 border border-green-200 text-secondary/90 px-4 py-3 rounded mb-4">
             {success}
           </div>
         )}
@@ -75,7 +75,7 @@ const VolunteerLoginPage = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-secondary"
               required
             />
           </div>
@@ -86,7 +86,7 @@ const VolunteerLoginPage = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-secondary"
               required
             />
           </div>
@@ -94,7 +94,7 @@ const VolunteerLoginPage = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
+            className="w-full bg-secondary text-white py-3 rounded-lg font-semibold hover:bg-secondary/90 transition disabled:opacity-50"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
@@ -103,7 +103,7 @@ const VolunteerLoginPage = () => {
         <div className="mt-4 text-center">
           <button
             onClick={() => setShowResetModal(true)}
-            className="text-green-600 hover:underline text-sm"
+            className="text-secondary hover:underline text-sm"
           >
             Forgot Password?
           </button>
@@ -112,15 +112,15 @@ const VolunteerLoginPage = () => {
 
       {showResetModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full">
-            <h3 className="text-xl font-bold mb-4">Reset Password</h3>
-            <p className="text-gray-600 mb-4 text-sm">Enter your email to reset your password</p>
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full">
+            <h3 className="text-xl font-bold mb-4 font-heading">Reset Password</h3>
+            <p className="text-gray-600 mb-4 text-sm font-body">Enter your email to reset your password</p>
             <input
               type="email"
               value={resetEmail}
               onChange={(e) => setResetEmail(e.target.value)}
               placeholder="Enter your email"
-              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 mb-4"
+              className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-secondary mb-4"
             />
             <div className="flex gap-3 justify-end">
               <button
@@ -132,7 +132,7 @@ const VolunteerLoginPage = () => {
               <button
                 onClick={handleResetPassword}
                 disabled={loading}
-                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                className="px-4 py-2 bg-secondary text-white rounded hover:bg-secondary/90 disabled:opacity-50"
               >
                 {loading ? 'Resetting...' : 'Reset Password'}
               </button>
@@ -145,3 +145,10 @@ const VolunteerLoginPage = () => {
 };
 
 export default VolunteerLoginPage;
+
+
+
+
+
+
+

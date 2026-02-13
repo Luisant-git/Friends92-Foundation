@@ -62,7 +62,7 @@ const AdminAssignTaskPage = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'PENDING': return 'bg-yellow-100 text-yellow-800';
-      case 'IN_PROGRESS': return 'bg-blue-100 text-blue-800';
+      case 'IN_PROGRESS': return 'bg-primary/10 text-primary';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -71,22 +71,22 @@ const AdminAssignTaskPage = () => {
     <div className="p-6 max-w-6xl mx-auto">
       <div>
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Assigned Tasks</h1>
+          <h1 className="text-2xl font-bold font-heading">Assigned Tasks</h1>
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold"
+            className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-semibold"
           >
             + Assign New Task
           </button>
         </div>
 
         {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
-        {success && <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">{success}</div>}
+        {success && <div className="bg-secondary/5 border border-green-200 text-secondary/90 px-4 py-3 rounded mb-4">{success}</div>}
 
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg shadow-md border">
+          <table className="min-w-full bg-white rounded-xl shadow-md border">
             <thead>
-              <tr className="bg-blue-50 text-left">
+              <tr className="bg-primary/5 text-left">
                 <th className="p-3">S.No</th>
                 <th className="p-3">Task Title</th>
                 <th className="p-3">Volunteer</th>
@@ -115,7 +115,7 @@ const AdminAssignTaskPage = () => {
                   <td className="p-3">
                     <button
                       onClick={() => setViewTask(task)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-primary hover:text-primary"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                     </button>
@@ -136,15 +136,15 @@ const AdminAssignTaskPage = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h3 className="text-2xl font-bold mb-4">Assign New Task</h3>
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <h3 className="text-2xl font-bold mb-4 font-heading">Assign New Task</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Select Volunteer</label>
                 <select
                   value={formData.volunteerId}
                   onChange={(e) => setFormData({ ...formData, volunteerId: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   required
                 >
                   <option value="">Choose a volunteer</option>
@@ -159,7 +159,7 @@ const AdminAssignTaskPage = () => {
                 <select
                   value={formData.taskType}
                   onChange={(e) => setFormData({ ...formData, taskType: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   required
                 >
                   <option value="">Select Task Type</option>
@@ -177,7 +177,7 @@ const AdminAssignTaskPage = () => {
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -187,7 +187,7 @@ const AdminAssignTaskPage = () => {
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   rows="4"
                   required
                 />
@@ -199,7 +199,7 @@ const AdminAssignTaskPage = () => {
                   type="date"
                   value={formData.deadline}
                   onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -215,7 +215,7 @@ const AdminAssignTaskPage = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                  className="px-6 py-2 bg-secondary text-white rounded hover:bg-secondary disabled:opacity-50"
                 >
                   {loading ? 'Assigning...' : 'Assign Task'}
                 </button>
@@ -227,28 +227,28 @@ const AdminAssignTaskPage = () => {
 
       {viewTask && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h3 className="text-2xl font-bold mb-4">Task Details</h3>
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <h3 className="text-2xl font-bold mb-4 font-heading">Task Details</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                <p className="text-gray-900">{viewTask.title}</p>
+                <p className="text-gray-900 font-body">{viewTask.title}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <p className="text-gray-900 whitespace-pre-wrap">{viewTask.description}</p>
+                <p className="text-gray-900 whitespace-pre-wrap font-body">{viewTask.description}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Volunteer</label>
-                <p className="text-gray-900">{viewTask.volunteer.name} ({viewTask.volunteer.email})</p>
+                <p className="text-gray-900 font-body">{viewTask.volunteer.name} ({viewTask.volunteer.email})</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Assigned Date</label>
-                <p className="text-gray-900">{new Date(viewTask.createdAt).toLocaleDateString('en-GB')}</p>
+                <p className="text-gray-900 font-body">{new Date(viewTask.createdAt).toLocaleDateString('en-GB')}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Deadline</label>
-                <p className="text-gray-900">{viewTask.deadline ? new Date(viewTask.deadline).toLocaleDateString('en-GB') : 'N/A'}</p>
+                <p className="text-gray-900 font-body">{viewTask.deadline ? new Date(viewTask.deadline).toLocaleDateString('en-GB') : 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
@@ -273,3 +273,10 @@ const AdminAssignTaskPage = () => {
 };
 
 export default AdminAssignTaskPage;
+
+
+
+
+
+
+

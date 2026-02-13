@@ -90,14 +90,14 @@ const VolunteerPage = () => {
     <div className="min-h-screen bg-gray-50">
       <section className="bg-slate-700 text-white py-20">
         <div className="container mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold mb-4">Volunteer Section</h1>
-          <p className="text-xl text-blue-100">Join us in making a difference</p>
+          <h1 className="text-5xl font-bold mb-4 font-heading">Volunteer Section</h1>
+          <p className="text-xl text-white/90 font-body">Join us in making a difference</p>
         </div>
       </section>
 
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-2xl font-bold mb-6">Volunteer Registration Form</h2>
+        <div className="bg-white rounded-xl shadow-md p-8">
+          <h2 className="text-2xl font-bold mb-6 font-heading">Volunteer Registration Form</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
@@ -107,7 +107,7 @@ const VolunteerPage = () => {
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -117,7 +117,7 @@ const VolunteerPage = () => {
                 <select
                   value={form.service}
                   onChange={(e) => setForm({ ...form, service: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   required
                 >
                   <option value="">Select Service</option>
@@ -135,7 +135,7 @@ const VolunteerPage = () => {
                   type="tel"
                   value={form.mobile1}
                   onChange={(e) => setForm({ ...form, mobile1: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -146,7 +146,7 @@ const VolunteerPage = () => {
                   type="tel"
                   value={form.mobile2}
                   onChange={(e) => setForm({ ...form, mobile2: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                 />
               </div>
 
@@ -156,7 +156,7 @@ const VolunteerPage = () => {
                   type="email"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -167,13 +167,13 @@ const VolunteerPage = () => {
                   type="text"
                   value={form.profession}
                   onChange={(e) => setForm({ ...form, profession: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                 />
               </div>
             </div>
 
             <div className="border-t pt-6">
-              <h3 className="font-semibold mb-4">If Employee</h3>
+              <h3 className="font-semibold mb-4 font-heading">If Employee</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium mb-2">Company Name</label>
@@ -181,7 +181,7 @@ const VolunteerPage = () => {
                     type="text"
                     value={form.companyName}
                     onChange={(e) => setForm({ ...form, companyName: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <div>
@@ -190,7 +190,7 @@ const VolunteerPage = () => {
                     type="text"
                     value={form.designation}
                     onChange={(e) => setForm({ ...form, designation: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <div>
@@ -199,7 +199,7 @@ const VolunteerPage = () => {
                     type="text"
                     value={form.companyDepartment}
                     onChange={(e) => setForm({ ...form, companyDepartment: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <div>
@@ -208,14 +208,14 @@ const VolunteerPage = () => {
                     type="text"
                     value={form.companyPlace}
                     onChange={(e) => setForm({ ...form, companyPlace: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   />
                 </div>
               </div>
             </div>
 
             <div className="border-t pt-6">
-              <h3 className="font-semibold mb-4">If Enterpruner</h3>
+              <h3 className="font-semibold mb-4 font-heading">If Enterpruner</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium mb-2">Business Name</label>
@@ -223,7 +223,7 @@ const VolunteerPage = () => {
                     type="text"
                     value={form.businessName}
                     onChange={(e) => setForm({ ...form, businessName: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <div>
@@ -232,7 +232,7 @@ const VolunteerPage = () => {
                     type="text"
                     value={form.natureOfBusiness}
                     onChange={(e) => setForm({ ...form, natureOfBusiness: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <div>
@@ -241,7 +241,7 @@ const VolunteerPage = () => {
                     type="text"
                     value={form.businessPlace}
                     onChange={(e) => setForm({ ...form, businessPlace: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   />
                 </div>
               </div>
@@ -252,7 +252,7 @@ const VolunteerPage = () => {
               <textarea
                 value={form.businessAddress}
                 onChange={(e) => setForm({ ...form, businessAddress: e.target.value })}
-                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                 rows="2"
               />
             </div>
@@ -262,7 +262,7 @@ const VolunteerPage = () => {
               <textarea
                 value={form.permanentAddress}
                 onChange={(e) => setForm({ ...form, permanentAddress: e.target.value })}
-                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                 rows="2"
               />
             </div>
@@ -277,7 +277,7 @@ const VolunteerPage = () => {
                     setWillProvideServices(e.target.checked);
                     if (!e.target.checked) setForm({ ...form, servicesOffered: '' });
                   }}
-                  className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500"
+                  className="w-4 h-4 text-secondary rounded focus:ring-2 focus:ring-secondary"
                 />
                 <label htmlFor="willProvideServices" className="text-sm font-medium cursor-pointer">
                   Are you willing to provide services to friends & alumni?
@@ -290,7 +290,7 @@ const VolunteerPage = () => {
                   <textarea
                     value={form.servicesOffered}
                     onChange={(e) => setForm({ ...form, servicesOffered: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500"
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-secondary"
                     rows="3"
                     placeholder="E.g., Career guidance, mentorship, technical training, business consultation, etc."
                   />
@@ -304,7 +304,7 @@ const VolunteerPage = () => {
                 type="file"
                 accept="image/*"
                 onChange={handlePhotoChange}
-                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:cursor-pointer hover:file:bg-blue-100"
+                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-primary/5 file:text-primary file:cursor-pointer hover:file:bg-primary/10"
               />
               {form.photoUrl && (
                 <img src={form.photoUrl} alt="Preview" className="mt-3 w-20 h-20 object-cover rounded border" />
@@ -314,7 +314,7 @@ const VolunteerPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
+              className="w-full bg-secondary text-white py-3 rounded-lg font-semibold hover:bg-secondary/90 transition disabled:opacity-50"
             >
               {loading ? 'Submitting...' : 'Submit'}
             </button>
@@ -324,17 +324,17 @@ const VolunteerPage = () => {
 
       {showSuccess && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-md mx-4 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-white rounded-xl p-8 max-w-md mx-4 text-center">
+            <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold mb-2">Success!</h3>
-            <p className="text-gray-600 mb-6">Your volunteer registration has been submitted successfully.</p>
+            <h3 className="text-2xl font-bold mb-2 font-heading">Success!</h3>
+            <p className="text-gray-600 mb-6 font-body">Your volunteer registration has been submitted successfully.</p>
             <button
               onClick={() => setShowSuccess(false)}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+              className="bg-secondary text-white px-6 py-2 rounded-lg hover:bg-secondary/90 transition"
             >
               Close
             </button>
@@ -346,3 +346,10 @@ const VolunteerPage = () => {
 };
 
 export default VolunteerPage;
+
+
+
+
+
+
+

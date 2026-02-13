@@ -152,7 +152,7 @@ export default function Carousel() {
             onClick={() => jumpTo(i)}
             className={`w-3 h-3 rounded-full transition-all ${
               currentIndex === i
-                ? "bg-green-600 scale-125"
+                ? "bg-secondary scale-125"
                 : "bg-gray-400 opacity-60"
             }`}
           />
@@ -166,3 +166,9 @@ export default function Carousel() {
     </div>
   );
 }
+
+
+
+
+
+

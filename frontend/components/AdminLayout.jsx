@@ -109,7 +109,7 @@ const AdminLayout = () => {
       {/* Sidebar */}
       <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-800 text-white transition-all duration-300 flex flex-col`}>
         <div className="p-4 flex items-center justify-between border-b border-gray-700">
-          {sidebarOpen && <h2 className="text-xl font-bold">Admin Panel</h2>}
+          {sidebarOpen && <h2 className="text-xl font-bold font-heading">Admin Panel</h2>}
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-gray-700 rounded">
             {sidebarOpen ? <XIcon className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
           </button>
@@ -144,9 +144,9 @@ const AdminLayout = () => {
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Confirm Logout</h3>
-            <p className="text-gray-600 mb-6">Are you sure you want to logout?</p>
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold text-gray-800 mb-4 font-heading">Confirm Logout</h3>
+            <p className="text-gray-600 mb-6 font-body">Are you sure you want to logout?</p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowLogoutModal(false)}
@@ -169,20 +169,20 @@ const AdminLayout = () => {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Navbar */}
         <header className="bg-white shadow-md p-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-800 font-heading">Dashboard</h1>
           <div className="relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
               className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded transition"
             >
               <span className="text-gray-600">Admin User</span>
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold">
                 A
               </div>
             </button>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 z-50">
                 <button
                   onClick={() => {
                     setShowDropdown(false);
@@ -208,3 +208,9 @@ const AdminLayout = () => {
 };
 
 export default AdminLayout;
+
+
+
+
+
+

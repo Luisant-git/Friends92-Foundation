@@ -18,8 +18,8 @@ export default function StatusToggle({
         />
         <div
           className={`w-12 h-6 rounded-full transition-all relative
-            ${value ? "bg-green-600" : "bg-gray-300"}
-            peer-focus:ring-2 peer-focus:ring-green-600`}
+            ${value ? "bg-secondary" : "bg-gray-300"}
+            peer-focus:ring-2 peer-focus:ring-secondary`}
         >
           <div
             className={`absolute top-[3px] left-[3px] w-5 h-5 bg-white rounded-full transition-all
@@ -30,7 +30,7 @@ export default function StatusToggle({
 
       <span
         className={`ml-2 font-medium ${
-          value ? "text-green-600" : "text-red-600"
+          value ? "text-secondary" : "text-red-600"
         }`}
       >
         {value ? "Active" : "Inactive"}
@@ -38,3 +38,9 @@ export default function StatusToggle({
     </label>
   );
 }
+
+
+
+
+
+

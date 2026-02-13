@@ -48,7 +48,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
           <X className="w-5 h-5" />
         </button>
 
-        <h2 className="text-xl font-bold mb-4 text-center">Admin Login</h2>
+        <h2 className="text-xl font-bold mb-4 text-center font-heading">Admin Login</h2>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
@@ -62,7 +62,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
               }`}
             />
             {errors.username && (
-              <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+              <p className="text-red-500 text-sm mt-1 font-body">{errors.username}</p>
             )}
           </div>
 
@@ -77,7 +77,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
               }`}
             />
             {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              <p className="text-red-500 text-sm mt-1 font-body">{errors.password}</p>
             )}
           </div>
 
@@ -103,3 +103,9 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
 };
 
 export default LoginModal;
+
+
+
+
+
+

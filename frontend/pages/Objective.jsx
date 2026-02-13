@@ -25,14 +25,14 @@ const Objective = () => {
 
           {/* Text Column */}
           <div className="wow animate__animated animate__fadeInRight">
-            <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-800 mb-6 tracking-tight">
+            <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-800 mb-6 tracking-tight font-heading">
               {heading}
             </h2>
-            <div className="w-24 h-1.5 bg-green-500 rounded-full mb-8"></div>
-            <p className="text-lg text-slate-600 leading-relaxed">
+            <div className="w-24 h-1.5 bg-secondary rounded-full mb-8"></div>
+            <p className="text-lg text-slate-600 leading-relaxed font-body">
               {paragraphText}
             </p>
-            <button className="mt-10 inline-flex items-center px-8 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 transform hover:scale-105">
+            <button className="mt-10 inline-flex items-center px-8 py-3 bg-secondary text-white font-semibold rounded-xl shadow-md hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition-all duration-300 transform hover:scale-105">
               Learn More
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -55,3 +55,10 @@ const Objective = () => {
 };
 
 export default Objective;
+
+
+
+
+
+
+

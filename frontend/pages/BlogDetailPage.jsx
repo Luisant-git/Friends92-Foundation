@@ -30,10 +30,10 @@ const BlogDetailPage = () => {
     <div className="bg-white min-h-screen">
       <section className="bg-slate-700 text-white py-20">
         <div className="container mx-auto px-6">
-          <button onClick={() => navigate('/blog')} className="text-blue-100 hover:text-white mb-4">
+          <button onClick={() => navigate('/blog')} className="text-white/90 hover:text-white mb-4">
             ← Back to Blogs
           </button>
-          <h1 className="text-4xl font-bold">{blog.title}</h1>
+          <h1 className="text-4xl font-bold font-heading">{blog.title}</h1>
         </div>
       </section>
 
@@ -43,7 +43,7 @@ const BlogDetailPage = () => {
         )}
 
         <div className="prose max-w-none">
-          <p className="text-xl text-gray-700 mb-6">{blog.description}</p>
+          <p className="text-xl text-gray-700 mb-6 font-body">{blog.description}</p>
           {blog.content && (
             <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">{blog.content}</div>
           )}
@@ -51,7 +51,7 @@ const BlogDetailPage = () => {
 
         {blog.videoUrl && (
           <div className="mt-8">
-            <h3 className="text-2xl font-bold mb-4">Video</h3>
+            <h3 className="text-2xl font-bold mb-4 font-heading">Video</h3>
             <div className="aspect-video">
               <iframe
                 src={blog.videoUrl.replace('watch?v=', 'embed/')}
@@ -67,3 +67,10 @@ const BlogDetailPage = () => {
 };
 
 export default BlogDetailPage;
+
+
+
+
+
+
+

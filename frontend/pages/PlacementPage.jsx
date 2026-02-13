@@ -24,9 +24,9 @@ export default function PlacementPage() {
   };
 
   if (loading)
-    return <p className="text-center mt-20 text-gray-600">Loading jobs...</p>;
+    return <p className="text-center mt-20 text-gray-600 font-body">Loading jobs...</p>;
 
-  if (error) return <p className="text-center mt-20 text-red-500">{error}</p>;
+  if (error) return <p className="text-center mt-20 text-red-500 font-body">{error}</p>;
 
   return (
     <div className="bg-gray-50 min-h-screen px-4 sm:px-6 py-6">
@@ -36,27 +36,27 @@ export default function PlacementPage() {
           <div
             key={job.id}
             className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray-200 
-            hover:shadow-lg transition-all flex flex-col lg:flex-row justify-between gap-6"
+            hover:shadow-xl transition-all flex flex-col lg:flex-row justify-between gap-6"
           >
             {/* LEFT SIDE JOB DETAILS */}
             <div className="w-full lg:w-2/3 space-y-4">
-              <h2 className="text-3xl font-bold text-[#16a34a] leading-tight">
+              <h2 className="text-3xl font-bold text-[#16a34a] leading-tight font-heading">
                 {job.jobTitle}
               </h2>
 
               <div className="text-gray-700 space-y-1">
-                <p className="text-base font-semibold flex items-center gap-2">
+                <p className="text-base font-semibold flex items-center gap-2 font-body">
                   <Building2 size={18} className="text-[#16a34a]" />
                   {job.companyName}
                 </p>
-                <p className="text-sm text-gray-500 flex items-center gap-2">
+                <p className="text-sm text-gray-500 flex items-center gap-2 font-body">
                   <MapPin size={16} className="text-[#16a34a]" />
                   {job.companyLocation}
                 </p>
               </div>
 
-              <p className="text-gray-700 leading-relaxed">{job.companyDesc}</p>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-gray-700 leading-relaxed font-body">{job.companyDesc}</p>
+              <p className="text-gray-700 leading-relaxed font-body">
                 {job.jobDescription}
               </p>
             </div>
@@ -81,18 +81,18 @@ export default function PlacementPage() {
 
               <div>
                 <h4 className="font-semibold text-gray-800 mb-1">Experience</h4>
-                <p className="text-sm text-gray-700">{job.experience} yrs</p>
+                <p className="text-sm text-gray-700 font-body">{job.experience} yrs</p>
               </div>
 
               <div className="space-y-3">
                 <h4 className="font-semibold text-gray-800 mb-1">
                   Contact Details
                 </h4>
-                <p className="text-sm text-gray-700 flex items-center gap-2">
+                <p className="text-sm text-gray-700 flex items-center gap-2 font-body">
                   <Phone size={16} className="text-[#16a34a]" />
                   {job.companyContactNumber}
                 </p>
-                <p className="text-sm text-gray-700 flex items-center gap-2">
+                <p className="text-sm text-gray-700 flex items-center gap-2 font-body">
                   <Mail size={16} className="text-[#16a34a]" />
                   {job.companyEmail}
                 </p>
@@ -104,3 +104,10 @@ export default function PlacementPage() {
     </div>
   );
 }
+
+
+
+
+
+
+

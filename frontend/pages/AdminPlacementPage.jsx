@@ -131,10 +131,10 @@ export default function PlacementAdmin() {
       <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Placement Management</h1>
+        <h1 className="text-3xl font-bold font-heading">Placement Management</h1>
         <button
           onClick={() => setShowEditModal(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold"
+          className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-semibold"
         >
           Add New Placement
         </button>
@@ -142,9 +142,9 @@ export default function PlacementAdmin() {
 
       {showEditModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">{editId ? 'Edit Placement' : 'Add Placement'}</h2>
+              <h2 className="text-2xl font-bold font-heading">{editId ? 'Edit Placement' : 'Add Placement'}</h2>
               <button onClick={() => { setShowEditModal(false); setEditId(null); }} className="text-gray-500 hover:text-gray-700">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
@@ -242,7 +242,7 @@ export default function PlacementAdmin() {
             <div className="flex gap-4 mt-6">
               <button
                 onClick={handleAddOrUpdate}
-                className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition"
+                className="bg-secondary text-white px-6 py-3 rounded-xl hover:bg-secondary transition"
               >
                 {editId ? "Update" : "Add"}
               </button>
@@ -259,9 +259,9 @@ export default function PlacementAdmin() {
 
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Confirm Delete</h3>
-            <p className="text-gray-600 mb-6">Are you sure you want to delete this placement?</p>
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold text-gray-800 mb-4 font-heading">Confirm Delete</h3>
+            <p className="text-gray-600 mb-6 font-body">Are you sure you want to delete this placement?</p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => { setShowDeleteModal(false); setDeleteId(null); }}
@@ -281,9 +281,9 @@ export default function PlacementAdmin() {
       )}
 
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg shadow-md border">
+        <table className="min-w-full bg-white rounded-xl shadow-md border">
           <thead>
-            <tr className="bg-blue-50 text-left">
+            <tr className="bg-primary/5 text-left">
               <th className="p-3">S.No</th>
               <th className="p-3">Company</th>
               <th className="p-3">Job</th>
@@ -303,7 +303,7 @@ export default function PlacementAdmin() {
                 <td className="p-3">{p.experience} yrs</td>
                 <td className="p-3">
                   <span className={`px-2 py-1 rounded text-sm ${
-                    p.status ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    p.status ? 'bg-secondary/10 text-secondary' : 'bg-red-100 text-red-800'
                   }`}>
                     {p.status ? 'Active' : 'Inactive'}
                   </span>
@@ -311,7 +311,7 @@ export default function PlacementAdmin() {
                 <td className="p-3 flex gap-4">
                   <button
                     onClick={() => handleEdit(p)}
-                    className="text-blue-600 hover:text-blue-800 transition"
+                    className="text-primary hover:text-primary transition"
                   >
                     <Pencil size={20} />
                   </button>
@@ -337,3 +337,10 @@ export default function PlacementAdmin() {
     </div>
   );
 }
+
+
+
+
+
+
+

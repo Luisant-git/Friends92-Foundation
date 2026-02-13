@@ -55,11 +55,11 @@ const AdminVolunteerManagement = () => {
       <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Volunteer Management</h1>
+        <h1 className="text-2xl font-bold font-heading">Volunteer Management</h1>
         <select
           value={filterService}
           onChange={(e) => setFilterService(e.target.value)}
-          className="px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 border rounded-md focus:ring-2 focus:ring-primary"
         >
           <option value="">All Services</option>
           <option value="Education & Tutoring">Education & Tutoring</option>
@@ -75,9 +75,9 @@ const AdminVolunteerManagement = () => {
 
       {showToggleModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
-            <h3 className="text-xl font-bold mb-4">Confirm Status Change</h3>
-            <p className="text-gray-600 mb-6">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold mb-4 font-heading">Confirm Status Change</h3>
+            <p className="text-gray-600 mb-6 font-body">
               Are you sure you want to {toggleVolunteer?.isActive ? 'deactivate' : 'activate'} this volunteer?
             </p>
             <div className="flex gap-3 justify-end">
@@ -90,7 +90,7 @@ const AdminVolunteerManagement = () => {
               <button
                 onClick={confirmToggle}
                 className={`px-4 py-2 text-white rounded ${
-                  toggleVolunteer?.isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
+                  toggleVolunteer?.isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-secondary hover:bg-secondary'
                 }`}
               >
                 {toggleVolunteer?.isActive ? 'Deactivate' : 'Activate'}
@@ -102,9 +102,9 @@ const AdminVolunteerManagement = () => {
 
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
-            <h3 className="text-xl font-bold mb-4">Confirm Delete</h3>
-            <p className="text-gray-600 mb-6">Are you sure you want to delete this volunteer?</p>
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold mb-4 font-heading">Confirm Delete</h3>
+            <p className="text-gray-600 mb-6 font-body">Are you sure you want to delete this volunteer?</p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => { setShowDeleteModal(false); setDeleteId(null); }}
@@ -125,9 +125,9 @@ const AdminVolunteerManagement = () => {
 
       {selectedVolunteer && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-2xl font-bold">Volunteer Details</h3>
+              <h3 className="text-2xl font-bold font-heading">Volunteer Details</h3>
               <button onClick={() => setSelectedVolunteer(null)} className="text-gray-500 hover:text-gray-700">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -157,9 +157,9 @@ const AdminVolunteerManagement = () => {
       )}
 
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg shadow-md border">
+        <table className="min-w-full bg-white rounded-xl shadow-md border">
           <thead>
-            <tr className="bg-blue-50 text-left">
+            <tr className="bg-primary/5 text-left">
               <th className="p-3">S.No</th>
               <th className="p-3">Name</th>
               <th className="p-3 hidden md:table-cell">Email</th>
@@ -179,7 +179,7 @@ const AdminVolunteerManagement = () => {
                   <button
                     onClick={() => { setToggleVolunteer(volunteer); setShowToggleModal(true); }}
                     className={`px-3 py-1 rounded text-xs cursor-pointer transition ${
-                      volunteer.isActive ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-red-100 text-red-800 hover:bg-red-200'
+                      volunteer.isActive ? 'bg-secondary/10 text-secondary hover:bg-green-200' : 'bg-red-100 text-red-800 hover:bg-red-200'
                     }`}
                   >
                     {volunteer.isActive ? 'Active' : 'Inactive'}
@@ -188,7 +188,7 @@ const AdminVolunteerManagement = () => {
                 <td className="p-3 flex gap-2 flex-wrap">
                   <button
                     onClick={() => setSelectedVolunteer(volunteer)}
-                    className="text-blue-600 hover:text-blue-800 transition"
+                    className="text-primary hover:text-primary transition"
                     title="View Details"
                   >
                     <Eye size={20} />
@@ -218,3 +218,10 @@ const AdminVolunteerManagement = () => {
 };
 
 export default AdminVolunteerManagement;
+
+
+
+
+
+
+

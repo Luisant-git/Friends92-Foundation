@@ -114,10 +114,10 @@ const ManageServicesPage = () => {
       <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Services Management</h1>
+        <h1 className="text-2xl font-bold font-heading">Services Management</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold"
+          className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-semibold"
         >
           Add New Service
         </button>
@@ -125,9 +125,9 @@ const ManageServicesPage = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">{editId ? 'Edit Service' : 'Add Service'}</h2>
+              <h2 className="text-2xl font-bold font-heading">{editId ? 'Edit Service' : 'Add Service'}</h2>
               <button onClick={resetForm} className="text-gray-500 hover:text-gray-700">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -164,13 +164,13 @@ const ManageServicesPage = () => {
                     type="file"
                     accept="image/*"
                     onChange={handleFileSelect}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:cursor-pointer hover:file:bg-blue-100"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-primary/5 file:text-primary file:cursor-pointer hover:file:bg-primary/10"
                   />
                   {selectedFile && (
                     <button
                       onClick={handleFileUpload}
                       disabled={uploading}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+                      className="px-4 py-2 bg-secondary text-white rounded-md hover:bg-secondary transition disabled:opacity-50"
                     >
                       {uploading ? 'Uploading...' : 'Upload'}
                     </button>
@@ -192,7 +192,7 @@ const ManageServicesPage = () => {
                 <select
                   value={form.type}
                   onChange={(e) => setForm({ ...form, type: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="SKILL_DEVELOPMENT">Skill Development</option>
                   <option value="PERSONALITY_DEVELOPMENT">Personality Development</option>
@@ -203,7 +203,7 @@ const ManageServicesPage = () => {
             <div className="flex gap-4 mt-6">
               <button
                 onClick={handleSubmit}
-                className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition"
+                className="bg-secondary text-white px-6 py-3 rounded-xl hover:bg-secondary transition"
               >
                 {editId ? 'Update' : 'Add'}
               </button>
@@ -220,9 +220,9 @@ const ManageServicesPage = () => {
 
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Confirm Delete</h3>
-            <p className="text-gray-600 mb-6">Are you sure you want to delete this service?</p>
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold text-gray-800 mb-4 font-heading">Confirm Delete</h3>
+            <p className="text-gray-600 mb-6 font-body">Are you sure you want to delete this service?</p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => { setShowDeleteModal(false); setDeleteId(null); }}
@@ -242,9 +242,9 @@ const ManageServicesPage = () => {
       )}
 
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg shadow-md border">
+        <table className="min-w-full bg-white rounded-xl shadow-md border">
           <thead>
-            <tr className="bg-blue-50 text-left">
+            <tr className="bg-primary/5 text-left">
               <th className="p-3">S.No</th>
               <th className="p-3">Title</th>
               <th className="p-3 hidden sm:table-cell">Type</th>
@@ -261,8 +261,8 @@ const ManageServicesPage = () => {
                   <div className="sm:hidden text-sm text-gray-500 mt-1">
                     <span className={`px-2 py-1 rounded text-xs ${
                       service.type === 'SKILL_DEVELOPMENT' 
-                        ? 'bg-blue-100 text-blue-800' 
-                        : 'bg-blue-100 text-blue-800'
+                        ? 'bg-primary/10 text-primary' 
+                        : 'bg-primary/10 text-primary'
                     }`}>
                       {service.type === 'SKILL_DEVELOPMENT' ? 'Skill Dev' : 'Personality Dev'}
                     </span>
@@ -274,8 +274,8 @@ const ManageServicesPage = () => {
                 <td className="p-3 hidden sm:table-cell">
                   <span className={`px-2 py-1 rounded text-sm ${
                     service.type === 'SKILL_DEVELOPMENT' 
-                      ? 'bg-blue-100 text-blue-800' 
-                      : 'bg-blue-100 text-blue-800'
+                      ? 'bg-primary/10 text-primary' 
+                      : 'bg-primary/10 text-primary'
                   }`}>
                     {service.type === 'SKILL_DEVELOPMENT' ? 'Skill Development' : 'Personality Development'}
                   </span>
@@ -285,7 +285,7 @@ const ManageServicesPage = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleEdit(service)}
-                      className="text-blue-600 hover:text-blue-800 transition p-1"
+                      className="text-primary hover:text-primary transition p-1"
                     >
                       <Pencil size={18} />
                     </button>
@@ -314,3 +314,10 @@ const ManageServicesPage = () => {
 };
 
 export default ManageServicesPage;
+
+
+
+
+
+
+

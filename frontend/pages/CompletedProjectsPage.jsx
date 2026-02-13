@@ -30,8 +30,8 @@ const CompletedProjectsPage = () => {
       {/* Page Header */}
       <section className="bg-slate-700 text-white py-20">
         <div className="container mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold">Completed Projects</h1>
-          <p className="text-lg text-slate-300 mt-4">A Showcase of Our Accomplishments</p>
+          <h1 className="text-4xl md:text-5xl font-extrabold font-heading">Completed Projects</h1>
+          <p className="text-lg text-slate-300 mt-4 font-body">A Showcase of Our Accomplishments</p>
         </div>
       </section>
 
@@ -60,3 +60,9 @@ const CompletedProjectsPage = () => {
 };
 
 export default CompletedProjectsPage;
+
+
+
+
+
+

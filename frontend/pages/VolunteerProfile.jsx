@@ -13,8 +13,8 @@ const VolunteerProfile = () => {
   if (!volunteer) return null;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold mb-6">My Profile</h2>
+    <div className="bg-white rounded-xl shadow-md p-6">
+      <h2 className="text-2xl font-bold mb-6 font-heading">My Profile</h2>
       
       <div className="space-y-4">
         <div className="flex items-center gap-6 mb-6">
@@ -25,13 +25,13 @@ const VolunteerProfile = () => {
               className="w-32 h-32 object-cover"
             />
           ) : (
-            <div className="w-32 h-32 bg-blue-500 flex items-center justify-center text-white text-5xl font-bold">
+            <div className="w-32 h-32 bg-primary flex items-center justify-center text-white text-5xl font-bold">
               {volunteer.name.charAt(0).toUpperCase()}
             </div>
           )}
           <div className="hidden md:flex flex-col flex-1 min-w-0">
-            <h3 className="text-2xl font-bold break-words">{volunteer.name}</h3>
-            <p className="text-gray-600 text-lg break-all">{volunteer.email}</p>
+            <h3 className="text-2xl font-bold break-words font-heading">{volunteer.name}</h3>
+            <p className="text-gray-600 text-lg break-all font-body">{volunteer.email}</p>
           </div>
         </div>
 
@@ -60,7 +60,7 @@ const VolunteerProfile = () => {
             </div>
             <div>
               <label className="text-sm text-gray-500">Status</label>
-              <p className="font-medium text-blue-600">Active</p>
+              <p className="font-medium text-primary font-body">Active</p>
             </div>
           </div>
         </div>
@@ -70,3 +70,10 @@ const VolunteerProfile = () => {
 };
 
 export default VolunteerProfile;
+
+
+
+
+
+
+

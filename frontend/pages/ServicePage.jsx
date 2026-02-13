@@ -33,7 +33,7 @@ const ServicePage = () => {
   };
 
   const ServiceCard = ({ service }) => (
-    <div className="group w-96 flex-shrink-0 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6 mx-3 border border-gray-200">
+    <div className="group w-96 flex-shrink-0 bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 mx-3 border border-gray-200">
       <div className="relative overflow-hidden rounded-xl mb-6">
         {service.imageUrl ? (
           <img 
@@ -42,22 +42,22 @@ const ServicePage = () => {
             className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
-            <Target className="w-16 h-16 text-blue-500" />
+          <div className="w-full h-48 bg-gradient-to-br from-primary/10 to-purple-100 flex items-center justify-center">
+            <Target className="w-16 h-16 text-primary" />
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
       
       <div className="space-y-4">
-        <h3 className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
+        <h3 className="text-xl font-bold text-gray-800 group-hover:text-primary transition-colors font-heading">
           {service.title}
         </h3>
-        <p className="text-gray-600 leading-relaxed">{service.description}</p>
+        <p className="text-gray-600 leading-relaxed font-body">{service.description}</p>
         {service.content && (
-          <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">{service.content}</p>
+          <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg font-body">{service.content}</p>
         )}
-        <button className="flex items-center text-blue-600 font-medium hover:text-blue-700 transition-colors group/btn">
+        <button className="flex items-center text-primary font-medium hover:text-primary transition-colors group/btn">
           Learn More 
           <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
         </button>
@@ -66,21 +66,21 @@ const ServicePage = () => {
   );
 
   const PlacementCard = ({ placement }) => (
-    <div className="group w-96 flex-shrink-0 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6 mx-3 border border-gray-200">
+    <div className="group w-96 flex-shrink-0 bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 mx-3 border border-gray-200">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-primary rounded-xl flex items-center justify-center">
             <Briefcase className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors">
+            <h3 className="text-xl font-bold text-gray-800 group-hover:text-secondary transition-colors font-heading">
               {placement.companyName}
             </h3>
-            <p className="text-sm text-gray-500">{placement.companyLocation}</p>
+            <p className="text-sm text-gray-500 font-body">{placement.companyLocation}</p>
           </div>
         </div>
         <div className="flex flex-col items-end space-y-1">
-          <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+          <span className="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-sm font-medium flex items-center">
             <Clock className="w-3 h-3 mr-1" />
             {placement.experience} yrs
           </span>
@@ -89,8 +89,8 @@ const ServicePage = () => {
       
       <div className="space-y-4">
         <div>
-          <h4 className="text-lg font-semibold text-blue-600 mb-2">{placement.jobTitle}</h4>
-          <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">{placement.jobDescription}</p>
+          <h4 className="text-lg font-semibold text-primary mb-2">{placement.jobTitle}</h4>
+          <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 font-body">{placement.jobDescription}</p>
         </div>
         
         <div className="space-y-2">
@@ -105,10 +105,10 @@ const ServicePage = () => {
         </div>
         
         <div className="space-y-2">
-          <p className="text-xs font-medium text-gray-700 uppercase tracking-wide">Required Skills</p>
+          <p className="text-xs font-medium text-gray-700 uppercase tracking-wide font-body">Required Skills</p>
           <div className="flex flex-wrap gap-1">
             {placement.skills.slice(0, 4).map((skill, idx) => (
-              <span key={idx} className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-xs font-medium border border-blue-200">
+              <span key={idx} className="bg-primary/5 text-primary px-2 py-1 rounded-md text-xs font-medium border border-blue-200">
                 {skill}
               </span>
             ))}
@@ -120,7 +120,7 @@ const ServicePage = () => {
           </div>
         </div>
         
-        <button className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-2 px-4 rounded-lg font-medium hover:from-green-600 hover:to-blue-600 transition-all duration-200 transform hover:scale-105">
+        <button className="w-full bg-gradient-to-r from-secondary to-primary text-white py-2 px-4 rounded-lg font-medium hover:from-secondary hover:to-primary transition-all duration-200 transform hover:scale-105">
           Apply Now
         </button>
       </div>
@@ -144,8 +144,8 @@ const ServicePage = () => {
       <section className={`py-12 ${bgColor}`}>
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">{title}</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">{subtitle}</p>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4 font-heading">{title}</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto font-body">{subtitle}</p>
           </div>
           
           <div className="flex justify-end mb-6">
@@ -182,8 +182,8 @@ const ServicePage = () => {
               <div className="text-gray-400 mb-4">
                 <Icon className="w-16 h-16 mx-auto" />
               </div>
-              <h3 className="text-xl font-medium text-gray-600 mb-2">No {title.toLowerCase()} available</h3>
-              <p className="text-gray-500">Check back later for new content.</p>
+              <h3 className="text-xl font-medium text-gray-600 mb-2 font-heading">No {title.toLowerCase()} available</h3>
+              <p className="text-gray-500 font-body">Check back later for new content.</p>
             </div>
           )}
         </div>
@@ -195,8 +195,8 @@ const ServicePage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading our services...</p>
+          <div className="w-16 h-16 border-4 border-blue-200 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg font-body">Loading our services...</p>
         </div>
       </div>
     );
@@ -207,8 +207,8 @@ const ServicePage = () => {
       {/* Header Section */}
       <section className="bg-slate-700 text-white py-20">
         <div className="container mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold mb-4">Our Services</h1>
-          <p className="text-xl text-blue-100">Empowering futures through comprehensive development programs</p>
+          <h1 className="text-5xl font-bold mb-4 font-heading">Our Services</h1>
+          <p className="text-xl text-white/90 font-body">Empowering futures through comprehensive development programs</p>
         </div>
       </section>
 
@@ -218,7 +218,7 @@ const ServicePage = () => {
         subtitle="Master new technologies and enhance your technical expertise with our comprehensive skill development courses"
         items={skillServices}
         renderCard={(service) => <ServiceCard service={service} />}
-        bgColor="bg-gradient-to-br from-blue-50 to-indigo-100"
+        bgColor="bg-gradient-to-br from-primary/5 to-indigo-100"
         icon={Target}
       />
 
@@ -227,7 +227,7 @@ const ServicePage = () => {
         subtitle="Connect with top employers and find your dream job through our extensive placement network"
         items={placements}
         renderCard={(placement) => <PlacementCard placement={placement} />}
-        bgColor="bg-gradient-to-br from-green-50 to-emerald-100"
+        bgColor="bg-gradient-to-br from-secondary/5 to-emerald-100"
         icon={Briefcase}
       />
 
@@ -246,3 +246,9 @@ const ServicePage = () => {
 };
 
 export default ServicePage;
+
+
+
+
+
+

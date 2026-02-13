@@ -23,3 +23,9 @@ export default function GalleryCard({ image, onClick }) {
     </div>
   );
 }
+
+
+
+
+
+

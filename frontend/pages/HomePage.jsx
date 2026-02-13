@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { getBanners } from "../api/Banner";
-import { Briefcase, Users, ClipboardList, Cpu, Heart, CheckCircle, MapPin, UserCheck } from "lucide-react";
-import Objective from "./Objective";
-import TeamSection from "./Teamsection";
-import Carousel from "../components/common/Carousel";
-
-import { Link } from "react-router-dom";
+import { CTAButtonGroup } from "../components/common/CTAButtons";
+import StatsBar from "../components/home/StatsBar";
+import FocusAreas from "../components/home/FocusAreas";
+import LatestEvents from "../components/home/LatestEvents";
+import AboutIntro from "../components/home/AboutIntro";
+import SuccessStories from "../components/home/SuccessStories";
+import GalleryPreview from "../components/home/GalleryPreview";
+import DonateCTA from "../components/home/DonateCTA";
+import DonationSection from "../components/home/DonationSection";
+import VolunteerSection from "../components/home/VolunteerSection";
 
 const HomePage = () => {
   const [banners, setBanners] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchBanners() {
@@ -18,6 +23,8 @@ const HomePage = () => {
         setBanners(data);
       } catch (error) {
         console.error("Failed to fetch banners:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchBanners();
@@ -31,51 +38,13 @@ const HomePage = () => {
     return () => clearInterval(timer);
   }, [banners.length]);
 
-  const services = [
-    {
-      icon: <Briefcase className="w-10 h-10 text-primary" />,
-      title: "Placement Opportunities",
-      link: "/placement",
-    },
-    {
-      icon: <Users className="w-10 h-10 text-primary" />,
-      title: "Alumnis",
-      link: "/alumni/view",
-    },
-    {
-      icon: <ClipboardList className="w-10 h-10 text-primary" />,
-      title: "Services",
-      link: "/services",
-    },
-    {
-      icon: <Cpu className="w-10 h-10 text-primary" />,
-      title: "Projects",
-      link: "/projects/live",
-    },
-  ];
 
-  const ServiceCard = ({ icon, title, link }) => (
-    <Link
-      to={link}
-      className="bg-white p-8 rounded-xl border border-gray-200 shadow-lg 
-               hover:shadow-2xl transition-all duration-300 transform 
-               hover:-translate-y-2 flex flex-col items-center justify-center 
-               text-center cursor-pointer"
-    >
-      <div className="h-12 w-12 text-[#16a34a] mb-4">{icon}</div>
-      <h3 className="text-lg font-bold text-brand-dark">{title}</h3>
-    </Link>
-  );
 
   return (
     <div className="animate-fadeIn">
-      {/* Hero Section */}
-      <section
-        className="relative 
-  h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[80vh]
-  text-white overflow-hidden"
-      >
-        {banners.map((banner, index) => (
+      {/* 2. Hero Section (Full-width Banner) */}
+      <section className="relative h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[80vh] text-white overflow-hidden z-0">
+        {!isLoading && banners.map((banner, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -86,23 +55,38 @@ const HomePage = () => {
             <img
               src={banner.imageUrl}
               alt="banner"
-              className="sm:hidden w-full h-full object-contain bg-[#f5f5f5] pointer-events-none"
+              loading="eager"
+              className="sm:hidden w-full h-full object-contain pointer-events-none"
             />
 
             {/* DESKTOP — cover */}
             <img
               src={banner.imageUrl}
               alt="banner"
+              loading="eager"
               className="hidden sm:block w-full h-full object-cover pointer-events-none"
             />
 
-            {/* DARK LAYOUT (but soft) → for indicators visibility */}
-            <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
+            {/* DARK OVERLAY for text visibility */}
+            <div className="absolute inset-0 bg-black/50 pointer-events-none"></div>
           </div>
         ))}
 
-        {/* INDICATORS — visible in dark layout */}
-        <div className="absolute bottom-4 w-full flex justify-center z-30">
+        {/* Hero Content */}
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="text-center px-4 max-w-5xl">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] font-heading">
+              Empowering Communities, Transforming Lives
+            </h1>
+            <p className="text-lg md:text-xl mb-8 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] font-body">
+              Alumni united for education, health, environment, and social welfare
+            </p>
+            <CTAButtonGroup size="lg" className="justify-center" />
+          </div>
+        </div>
+
+        {/* Indicators */}
+        <div className="absolute bottom-4 w-full flex justify-center z-20">
           <div className="flex space-x-2">
             {banners.map((_, index) => (
               <button
@@ -117,79 +101,37 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Objective Section */}
-      <Objective />
+      {/* 3. Quick Impact Numbers (Stats Bar) */}
+      <StatsBar />
 
-      {/* Our Impact Section */}
-      <section className="py-16 bg-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-4">
-              Our Impact
-            </h2>
-            <p className="text-slate-300 max-w-2xl mx-auto">
-              Making a difference in communities through our dedicated efforts and programs
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <Heart className="w-12 h-12 text-green-400 mx-auto mb-4" />
-              <div className="text-4xl font-bold text-green-400 mb-2">500+</div>
-              <div className="text-slate-300">Lives Impacted</div>
-            </div>
-            <div className="text-center">
-              <CheckCircle className="w-12 h-12 text-sky-400 mx-auto mb-4" />
-              <div className="text-4xl font-bold text-sky-400 mb-2">50+</div>
-              <div className="text-slate-300">Projects Completed</div>
-            </div>
-            <div className="text-center">
-              <MapPin className="w-12 h-12 text-purple-400 mx-auto mb-4" />
-              <div className="text-4xl font-bold text-purple-400 mb-2">25+</div>
-              <div className="text-slate-300">Communities Served</div>
-            </div>
-            <div className="text-center">
-              <UserCheck className="w-12 h-12 text-orange-400 mx-auto mb-4" />
-              <div className="text-4xl font-bold text-orange-400 mb-2">100+</div>
-              <div className="text-slate-300">Volunteers</div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 4. Focus Areas (Highlight Tiles / Cards) */}
+      <FocusAreas />
 
-      {/* Gallery carousel */}
-      <div className="mt-6">
-        <section className="py-8 bg-white">
-          <div className="max-w-4xl mx-auto text-center px-4">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-dark">
-              Gallery
-            </h2>
-          </div>
-        </section>
+      {/* 5. Latest News & Events */}
+      <LatestEvents />
 
-        <Carousel />
-      </div>
+      {/* 6. About Us (Short Intro Block) */}
+      <AboutIntro />
 
-      {/* Services Section */}
-      <section className="py-16 bg-brand-light">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl">
-              Services
-            </h2>
-          </div>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map((service, index) => (
-              <ServiceCard key={index} {...service} />
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 7. Success Stories (Impact Showcase) */}
+      <SuccessStories />
 
-      {/* TeamSection */}
-      <TeamSection />
+      {/* 8. Gallery Preview */}
+      <GalleryPreview />
+
+      {/* 9. Donation Section */}
+      <DonationSection />
+
+      {/* 10. Volunteer Section */}
+      <VolunteerSection />
     </div>
   );
 };
 
 export default HomePage;
+
+
+
+
+
+

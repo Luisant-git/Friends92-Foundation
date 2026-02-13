@@ -45,7 +45,7 @@ export default function ImageModal({ image, onClose }) {
         />
 
         {/* Title */}
-        <h2 className="mt-4 text-center text-lg font-semibold text-gray-800">
+        <h2 className="mt-4 text-center text-lg font-semibold text-gray-800 font-heading">
           {image?.title}
         </h2>
       </div>
@@ -65,3 +65,9 @@ export default function ImageModal({ image, onClose }) {
     </div>
   );
 }
+
+
+
+
+
+

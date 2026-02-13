@@ -44,18 +44,18 @@ export default function SearchableDropdown({
           text-black font-normal
           placeholder-black placeholder-opacity-70
           rounded-lg
-          focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500
+          focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary
           transition-all duration-300 ease-in-out
         "
       />
 
       {/* Dropdown options */}
       {open && (
-        <div className="absolute w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-40 overflow-y-auto z-50 mt-1">
+        <div className="absolute w-full bg-white border border-gray-300 rounded-xl shadow-lg max-h-40 overflow-y-auto z-50 mt-1">
           {options.filter((o) =>
             o.toString().toLowerCase().includes(search.toLowerCase())
           ).length === 0 && (
-            <p className="p-2 px-4 text-gray-500 text-sm">No results found</p>
+            <p className="p-2 px-4 text-gray-500 text-sm font-body">No results found</p>
           )}
 
           {options
@@ -80,3 +80,9 @@ export default function SearchableDropdown({
     </div>
   );
 }
+
+
+
+
+
+

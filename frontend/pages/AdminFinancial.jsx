@@ -84,10 +84,10 @@ export default function AdminFinancial() {
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Financial Summary Management</h1>
+        <h1 className="text-2xl font-bold font-heading">Financial Summary Management</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold"
+          className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-semibold"
         >
           Add Category
         </button>
@@ -95,7 +95,7 @@ export default function AdminFinancial() {
 
       {totalPercentage !== 100 && financial.length > 0 && (
         <div className="mb-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 rounded">
-          <p className="text-yellow-800">
+          <p className="text-yellow-800 font-body">
             Warning: Total percentage is {totalPercentage}%. It should equal 100%.
           </p>
         </div>
@@ -103,8 +103,8 @@ export default function AdminFinancial() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h2 className="text-xl font-bold mb-4">{editingItem ? 'Edit Category' : 'Add Category'}</h2>
+          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <h2 className="text-xl font-bold mb-4 font-heading">{editingItem ? 'Edit Category' : 'Add Category'}</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label className="block font-semibold mb-2">Year</label>
@@ -113,7 +113,7 @@ export default function AdminFinancial() {
                   value={form.year}
                   onChange={(e) => setForm({ ...form, year: e.target.value })}
                   placeholder="2023-24"
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -124,7 +124,7 @@ export default function AdminFinancial() {
                   value={form.category}
                   onChange={(e) => setForm({ ...form, category: e.target.value })}
                   placeholder="Education Programs"
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -135,7 +135,7 @@ export default function AdminFinancial() {
                   value={form.amount}
                   onChange={(e) => setForm({ ...form, amount: e.target.value })}
                   placeholder="₹45,00,000"
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -148,7 +148,7 @@ export default function AdminFinancial() {
                   value={form.percentage}
                   onChange={(e) => setForm({ ...form, percentage: e.target.value })}
                   placeholder="45"
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary"
                   required
                 />
               </div>
@@ -156,7 +156,7 @@ export default function AdminFinancial() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold"
+                  className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-semibold"
                 >
                   {loading ? "Saving..." : editingItem ? "Update" : "Add"}
                 </button>
@@ -175,8 +175,8 @@ export default function AdminFinancial() {
 
       {deleteId && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
-            <h3 className="text-xl font-bold mb-4">Confirm Delete</h3>
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold mb-4 font-heading">Confirm Delete</h3>
             <p className="mb-6">Are you sure you want to delete this category?</p>
             <div className="flex gap-3 justify-end">
               <button
@@ -197,9 +197,9 @@ export default function AdminFinancial() {
       )}
 
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg shadow-md border">
+        <table className="min-w-full bg-white rounded-xl shadow-md border">
           <thead>
-            <tr className="bg-blue-50">
+            <tr className="bg-primary/5">
               <th className="p-3 text-left">Year</th>
               <th className="p-3 text-left">Category</th>
               <th className="p-3 text-left">Amount</th>
@@ -218,7 +218,7 @@ export default function AdminFinancial() {
                   <td className="p-3 flex gap-4">
                     <button
                       onClick={() => handleEdit(item)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-primary hover:text-primary"
                     >
                       <Edit size={20} />
                     </button>
@@ -244,3 +244,9 @@ export default function AdminFinancial() {
     </div>
   );
 }
+
+
+
+
+
+
