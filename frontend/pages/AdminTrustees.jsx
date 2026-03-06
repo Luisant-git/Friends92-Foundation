@@ -115,76 +115,73 @@ const AdminTrustees = () => {
         </button>
       </div>
 
+      {/* Modal */}
       {showForm && (
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold mb-4">
-            {editingTrustee ? 'Edit Trustee' : 'Add New Trustee'}
-          </h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <InputField
-              label="Name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-            />
-            <InputField
-              label="Designation"
-              value={formData.designation}
-              onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-              required
-            />
-            <TextAreaField
-              label="Description"
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              rows={4}
-              required
-            />
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Profile Image
-              </label>
-              <div className="flex items-center gap-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4">
+              {editingTrustee ? 'Edit Trustee' : 'Add New Trustee'}
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <InputField
+                label="Name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+              <InputField
+                label="Designation"
+                value={formData.designation}
+                onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+                required
+              />
+              <TextAreaField
+                label="Description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                rows={4}
+                required
+              />
+              <div>
+                <label className="block font-semibold mb-2">Image</label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleImageUpload}
-                  className="hidden"
-                  id="image-upload"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-primary/5 file:text-primary file:cursor-pointer hover:file:bg-primary/10"
                 />
-                <label
-                  htmlFor="image-upload"
-                  className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 flex items-center gap-2"
-                >
-                  <Upload className="w-4 h-4" />
-                  {uploading ? 'Uploading...' : 'Upload Image'}
-                </label>
                 {formData.imageUrl && (
-                  <img src={formData.imageUrl} alt="Preview" className="w-16 h-16 rounded-full object-cover" />
+                  <div className="mt-3">
+                    <img
+                      src={formData.imageUrl}
+                      alt="Preview"
+                      className="w-20 h-20 object-cover rounded-full border"
+                    />
+                  </div>
                 )}
               </div>
-            </div>
-            <StatusToggle
-              label="Active Status"
-              checked={formData.isActive}
-              onChange={(checked) => setFormData({ ...formData, isActive: checked })}
-            />
-            <div className="flex gap-2">
-              <button
-                type="submit"
-                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90"
-              >
-                {editingTrustee ? 'Update' : 'Create'}
-              </button>
-              <button
-                type="button"
-                onClick={resetForm}
-                className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+              <StatusToggle
+                label="Active Status"
+                value={formData.isActive}
+                onChange={(checked) => setFormData({ ...formData, isActive: checked })}
+              />
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="submit"
+                  className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90"
+                >
+                  {editingTrustee ? 'Update' : 'Create'}
+                </button>
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
