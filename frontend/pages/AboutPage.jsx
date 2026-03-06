@@ -148,7 +148,7 @@ const AboutPage = () => {
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {trustees.map((trustee) => (
               <div key={trustee.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition flex">
-                <img src={trustee.imageUrl} alt={trustee.name} className="w-24 h-24 sm:w-32 sm:h-32 object-cover flex-shrink-0" />
+                <img src={trustee.imageUrl} alt={trustee.name} className="w-24 h-24 sm:w-32 sm:h-32 object-contain flex-shrink-0" />
                 <div className="p-3 sm:p-4 flex-1">
                   <h3 className="text-sm sm:text-base font-bold text-gray-800 font-heading mb-1">{trustee.name}</h3>
                   <p className="text-primary font-semibold mb-2 text-xs sm:text-sm font-body">{trustee.designation}</p>
