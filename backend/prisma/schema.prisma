@@ -183,6 +183,17 @@ model Trust {
   updatedAt    DateTime @updatedAt
 }
 
+model Trustee {
+  id          Int      @id @default(autoincrement())
+  name        String
+  designation String
+  description String?
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model Task {
   id              Int        @id @default(autoincrement())
   title           String

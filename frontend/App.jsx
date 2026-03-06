@@ -47,6 +47,7 @@ import VolunteerTasksPage from './pages/VolunteerTasksPage';
 import AdminReports from './pages/AdminReports';
 import AdminFinancial from './pages/AdminFinancial';
 import AdminAlumni from './pages/AdminAlumni';
+import AdminTrustees from './pages/AdminTrustees';
 import AdminBlogPage from './pages/AdminBlogPage';
 import AdminDonorsPage from './pages/AdminDonorsPage';
 import BlogPage from './pages/BlogPage';
@@ -246,6 +247,7 @@ const App = () => {
           <Route path="placement" element={<AdminPlacementPage />} />
           <Route path="events" element={<AdminEventsPage />} />
           <Route path="team" element={<AdminTeam />} />
+          <Route path="trustees" element={<AdminTrustees />} />
           <Route path="trust" element={<AdminTrust />} />
           <Route path="volunteer-requests" element={<AdminVolunteerPage />} />
           <Route path="volunteer-management" element={<AdminVolunteerManagement />} />

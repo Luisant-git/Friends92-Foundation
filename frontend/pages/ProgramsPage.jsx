@@ -33,6 +33,12 @@ const ProgramsPage = () => {
       title: 'Disaster Relief',
       description: 'Providing immediate assistance and long-term rehabilitation support during natural calamities and emergencies. Our rapid response teams ensure timely aid reaches affected communities.',
       impact: '10+ disaster relief operations supporting thousands of families'
+    },
+    {
+      id: 6,
+      title: 'Skill Development',
+      description: 'Job-oriented training programmes in technical and non-technical trades to improve employability. Career guidance, interview skills and soft-skills sessions for students and unemployed youth.',
+      impact: 'Entrepreneurship Development Programmes (EDP) to encourage self-employment, especially among women and youth'
     }
   ];
 
@@ -103,8 +109,62 @@ const ProgramsPage = () => {
         </div>
       </section>
 
-      {/* Impact Section - matching AboutPage pattern with gray background */}
+      {/* Impact and Success Stories Section */}
       <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-primary mb-4 font-heading">Impact and Success Stories</h2>
+            <p className="text-gray-600 max-w-3xl mx-auto font-body">Real stories of transformation and impact from our ongoing initiatives across various communities.</p>
+          </div>
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2023 onwards</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Supporting Students' Education</h3>
+              </div>
+              <p className="text-gray-700 font-body">Through our scholarship program, GPTCK 92 TRUST has helped poor and deserving students continue their college and technical education when their families were unable to afford the costs.</p>
+            </div>
+            <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2023</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Alumni-led Tree Plantation</h3>
+              </div>
+              <p className="text-gray-700 font-body">Alumni of GPTC Krishnagiri joined hands to plant trees in and around the campus and nearby areas, promoting a greener environment and climate awareness among students.</p>
+            </div>
+            <div className="bg-purple-50 border-l-4 border-purple-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2024 onwards</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Educational Fee Assistance</h3>
+              </div>
+              <p className="text-gray-700 font-body">We started educational fee assistance for students' college fees as part of our program. GPTCK 92 TRUST has helped poor and deserving students continue their college and technical education when their families were unable to afford the fee payments.</p>
+            </div>
+            <div className="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2024</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Computer Desktop Sponsorship</h3>
+              </div>
+              <p className="text-gray-700 font-body">We have sponsored computer desktops to GPTC Krishnagiri for students' training, enhancing their technical skills and digital literacy.</p>
+            </div>
+            <div className="bg-orange-50 border-l-4 border-orange-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2024</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Motivational Programme</h3>
+              </div>
+              <p className="text-gray-700 font-body">We have provided motivational programmes to the students of GPTC Krishnagiri, inspiring them to achieve their goals and build successful careers.</p>
+            </div>
+            <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2025 onwards</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Health Camps in Rural Areas</h3>
+              </div>
+              <p className="text-gray-700 font-body">Medical assistance for needy people when their families were unable to afford the expenses. Our health camps provide essential healthcare services to underserved communities.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Impact Section */}
+      <section className="py-16">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center text-primary mb-4 font-heading">Our Impact</h2>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto font-body">Real numbers showing the lives we've touched and communities we've transformed through our dedicated efforts.</p>
@@ -120,7 +180,7 @@ const ProgramsPage = () => {
       </section>
 
       {/* Featured Programs Section */}
-      <section className="py-16 bg-white">
+      {/* <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold tracking-tight text-primary sm:text-4xl mb-4 font-heading">Featured Programs</h2>
@@ -141,7 +201,61 @@ const ProgramsPage = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
+
+      {/* Impact and Success Stories Section */}
+      {/* <section className="py-16">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-primary mb-4 font-heading">Impact and Success Stories</h2>
+            <p className="text-gray-600 max-w-3xl mx-auto font-body">Real stories of transformation and impact from our ongoing initiatives across various communities.</p>
+          </div>
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2023 onwards</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Supporting Students' Education</h3>
+              </div>
+              <p className="text-gray-700 font-body">Through our scholarship program, GPTCK 92 TRUST has helped poor and deserving students continue their college and technical education when their families were unable to afford the costs.</p>
+            </div>
+            <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2023</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Alumni-led Tree Plantation</h3>
+              </div>
+              <p className="text-gray-700 font-body">Alumni of GPTC Krishnagiri joined hands to plant trees in and around the campus and nearby areas, promoting a greener environment and climate awareness among students.</p>
+            </div>
+            <div className="bg-purple-50 border-l-4 border-purple-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2024 onwards</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Educational Fee Assistance</h3>
+              </div>
+              <p className="text-gray-700 font-body">We started educational fee assistance for students' college fees as part of our program. GPTCK 92 TRUST has helped poor and deserving students continue their college and technical education when their families were unable to afford the fee payments.</p>
+            </div>
+            <div className="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2024</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Computer Desktop Sponsorship</h3>
+              </div>
+              <p className="text-gray-700 font-body">We have sponsored computer desktops to GPTC Krishnagiri for students' training, enhancing their technical skills and digital literacy.</p>
+            </div>
+            <div className="bg-orange-50 border-l-4 border-orange-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2024</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Motivational Programme</h3>
+              </div>
+              <p className="text-gray-700 font-body">We have provided motivational programmes to the students of GPTC Krishnagiri, inspiring them to achieve their goals and build successful careers.</p>
+            </div>
+            <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg">
+              <div className="flex items-center mb-3">
+                <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">2025 onwards</span>
+                <h3 className="text-xl font-bold text-gray-800 ml-4 font-heading">Health Camps in Rural Areas</h3>
+              </div>
+              <p className="text-gray-700 font-body">Medical assistance for needy people when their families were unable to afford the expenses. Our health camps provide essential healthcare services to underserved communities.</p>
+            </div>
+          </div>
+        </div>
+      </section> */}
 
       {/* Call to Action Section */}
       <section className="py-16 bg-gray-50">

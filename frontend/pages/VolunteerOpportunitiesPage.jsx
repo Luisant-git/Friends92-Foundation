@@ -1,13 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getVerifiedTasks } from '../api/Task';
-import { Users, Heart, Camera, MapPin } from 'lucide-react';
+import { Users, Heart, Camera, MapPin, Quote } from 'lucide-react';
 
 const VolunteerOpportunitiesPage = () => {
   const [volunteers, setVolunteers] = useState([]);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+  const testimonials = [
+    {
+      quote: "GPTCK 92 Trust has been instrumental in my career growth. The mentorship and guidance I received helped me secure a good job and give back to my community.",
+      name: "Rajesh Kumar",
+      role: "Alumni, Batch 2018",
+      category: "Alumni"
+    },
+    {
+      quote: "The scholarship support from GPTCK 92 Trust enabled me to complete my engineering degree. Today, I'm working in a multinational company and supporting other students.",
+      name: "Priya Sharma",
+      role: "Beneficiary",
+      category: "Beneficiary"
+    },
+    {
+      quote: "Working with GPTCK 92 Trust has been rewarding. Their transparent approach and genuine commitment to student welfare makes them an ideal partner for our CSR initiatives.",
+      name: "Dr. Suresh Babu",
+      role: "Corporate Partner",
+      category: "Partner"
+    },
+    {
+      quote: "The health camps organized by GPTCK 92 Trust in our village have been a blessing. They provide quality healthcare services to families who cannot afford private treatment.",
+      name: "Lakshmi Devi",
+      role: "Community Member",
+      category: "Beneficiary"
+    },
+    {
+      quote: "As an alumnus, volunteering with GPTCK 92 Trust gives me immense satisfaction. Seeing young students achieve their dreams through our support is truly fulfilling.",
+      name: "Arun Prakash",
+      role: "Volunteer, Batch 2015",
+      category: "Alumni"
+    }
+  ];
 
   useEffect(() => {
     fetchVerifiedTasks();
+    
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   const fetchVerifiedTasks = async () => {
@@ -23,8 +63,9 @@ const VolunteerOpportunitiesPage = () => {
     <div className="bg-white">
       <section className="bg-primary text-white py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-6 text-center">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 font-heading">Join Hands, Inspire Change</h1>
-          <p className="text-base md:text-lg lg:text-xl text-white/90 font-body max-w-4xl mx-auto">Your time, skills, and passion can transform lives. Together, alumni and volunteers create lasting impact in education, health, environment, and social welfare.</p>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 font-heading">Volunteer & Alumni</h1>
+          <p className="text-base md:text-lg lg:text-xl text-white/90 font-body max-w-4xl mx-auto">We invite GPTC Krishnagiri alumni and like-minded individuals to join hands with us as
+volunteers, mentors and supporters.</p>
         </div>
       </section>
 
@@ -95,6 +136,44 @@ const VolunteerOpportunitiesPage = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-primary mb-4 font-heading">Testimonials</h2>
+            <p className="text-gray-600 font-body">Short quotes from beneficiaries, alumni and partners about their experience with GPTCK 92 Trust.</p>
+          </div>
+          
+          <div className="relative max-w-4xl mx-auto">
+            <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+              <Quote className="w-12 h-12 text-secondary mx-auto mb-6" />
+              <blockquote className="text-lg text-gray-700 mb-6 font-body italic leading-relaxed">
+                "{testimonials[currentTestimonial].quote}"
+              </blockquote>
+              <div className="border-t pt-6">
+                <p className="font-semibold text-gray-800 font-heading">{testimonials[currentTestimonial].name}</p>
+                <p className="text-gray-600 text-sm font-body">{testimonials[currentTestimonial].role}</p>
+                <span className="inline-block mt-2 px-3 py-1 bg-secondary/10 text-secondary text-xs rounded-full font-medium">
+                  {testimonials[currentTestimonial].category}
+                </span>
+              </div>
+            </div>
+            
+            <div className="flex justify-center mt-6 space-x-2">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentTestimonial(index)}
+                  className={`w-3 h-3 rounded-full transition ${
+                    index === currentTestimonial ? 'bg-secondary' : 'bg-gray-300 hover:bg-gray-400'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

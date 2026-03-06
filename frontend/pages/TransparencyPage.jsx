@@ -169,7 +169,7 @@ const TransparencyPage = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-gray-50">
+      {/* <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <Users className="w-12 h-12 text-secondary mx-auto mb-4" />
@@ -191,7 +191,7 @@ const TransparencyPage = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Partner Logos */}
       <section className="py-16">

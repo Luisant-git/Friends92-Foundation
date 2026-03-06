@@ -17,10 +17,11 @@ import { TaskModule } from './task/task.module';
 import { ReportsModule } from './reports/reports.module';
 import { FinancialModule } from './financial/financial.module';
 import { BlogModule } from './blog/blog.module';
+import { TrusteeModule } from './trustees/trustee.module';
 import { DonationModule } from './donation/donation.module';
 
 @Module({
-  imports: [AdminModule, BannerModule, UploadModule, AlumniModule, GalleryModule, PlacementModule, CategoryModule, EventsModule, ServicesModule, TeamModule, TrustModule, VolunteerModule, TaskModule, ReportsModule, FinancialModule, BlogModule, DonationModule],
+  imports: [AdminModule, BannerModule, UploadModule, AlumniModule, GalleryModule, PlacementModule, CategoryModule, EventsModule, ServicesModule, TeamModule, TrustModule, TrusteeModule, VolunteerModule, TaskModule, ReportsModule, FinancialModule, BlogModule, DonationModule],
   controllers: [AppController],
   providers: [AppService],
 })

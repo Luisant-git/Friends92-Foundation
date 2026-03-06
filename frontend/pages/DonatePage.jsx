@@ -17,19 +17,19 @@ const DonatePage = () => {
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
 
-  const suggestedAmounts = [500, 1000, 2500, 5000, 10000];
+  const suggestedAmounts = [500, 1000, 3000, 5000, 10000];
 
   const impactStatements = {
-    500: "Provides school supplies for 1 child for a year",
-    1000: "Supports skill training for 2 students",
-    2500: "Topper prize for 3 children",
-    5000: "Funds personality development program for 10 students",
-    10000: "Supports complete education for 1 child for a year",
+    500: "₹500 – Study materials for one student",
+    1000: "₹1,000 – Health camp or tree plantation",
+    3000: "₹3,000 – Topper prizes for three children",
+    5000: "₹5,000+ – Scholarship support for higher education",
+    10000: "₹10,000+ – Scholarship support for higher education",
   };
 
   const selectedAmount = customAmount || amount;
-  const impact =
-    impactStatements[selectedAmount] || "Your contribution makes a difference";
+  const impact = impactStatements[selectedAmount] || 
+    (selectedAmount >= 5000 ? "₹5,000+ – Scholarship support for higher education" : "Your contribution makes a difference");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,11 +70,12 @@ const DonatePage = () => {
         <div className="text-center mb-10">
           <Heart className="w-16 h-16 text-secondary mx-auto mb-4" />
           <h1 className="text-4xl font-bold text-primary mb-3 font-heading">
-            Make a Difference Today
+            Your Support Changes Lives
           </h1>
-          <p className="text-gray-600 text-lg font-body">
-            Your generosity transforms lives and builds futures
+          <p className="text-gray-600 text-lg font-body mb-6">
+            Every contribution helps us reach more students, families, and communities.
           </p>
+         
         </div>
 
         {/* Main Form Card */}

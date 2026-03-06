@@ -27,11 +27,39 @@ const FocusAreas = () => {
       title: "Women & Youth Empowerment",
       description: "SHG support, mentoring, training",
       link: "/programs"
+    },
+    {
+      icon: <GraduationCap className="w-12 h-12" />,
+      title: "Upcoming Camps",
+      description: "Scheduled health and awareness camps",
+      link: "/events"
+    },
+    {
+      icon: <Users className="w-12 h-12" />,
+      title: "Alumni Meets",
+      description: "Networking and collaboration events",
+      link: "/events"
+    },
+    {
+      icon: <Heart className="w-12 h-12" />,
+      title: "Recent Programmes",
+      description: "Latest initiatives and activities",
+      link: "/programs"
     }
   ];
 
   return (
     <section className="py-16 bg-gray-50">
+      {/* Who We Are Section */}
+      <div className="bg-primary/5 py-12 mb-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h3 className="text-2xl md:text-3xl font-bold text-primary mb-6 font-heading">Who We Are</h3>
+          <p className="text-gray-700 text-lg leading-relaxed font-body">
+            We are alumni of the 1992 batch of Government Polytechnic College, Krishnagiri. Our mission is to uplift communities through initiatives in Education, Health, Environment, Women & Child Welfare, and Youth Development.
+          </p>
+        </div>
+      </div>
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4 font-heading">Our Focus Areas</h2>
