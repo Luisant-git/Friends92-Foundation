@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { LoginAdminDto } from './dto/create-admin.dto';
 import { PrismaClient } from '@prisma/client';
@@ -15,7 +15,7 @@ export class AdminService {
       where: { email },
     });
     if (existingAdmin) {
-      throw new Error('Email already registered');
+      throw new ConflictException('Email already registered');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -34,10 +34,10 @@ export class AdminService {
     const { name, password } = loginAdminDto;
 
     const admin = await this.prisma.admin.findUnique({ where: { name } });
-    if (!admin) throw new Error('Invalid name or password');
+    if (!admin) throw new UnauthorizedException('Invalid name or password');
 
     const valid = await bcrypt.compare(password, admin.password);
-    if (!valid) throw new Error('Invalid name or password');
+    if (!valid) throw new UnauthorizedException('Invalid name or password');
 
     return { message: 'Login successful', admin: admin };
   }
