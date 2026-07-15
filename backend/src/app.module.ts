@@ -19,9 +19,10 @@ import { FinancialModule } from './financial/financial.module';
 import { BlogModule } from './blog/blog.module';
 import { TrusteeModule } from './trustees/trustee.module';
 import { DonationModule } from './donation/donation.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
-  imports: [AdminModule, BannerModule, UploadModule, AlumniModule, GalleryModule, PlacementModule, CategoryModule, EventsModule, ServicesModule, TeamModule, TrustModule, TrusteeModule, VolunteerModule, TaskModule, ReportsModule, FinancialModule, BlogModule, DonationModule],
+  imports: [AdminModule, BannerModule, UploadModule, AlumniModule, GalleryModule, PlacementModule, CategoryModule, EventsModule, ServicesModule, TeamModule, TrustModule, TrusteeModule, VolunteerModule, TaskModule, ReportsModule, FinancialModule, BlogModule, DonationModule, PaymentModule],
   controllers: [AppController],
   providers: [AppService],
 })

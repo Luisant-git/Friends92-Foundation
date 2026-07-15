@@ -31,6 +31,16 @@ const DonatePage = () => {
   const impact = impactStatements[selectedAmount] || 
     (selectedAmount >= 5000 ? "₹5,000+ – Scholarship support for higher education" : "Your contribution makes a difference");
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedAmount || !formData.name || !formData.phone) {
@@ -38,23 +48,82 @@ const DonatePage = () => {
       return;
     }
 
+    const res = await loadRazorpayScript();
+    if (!res) {
+      setToast({ message: "Razorpay SDK failed to load. Are you online?", type: "error" });
+      return;
+    }
+
     setLoading(true);
     try {
-      const donationData = {
-        amount: parseInt(selectedAmount),
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email || "",
-        message: formData.pan ? `PAN: ${formData.pan}` : null
+      const apiUrl = import.meta.env.VITE_API_URL;
+      
+      // 1. Create Order
+      const orderRes = await fetch(`${apiUrl}/payment/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: parseInt(selectedAmount) })
+      });
+      const orderData = await orderRes.json();
+
+      if (!orderData || !orderData.id) {
+        throw new Error('Failed to create order');
+      }
+
+      // 2. Open Razorpay Checkout
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'Friends92 Foundation',
+        description: 'Donation',
+        order_id: orderData.id,
+        handler: async function (response) {
+          // 3. Verify Payment
+          const verifyRes = await fetch(`${apiUrl}/payment/verify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            })
+          });
+          const verifyData = await verifyRes.json();
+
+          if (verifyData.status === 'success') {
+            const donationData = {
+              amount: parseInt(selectedAmount),
+              name: formData.name,
+              phone: formData.phone,
+              email: formData.email || "",
+              message: formData.pan 
+                ? `PAN: ${formData.pan} | Txn: ${response.razorpay_payment_id}` 
+                : `Txn: ${response.razorpay_payment_id}`
+            };
+
+            await createDonation(donationData);
+            setToast({ message: `Thank you! Your donation of ₹${selectedAmount} has been processed successfully.`, type: "success" });
+            
+            setAmount("");
+            setCustomAmount("");
+            setFormData({ name: "", phone: "", email: "", pan: "" });
+          } else {
+            setToast({ message: "Payment verification failed.", type: "error" });
+          }
+        },
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone,
+        },
+        theme: {
+          color: '#1E3A8A'
+        }
       };
 
-      await createDonation(donationData);
-      setToast({ message: `Thank you! Your donation of ₹${selectedAmount} has been processed successfully.`, type: "success" });
-      
-      // Reset form
-      setAmount("");
-      setCustomAmount("");
-      setFormData({ name: "", phone: "", email: "", pan: "" });
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
     } catch (error) {
       setToast({ message: "Failed to process donation. Please try again.", type: "error" });
       console.error(error);
