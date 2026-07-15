@@ -66,6 +66,9 @@ export class AlumniService {
 
   // DELETE
   async remove(id: number) {
+    await this.prisma.subscription.deleteMany({
+      where: { alumniId: id },
+    });
     return this.prisma.alumni.delete({
       where: { id },
     });
