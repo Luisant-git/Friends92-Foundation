@@ -7,6 +7,8 @@ const AdminSubscriptionsPage = () => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const [editingPlan, setEditingPlan] = useState(null);
   
   const [newPlan, setNewPlan] = useState({
@@ -96,10 +98,9 @@ const AdminSubscriptionsPage = () => {
     setShowCreateModal(true);
   };
 
-  const handleDeletePlan = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this plan?")) return;
+  const confirmDeletePlan = async () => {
     try {
-      const response = await fetch(`${apiUrl}/alumni/membership-plan/${id}`, {
+      const response = await fetch(`${apiUrl}/alumni/membership-plan/${deleteId}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -108,6 +109,9 @@ const AdminSubscriptionsPage = () => {
       }
     } catch (error) {
       toast.error('Error deleting plan');
+    } finally {
+      setShowDeleteModal(false);
+      setDeleteId(null);
     }
   };
 
@@ -166,7 +170,7 @@ const AdminSubscriptionsPage = () => {
                       Edit
                     </button>
                     <button 
-                      onClick={() => handleDeletePlan(plan.id)}
+                      onClick={() => { setDeleteId(plan.id); setShowDeleteModal(true); }}
                       className="text-red-500 hover:text-red-700 text-sm font-semibold transition"
                       title="Delete Plan"
                     >
@@ -242,6 +246,30 @@ const AdminSubscriptionsPage = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Delete Plan Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-2xl relative animate-slide-up">
+            <h3 className="text-xl font-bold mb-4 text-gray-800 font-heading">Confirm Delete</h3>
+            <p className="text-gray-600 mb-6 font-body">Are you sure you want to delete this membership plan? This action cannot be undone.</p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => { setShowDeleteModal(false); setDeleteId(null); }}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeletePlan}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition shadow-md"
+              >
+                Delete Plan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Create/Edit Plan Modal */}
       {showCreateModal && (

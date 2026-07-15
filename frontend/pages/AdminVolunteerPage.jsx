@@ -9,6 +9,8 @@ const AdminVolunteerPage = () => {
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [approveId, setApproveId] = useState(null);
   const [filterService, setFilterService] = useState('');
 
   useEffect(() => {
@@ -36,11 +38,18 @@ const AdminVolunteerPage = () => {
     }
   };
 
-  const handleApprove = async (id) => {
+  const handleApproveClick = (id) => {
+    setApproveId(id);
+    setShowApproveModal(true);
+  };
+
+  const confirmApprove = async () => {
     try {
-      await approveVolunteer(id);
+      await approveVolunteer(approveId);
       toast.success('Volunteer approved! Selection email sent.');
       fetchVolunteers();
+      setShowApproveModal(false);
+      setApproveId(null);
     } catch (err) {
       toast.error('Failed to approve volunteer');
     }
@@ -93,6 +102,29 @@ const AdminVolunteerPage = () => {
                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showApproveModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold mb-4 font-heading">Confirm Approval</h3>
+            <p className="text-gray-600 mb-6 font-body">Are you sure you want to approve this volunteer? A selection email will be sent to them.</p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => { setShowApproveModal(false); setApproveId(null); }}
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmApprove}
+                className="px-4 py-2 bg-secondary text-white rounded hover:bg-secondary/90 transition shadow-md"
+              >
+                Approve
               </button>
             </div>
           </div>
@@ -170,7 +202,7 @@ const AdminVolunteerPage = () => {
                   </button>
                   {!volunteer.password && (
                     <button
-                      onClick={() => handleApprove(volunteer.id)}
+                      onClick={() => handleApproveClick(volunteer.id)}
                       className="px-3 py-1 bg-secondary text-white text-xs rounded hover:bg-secondary/90"
                     >
                       Approve

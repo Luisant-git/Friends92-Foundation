@@ -20,6 +20,8 @@ const AdminTrustees = () => {
   });
   const [toast, setToast] = useState({ show: false, message: '', type: '' });
   const [uploading, setUploading] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
     loadTrustees();
@@ -57,16 +59,22 @@ const AdminTrustees = () => {
     setShowForm(true);
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this trustee?')) {
-      try {
-        await deleteTrustee(id);
-        showToast('Trustee deleted successfully', 'success');
-        loadTrustees();
-      } catch (error) {
-        showToast('Failed to delete trustee', 'error');
-      }
+  const confirmDelete = async () => {
+    try {
+      await deleteTrustee(deleteId);
+      showToast('Trustee deleted successfully', 'success');
+      loadTrustees();
+    } catch (error) {
+      showToast('Failed to delete trustee', 'error');
+    } finally {
+      setShowDeleteModal(false);
+      setDeleteId(null);
     }
+  };
+
+  const handleDelete = (id) => {
+    setDeleteId(id);
+    setShowDeleteModal(true);
   };
 
   const handleImageUpload = async (e) => {
@@ -114,6 +122,30 @@ const AdminTrustees = () => {
           Add Trustee
         </button>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-2xl relative animate-slide-up">
+            <h3 className="text-xl font-bold mb-4 text-gray-800 font-heading">Confirm Delete</h3>
+            <p className="text-gray-600 mb-6 font-body">Are you sure you want to delete this trustee? This action cannot be undone.</p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => { setShowDeleteModal(false); setDeleteId(null); }}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition shadow-md"
+              >
+                Delete Trustee
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal */}
       {showForm && (

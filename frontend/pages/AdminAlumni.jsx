@@ -7,6 +7,8 @@ const AdminAlumni = () => {
   const [filteredAlumni, setFilteredAlumni] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewModal, setViewModal] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const [filters, setFilters] = useState({
     year: '',
     willingToDonateBlood: '',
@@ -50,15 +52,21 @@ const AdminAlumni = () => {
     setFilteredAlumni(filtered);
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this alumni?')) {
-      try {
-        await deleteAlumni(id);
-        setAlumni(alumni.filter(a => a.id !== id));
-      } catch (err) {
-        alert('Failed to delete alumni');
-      }
+  const confirmDelete = async () => {
+    try {
+      await deleteAlumni(deleteId);
+      setAlumni(alumni.filter(a => a.id !== deleteId));
+    } catch (err) {
+      alert('Failed to delete alumni');
+    } finally {
+      setShowDeleteModal(false);
+      setDeleteId(null);
     }
+  };
+
+  const handleDelete = (id) => {
+    setDeleteId(id);
+    setShowDeleteModal(true);
   };
 
   const currentYear = new Date().getFullYear();
@@ -206,6 +214,29 @@ const AdminAlumni = () => {
             <button onClick={() => setViewModal(null)} className="mt-6 px-6 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
               Close
             </button>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-2xl relative animate-slide-up">
+            <h3 className="text-xl font-bold mb-4 text-gray-800 font-heading">Confirm Delete</h3>
+            <p className="text-gray-600 mb-6 font-body">Are you sure you want to delete this alumni? This action cannot be undone.</p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => { setShowDeleteModal(false); setDeleteId(null); }}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition shadow-md"
+              >
+                Delete Alumni
+              </button>
+            </div>
           </div>
         </div>
       )}
