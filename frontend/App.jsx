@@ -52,6 +52,8 @@ import AdminBlogPage from './pages/AdminBlogPage';
 import AdminDonorsPage from './pages/AdminDonorsPage';
 import BlogPage from './pages/BlogPage';
 import BlogDetailPage from './pages/BlogDetailPage';
+import MembershipRenewal from './pages/MembershipRenewal';
+import AdminSubscriptionsPage from './pages/AdminSubscriptionsPage';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -176,6 +178,13 @@ const App = () => {
             <Footer />
           </div>
         } />
+        <Route path="/alumni/renewal" element={
+          <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+            <Header />
+            <main className="flex-grow"><MembershipRenewal /></main>
+            <Footer />
+          </div>
+        } />
         <Route path="/gallery" element={
           <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
             <Header />
@@ -258,6 +267,7 @@ const App = () => {
           <Route path="financial" element={<AdminFinancial />} />
           <Route path="donors" element={<AdminDonorsPage />} />
           <Route path="alumni" element={<AdminAlumni />} />
+          <Route path="subscriptions" element={<AdminSubscriptionsPage />} />
           <Route path="blog" element={<AdminBlogPage />} />
         </Route>
 

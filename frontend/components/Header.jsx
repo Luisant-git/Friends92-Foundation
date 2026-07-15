@@ -285,6 +285,12 @@ const Header = () => {
                   >
                     View Alumni
                   </NavLink>
+                  <NavLink
+                    to="/alumni/renewal"
+                    className="text-gray-500 hover:text-primary transition text-sm px-2 py-1 font-medium"
+                  >
+                    Membership Renewal
+                  </NavLink>
                 </div>
               )}
             </div>
@@ -315,6 +321,12 @@ const Header = () => {
                     className="block px-4 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition"
                   >
                     View Alumni
+                  </NavLink>
+                  <NavLink
+                    to="/alumni/renewal"
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition"
+                  >
+                    Membership Renewal
                   </NavLink>
                 </div>
               )}
