@@ -60,6 +60,11 @@ export class AlumniController {
     return this.alumniService.deleteMembershipPlan(Number(id));
   }
 
+  @Get('verify-mobile/:mobile')
+  verifyMobile(@Param('mobile') mobile: string) {
+    return this.alumniService.verifyMobile(mobile);
+  }
+
   @Get()
   findAll() {
     return this.alumniService.findAll();

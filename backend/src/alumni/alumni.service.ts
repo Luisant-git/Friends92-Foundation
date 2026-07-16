@@ -138,4 +138,14 @@ export class AlumniService {
   async deleteMembershipPlan(id: number) {
     return this.prisma.membershipPlan.delete({ where: { id } });
   }
+
+  async verifyMobile(mobile: string) {
+    const alumni = await this.prisma.alumni.findUnique({
+      where: { mobile },
+    });
+    if (alumni) {
+      return { exists: true, name: alumni.name };
+    }
+    return { exists: false };
+  }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, CalendarCheck, ShieldCheck, Heart, X } from 'lucide-react';
+import { Mail, Phone, CalendarCheck, ShieldCheck, Heart, X, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 const MembershipRenewal = () => {
@@ -12,12 +12,51 @@ const MembershipRenewal = () => {
     renewalYear: new Date().getFullYear().toString() + '-' + (new Date().getFullYear() + 1).toString(),
   });
   const [loading, setLoading] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [verifiedName, setVerifiedName] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchPlans();
   }, []);
+
+  useEffect(() => {
+    const verifyNumber = async () => {
+      if (formData.mobile.length === 10) {
+        setIsVerifying(true);
+        try {
+          const res = await fetch(`${apiUrl}/alumni/verify-mobile/${formData.mobile}`);
+          const data = await res.json();
+          if (data.exists) {
+            setIsVerified(true);
+            setVerifiedName(data.name);
+            setShowSuccessModal(true);
+          } else {
+            setIsVerified(false);
+            setVerifiedName('');
+          }
+        } catch (error) {
+          console.error(error);
+          setIsVerified(false);
+          setVerifiedName('');
+        } finally {
+          setIsVerifying(false);
+        }
+      } else {
+        setIsVerified(false);
+        setVerifiedName('');
+      }
+    };
+
+    const debounceTimeout = setTimeout(() => {
+      verifyNumber();
+    }, 400);
+
+    return () => clearTimeout(debounceTimeout);
+  }, [formData.mobile, apiUrl]);
 
   const fetchPlans = async () => {
     try {
@@ -43,6 +82,10 @@ const MembershipRenewal = () => {
 
   const handleOpenPayment = (plan) => {
     setSelectedPlan(plan);
+    setFormData({ ...formData, mobile: '' });
+    setIsVerified(false);
+    setVerifiedName('');
+    setShowSuccessModal(false);
     setShowModal(true);
   };
 
@@ -225,21 +268,69 @@ const MembershipRenewal = () => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Registered Mobile Number *</label>
-                  <input
-                    type="text"
-                    required
-                    autoFocus
-                    className="w-full px-4 py-3 text-lg border-2 border-gray-200 rounded-xl focus:ring-0 focus:border-primary outline-none transition"
-                    placeholder="Enter mobile number"
-                    value={formData.mobile}
-                    onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      autoFocus
+                      maxLength="10"
+                      className={`w-full px-4 py-3 pl-12 text-lg border-2 rounded-xl focus:ring-0 outline-none transition ${
+                        isVerified ? 'border-green-500 focus:border-green-500' :
+                        formData.mobile.length === 10 && !isVerifying && !isVerified ? 'border-red-400 focus:border-red-500' :
+                        'border-gray-200 focus:border-primary'
+                      }`}
+                      placeholder="10-digit mobile number"
+                      value={formData.mobile}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '');
+                        setFormData({ ...formData, mobile: val });
+                      }}
+                    />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                      <Phone className="w-5 h-5" />
+                    </div>
+                    {isVerifying && (
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                        <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+                      </div>
+                    )}
+                    {isVerified && (
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                        <CheckCircle2 className="w-5 h-5 text-green-500" />
+                      </div>
+                    )}
+                    {formData.mobile.length === 10 && !isVerifying && !isVerified && (
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                        <AlertCircle className="w-5 h-5 text-red-500" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="mt-2 min-h-[24px]">
+                    {isVerifying ? (
+                      <p className="text-sm text-blue-500 font-medium animate-pulse flex items-center gap-1">
+                        <Loader2 className="w-4 h-4 animate-spin" /> Verifying number...
+                      </p>
+                    ) : isVerified ? (
+                      <p className="text-sm text-green-600 font-medium flex items-center gap-1 animate-fade-in">
+                        <ShieldCheck className="w-4 h-4" /> Verified Alumni: {verifiedName}
+                      </p>
+                    ) : formData.mobile.length === 10 ? (
+                      <p className="text-sm text-red-500 font-medium flex items-center gap-1 animate-fade-in">
+                        <AlertCircle className="w-4 h-4" /> Not registered as an alumni.
+                      </p>
+                    ) : (
+                      <p className="text-sm text-gray-500">Enter your 10-digit registered number.</p>
+                    )}
+                  </div>
                 </div>
-                
+
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="w-full bg-[#528FF0] text-white px-4 py-4 rounded-xl font-bold hover:bg-[#3D7FE6] transition shadow-lg disabled:opacity-50 text-lg flex items-center justify-center gap-2"
+                  disabled={loading || !isVerified}
+                  className={`w-full text-white px-4 py-4 rounded-xl font-bold transition shadow-lg disabled:opacity-50 text-lg flex items-center justify-center gap-2 ${
+                    isVerified ? 'bg-[#528FF0] hover:bg-[#3D7FE6]' : 'bg-gray-400 cursor-not-allowed'
+                  }`}
                 >
                   {loading ? 'Processing...' : `Pay ₹${selectedPlan.amount} Securely`}
                 </button>
@@ -248,6 +339,40 @@ const MembershipRenewal = () => {
                 </p>
               </form>
             </div>
+
+            {/* Inner Success Verification Modal */}
+            {showSuccessModal && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center p-6 bg-white/95 backdrop-blur-sm animate-fade-in rounded-2xl">
+                <style>
+                  {`
+                    @keyframes success-pop {
+                      0% { transform: scale(0.3); opacity: 0; }
+                      60% { transform: scale(1.15); opacity: 1; }
+                      100% { transform: scale(1); opacity: 1; }
+                    }
+                    .animate-success-pop {
+                      animation: success-pop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                    }
+                  `}
+                </style>
+                <div className="bg-white border border-gray-100 p-8 rounded-2xl shadow-2xl text-center max-w-sm w-full animate-slide-up">
+                  <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner animate-success-pop">
+                    <CheckCircle2 className="w-10 h-10" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Verified Successfully!</h3>
+                  <p className="text-gray-600 mb-8 text-lg">
+                    Welcome back,<br/>
+                    <span className="font-bold text-green-600 text-xl mt-1 block">{verifiedName}</span>
+                  </p>
+                  <button 
+                    onClick={() => setShowSuccessModal(false)}
+                    className="w-full bg-green-500 text-white py-4 rounded-xl font-bold hover:bg-green-600 transition shadow-lg text-lg flex items-center justify-center gap-2"
+                  >
+                    Continue to Payment
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
