@@ -44,6 +44,7 @@ model Alumni {
   mobile                  String     @unique
   mobile2                 String?
   city                    String
+  district                String?
   profession              String?
   serviceArea             String?
   bloodGroup              String?

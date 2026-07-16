@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createAlumni } from "../api/Alumini";
 import { createVolunteer } from "../api/Volunteer";
 import { uploadImage } from "../api/Upload";
+import SearchableDropdown from "../components/SearchableDropdown";
 
 const AluminiRegister = () => {
   const [form, setForm] = useState({
@@ -10,6 +11,7 @@ const AluminiRegister = () => {
     year: "",
     mobile: "",
     city: "",
+    district: "",
     mobile2: "",
     email: "",
     profession: "",
@@ -39,6 +41,7 @@ const AluminiRegister = () => {
     (_, i) => 1970 + i
   );
   const departments = ["DAE", "DCE", "DCSE", "DEE", "DECE", "DIT", "DME"];
+  const districts = ["Ariyalur", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kancheepuram", "Kanniyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivaganga", "Thanjavur", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", "Virudhunagar", "Tenkasi", "Ranipet", "Tirupathur", "Mayiladuthurai", "Kallakurichi", "Chengalpattu"];
 
   const handlePhotoChange = async (e) => {
     const file = e.target.files[0];
@@ -71,6 +74,7 @@ const AluminiRegister = () => {
         mobile: form.mobile,
         mobile2: form.mobile2,
         city: form.city,
+        district: form.district,
         profession: form.profession,
         serviceArea: form.service,
         bloodGroup: form.bloodGroup,
@@ -118,7 +122,7 @@ const AluminiRegister = () => {
 
       setShowSuccess(true);
       window.dispatchEvent(new Event("alumniListUpdated"));
-      setForm({ name: "", department: "", year: "", mobile: "", city: "", mobile2: "", email: "", profession: "", bloodGroup: "", companyName: "", designation: "", companyDepartment: "", companyPlace: "", businessName: "", natureOfBusiness: "", businessPlace: "", businessAddress: "", permanentAddress: "", servicesOffered: "", photoUrl: "", service: "" });
+      setForm({ name: "", department: "", year: "", mobile: "", city: "", district: "", mobile2: "", email: "", profession: "", bloodGroup: "", companyName: "", designation: "", companyDepartment: "", companyPlace: "", businessName: "", natureOfBusiness: "", businessPlace: "", businessAddress: "", permanentAddress: "", servicesOffered: "", photoUrl: "", service: "" });
       setWillProvideServices(false);
       setPhotoFile(null);
     } catch (err) {
@@ -220,13 +224,24 @@ const AluminiRegister = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Current Location *</label>
+                <label className="block text-sm font-medium mb-2">Current City *</label>
                 <input
                   type="text"
+                  maxLength={20}
                   value={form.city}
                   onChange={(e) => setForm({ ...form, city: e.target.value })}
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
                   required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Current District *</label>
+                <SearchableDropdown
+                  options={districts}
+                  value={form.district}
+                  onChange={(value) => setForm({ ...form, district: value })}
+                  placeholder="Select District"
                 />
               </div>
 

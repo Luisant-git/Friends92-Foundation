@@ -167,7 +167,8 @@ export default function ViewAlumni() {
                   <th className="py-2 px-4 border">Department</th>
                   <th className="py-2 px-4 border">Passed Out Year</th>
                   <th className="py-2 px-4 border">Mobile</th>
-                  <th className="py-2 px-4 border">Current Location</th>
+                  <th className="py-2 px-4 border">Current City</th>
+                  <th className="py-2 px-4 border">Current District</th>
                   <th className="py-2 px-4 border">Actions</th>
                 </tr>
               </thead>
@@ -178,12 +179,13 @@ export default function ViewAlumni() {
                     key={a.id}
                     className="text-center hover:bg-secondary/5 transition"
                   >
-                    <td className="py-2 px-4 border">{index + 1}</td>
+                  <td className="py-2 px-4 border">{index + 1}</td>
                     <td className="py-2 px-4 border">{a.name}</td>
                     <td className="py-2 px-4 border">{a.department}</td>
                     <td className="py-2 px-4 border">{a.year}</td>
                     <td className="py-2 px-4 border">{a.mobile}</td>
                     <td className="py-2 px-4 border">{a.city}</td>
+                    <td className="py-2 px-4 border">{a.district || '-'}</td>
                     <td className="py-2 px-4 border">
                       <button
                         onClick={() => handleEdit(a)}

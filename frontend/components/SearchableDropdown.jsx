@@ -12,6 +12,13 @@ export default function SearchableDropdown({
   const [search, setSearch] = useState("");
   const wrapperRef = useRef();
 
+  // Update search when value changes from parent
+  useEffect(() => {
+    if (value) {
+      setSearch(value);
+    }
+  }, [value]);
+
   // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e) {
@@ -23,6 +30,12 @@ export default function SearchableDropdown({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleSelect = (option) => {
+    onChange(option);
+    setSearch(option);
+    setOpen(false);
+  };
+
   return (
     <div className="relative" ref={wrapperRef}>
       {/* Optional icon */}
@@ -31,11 +44,10 @@ export default function SearchableDropdown({
       <input
         type="text"
         placeholder={placeholder}
-        value={search || value}
+        value={search}
         onChange={(e) => setSearch(e.target.value)}
         onFocus={() => {
           setOpen(true);
-          setSearch("");
         }}
         onMouseDown={(e) => e.stopPropagation()} // Prevent auto close
         className="
@@ -65,11 +77,7 @@ export default function SearchableDropdown({
             .map((opt, i) => (
               <p
                 key={i}
-                onMouseDown={() => {
-                  onChange(opt);
-                  setOpen(false);
-                  setSearch("");
-                }}
+                onMouseDown={() => handleSelect(opt)}
                 className="p-2 px-4 cursor-pointer hover:bg-gray-100 text-sm"
               >
                 {opt}
