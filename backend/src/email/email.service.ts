@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import { generateReceiptPdf } from './pdf-generator';
 
 @Injectable()
 export class EmailService {
@@ -87,4 +88,97 @@ export class EmailService {
 
     await this.transporter.sendMail(mailOptions);
   }
+
+  async sendDonationReceiptEmail(donation: {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    amount: number;
+    message?: string | null;
+    createdAt: Date;
+  }) {
+    const pdfBuffer = await generateReceiptPdf(donation);
+    const fromEmail = process.env.EMAIL_USER || 'wondwebtechmail@gmail.com';
+    const mailOptions = {
+      from: `"GPTCK 92 TRUST" <${fromEmail}>`,
+      to: donation.email,
+      subject: `Donation Receipt - GPTCK 92 TRUST (Receipt No: R${donation.id.toString().padStart(4, '0')})`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+          <h2 style="color: #1e3a8a;">Thank You for Your Support!</h2>
+          <p>Dear Mr./Ms. ${donation.name},</p>
+          <p>We gratefully acknowledge your generous donation of <strong>₹${donation.amount.toLocaleString('en-IN')}</strong> to the <strong>GPTCK 92 TRUST</strong>.</p>
+          <p>Your contribution plays a vital role in enabling our programs and supporting students and communities.</p>
+          <p>Please find attached your 80G tax exemption receipt for this donation.</p>
+          <div style="background-color: #f3f4f6; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <p style="margin: 5px 0;"><strong>Receipt No:</strong> R${donation.id.toString().padStart(4, '0')}</p>
+            <p style="margin: 5px 0;"><strong>Amount:</strong> ₹${donation.amount.toLocaleString('en-IN')}</p>
+            <p style="margin: 5px 0;"><strong>Date:</strong> ${new Date(donation.createdAt).toLocaleDateString('en-GB')}</p>
+          </div>
+          <p>If you have any questions or require further assistance, please contact us at <a href="mailto:gptck92trust@gmail.com">gptck92trust@gmail.com</a>.</p>
+          <p>Warm regards,<br><strong>GPTCK 92 TRUST Team</strong></p>
+        </div>
+      `,
+      attachments: [
+        {
+          filename: `Donation_Receipt_R${donation.id.toString().padStart(4, '0')}.pdf`,
+          content: pdfBuffer,
+        },
+      ],
+    };
+
+    await this.transporter.sendMail(mailOptions);
+  }
+
+  async sendSubscriptionReceiptEmail(subscription: {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    amount: number;
+    transactionId?: string | null;
+    createdAt: Date;
+  }) {
+    const pdfBuffer = await generateReceiptPdf({
+      id: subscription.id,
+      name: subscription.name,
+      email: subscription.email,
+      phone: subscription.phone,
+      amount: subscription.amount,
+      message: subscription.transactionId ? `Txn: ${subscription.transactionId}` : null,
+      createdAt: subscription.createdAt,
+      receiptType: 'SUBSCRIPTION',
+    });
+    const fromEmail = process.env.EMAIL_USER || 'wondwebtechmail@gmail.com';
+    const mailOptions = {
+      from: `"GPTCK 92 TRUST" <${fromEmail}>`,
+      to: subscription.email,
+      subject: `Subscription Receipt - GPTCK 92 TRUST (Receipt No: R${subscription.id.toString().padStart(4, '0')})`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+          <h2 style="color: #1e3a8a;">Thank You for Your Membership!</h2>
+          <p>Dear Mr./Ms. ${subscription.name},</p>
+          <p>We are pleased to confirm your Alumni Membership subscription of <strong>₹${subscription.amount.toLocaleString('en-IN')}</strong> to the <strong>GPTCK 92 TRUST</strong>.</p>
+          <p>Please find attached your subscription receipt.</p>
+          <div style="background-color: #f3f4f6; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <p style="margin: 5px 0;"><strong>Receipt No:</strong> R${subscription.id.toString().padStart(4, '0')}</p>
+            <p style="margin: 5px 0;"><strong>Amount:</strong> ₹${subscription.amount.toLocaleString('en-IN')}</p>
+            <p style="margin: 5px 0;"><strong>Date:</strong> ${new Date(subscription.createdAt).toLocaleDateString('en-GB')}</p>
+          </div>
+          <p>If you have any questions, please contact us at <a href="mailto:gptck92trust@gmail.com">gptck92trust@gmail.com</a>.</p>
+          <p>Warm regards,<br><strong>GPTCK 92 TRUST Team</strong></p>
+        </div>
+      `,
+      attachments: [
+        {
+          filename: `Subscription_Receipt_R${subscription.id.toString().padStart(4, '0')}.pdf`,
+          content: pdfBuffer,
+        },
+      ],
+    };
+
+    await this.transporter.sendMail(mailOptions);
+  }
 }
+

@@ -96,3 +96,14 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## to run locally without payment gateway
+
+
+## to run test email for alumni donation run this 
+## chnage the email and name in that test-email-send.js file to send there email
+node test-email-send.js
+
+## chnage the email and name in that test-subscription-send.js file to send there email
+## to run test email for alumni membership subscription run this 
+node test-subscription-email.js

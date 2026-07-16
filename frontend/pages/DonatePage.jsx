@@ -43,7 +43,7 @@ const DonatePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedAmount || !formData.name || !formData.phone) {
+    if (!selectedAmount || !formData.name || !formData.phone || !formData.email) {
       setToast({ message: "Please fill in required fields", type: "error" });
       return;
     }
@@ -252,7 +252,8 @@ const DonatePage = () => {
                 />
                 <input
                   type="email"
-                  placeholder="Email Address (optional)"
+                  placeholder="Email Address *"
+                  required
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
@@ -265,42 +266,7 @@ const DonatePage = () => {
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                 />
               </div>
-              {/* <div className="mt-4">
-                <label className="block text-gray-700 text-sm font-medium mb-2">
-                  Receipt Delivery Preference
-                </label>
-                <div className="flex gap-4">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 text-secondary rounded focus:ring-2 focus:ring-secondary" />
-                    <span className="text-gray-700">Email</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 text-secondary rounded focus:ring-2 focus:ring-secondary" />
-                    <span className="text-gray-700">WhatsApp</span>
-                  </label>
-                </div>
-              </div> */}
             </div>
-
-            {/* Matching Gift */}
-            {/* <div className="mb-8 p-4 bg-primary/5 rounded-lg">
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={matchingGift}
-                  onChange={(e) => setMatchingGift(e.target.checked)}
-                  className="mt-1 w-5 h-5 text-secondary rounded focus:ring-2 focus:ring-secondary"
-                />
-                <div>
-                  <p className="font-semibold text-gray-800 font-body">
-                    Double Your Impact!
-                  </p>
-                  <p className="text-sm text-gray-600 font-body">
-                    Check if your employer offers matching gift programs
-                  </p>
-                </div>
-              </label>
-            </div> */}
 
             {/* Tax Information */}
             <div className="mb-8 p-4 bg-gray-50 rounded-lg flex items-start gap-3">
@@ -309,7 +275,7 @@ const DonatePage = () => {
                 <p className="font-semibold text-gray-800 mb-1 font-body">Tax Benefits</p>
                 <p>
                   Donations to Gptck92Trust Foundation are eligible for 80G tax
-                  deduction. Tax receipt will be sent via your preferred method within 48 hours.
+                  deduction. Tax receipt will be sent via email within 48 hours.
                 </p>
               </div>
             </div>

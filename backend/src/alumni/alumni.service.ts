@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { CreateAlumniDto } from './dto/create-alumni.dto';
 import { UpdateAlumniDto } from './dto/update-alumni.dto';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class AlumniService {
   private prisma = new PrismaClient();
+
+  constructor(private readonly emailService: EmailService) {}
 
   // CREATE
   async create(data: CreateAlumniDto) {
@@ -90,6 +93,20 @@ export class AlumniService {
           transactionId: data.transactionId,
         },
       });
+
+      // Send subscription receipt email if alumni has an email
+      if (alumni.email) {
+        this.emailService.sendSubscriptionReceiptEmail({
+          id: result.id,
+          name: alumni.name,
+          email: alumni.email,
+          phone: alumni.mobile,
+          amount: data.amount,
+          transactionId: data.transactionId || null,
+          createdAt: result.createdAt,
+        }).catch((err) => console.error('Failed to send subscription receipt email:', err));
+      }
+
       return { message: "success", data: result };
     } catch (error) {
       console.log(error);
