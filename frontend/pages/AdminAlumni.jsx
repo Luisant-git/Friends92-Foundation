@@ -129,6 +129,7 @@ const AdminAlumni = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Year</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Current City</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">State</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Current District</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
             </tr>
@@ -141,6 +142,7 @@ const AdminAlumni = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{person.department}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{person.year}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{person.city}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{person.state || '-'}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{person.district || '-'}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm flex gap-2">
                   <button onClick={() => setViewModal(person)} className="text-primary hover:text-blue-900">
@@ -171,6 +173,7 @@ const AdminAlumni = () => {
                 <div><span className="font-semibold">Department:</span> {viewModal.department}</div>
                 <div><span className="font-semibold">Passed Out Year:</span> {viewModal.year}</div>
                 <div><span className="font-semibold">Current City:</span> {viewModal.city}</div>
+                <div><span className="font-semibold">State:</span> {viewModal.state || '-'}</div>
                 <div><span className="font-semibold">Current District:</span> {viewModal.district || '-'}</div>
                 <div><span className="font-semibold">Profession:</span> {viewModal.profession || '-'}</div>
                 <div><span className="font-semibold">Service Area:</span> {viewModal.serviceArea || '-'}</div>
