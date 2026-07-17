@@ -144,11 +144,18 @@ const AdminDonorsPage = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Amount
                   </th>
+
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Message
+                    Pan number
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date
+                    Transaction ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date and time
                   </th>
                 </tr>
               </thead>
@@ -178,13 +185,22 @@ const AdminDonorsPage = () => {
                         ₹{donor.amount?.toLocaleString() || 0}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-gray-900 max-w-xs truncate">
-                        {donor.message || 'No message'}
-                      </div>
+
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {donor.panNumber || 'N/A'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {donor.transactionId || 'N/A'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        (!donor.status || donor.status === 'SUCCESS') ? 'bg-green-100 text-green-800' : donor.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {donor.status || 'SUCCESS'}
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {donor.createdAt ? new Date(donor.createdAt).toLocaleDateString() : 'N/A'}
+                      {donor.createdAt ? new Date(donor.createdAt).toLocaleString() : 'N/A'}
                     </td>
                   </tr>
                 ))}

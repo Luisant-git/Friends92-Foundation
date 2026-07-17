@@ -97,9 +97,10 @@ const DonatePage = () => {
               name: formData.name,
               phone: formData.phone,
               email: formData.email || "",
-              message: formData.pan 
-                ? `PAN: ${formData.pan} | Txn: ${response.razorpay_payment_id}` 
-                : `Txn: ${response.razorpay_payment_id}`
+
+              panNumber: formData.pan || null,
+              transactionId: response.razorpay_payment_id,
+              status: "SUCCESS"
             };
 
             await createDonation(donationData);
