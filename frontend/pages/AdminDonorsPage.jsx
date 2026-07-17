@@ -162,7 +162,7 @@ const AdminDonorsPage = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredDonors.map((donor, index) => {
                   const transactionId = donor.transactionId || donor.message?.match(/Txn:\s*(pay_[A-Za-z0-9]+)/)?.[1] || 'N/A';
-                  const panNumber = donor.panNumber || donor.message?.match(/PAN:\s*([A-Z0-9]+)/)?.[1] || 'N/A';
+                  const panNumber = donor.panNumber || donor.message?.match(/PAN:\s*([A-Za-z0-9]+)/)?.[1] || 'N/A';
 
                   return (
                   <tr key={index} className="hover:bg-gray-50">
