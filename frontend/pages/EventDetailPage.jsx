@@ -73,11 +73,11 @@ export default function EventDetailPage() {
 
         <article className="bg-white rounded-xl shadow-lg overflow-hidden">
           {event.imageUrl && (
-            <div className="w-full h-64 md:h-96">
+            <div className="w-full bg-gray-50">
               <img
                 src={event.imageUrl}
                 alt={event.title}
-                className="w-full h-full object-cover"
+                className="w-full h-auto"
               />
             </div>
           )}
