@@ -13,7 +13,7 @@ export class TrusteeService {
 
   async findAll() {
     return this.prisma.trustee.findMany({
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
