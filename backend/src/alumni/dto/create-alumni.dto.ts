@@ -34,6 +34,10 @@ export class CreateAlumniDto {
 
   @IsOptional()
   @IsString()
+  state?: string;
+
+  @IsOptional()
+  @IsString()
   profession?: string;
 
   @IsOptional()

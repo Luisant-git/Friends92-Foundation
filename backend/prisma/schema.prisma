@@ -45,6 +45,7 @@ model Alumni {
   mobile2                 String?
   city                    String
   district                String?
+  state                   String?
   profession              String?
   serviceArea             String?
   bloodGroup              String?
