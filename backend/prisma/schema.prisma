@@ -258,7 +258,10 @@ model Donation {
   email       String
   phone       String
   amount      Float
-  message     String?
+
+  panNumber   String?
+  transactionId String?
+  status      String   @default("SUCCESS")
   createdAt   DateTime @default(now())
 }
 

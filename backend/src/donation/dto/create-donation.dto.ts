@@ -3,5 +3,8 @@ export class CreateDonationDto {
   email: string;
   phone: string;
   amount: number;
-  message?: string;
+
+  panNumber?: string;
+  transactionId?: string;
+  status?: string;
 }
