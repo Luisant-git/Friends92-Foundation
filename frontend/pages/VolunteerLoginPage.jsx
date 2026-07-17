@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { volunteerLogin, resetVolunteerPassword } from '../api/Volunteer';
+import { ArrowLeft } from 'lucide-react';
 
 const VolunteerLoginPage = () => {
   const [email, setEmail] = useState('');
@@ -54,6 +55,13 @@ const VolunteerLoginPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8">
+        <button
+          onClick={() => navigate('/')}
+          className="flex items-center gap-2 text-secondary hover:text-secondary/80 mb-4 transition"
+        >
+          <ArrowLeft size={20} />
+          <span>Back to Home</span>
+        </button>
         <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 font-heading">Volunteer Login</h2>
         
         {error && (
