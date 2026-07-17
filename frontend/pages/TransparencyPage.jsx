@@ -202,9 +202,11 @@ const TransparencyPage = () => {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-12 max-w-7xl mx-auto">
             {partners.map((partner) => (
-              <div key={partner.id} className="bg-white p-8 rounded-xl shadow-md flex flex-col items-center justify-center hover:shadow-xl transition">
-                <img src={partner.imageUrl} alt={partner.name} className="w-32 h-32 rounded-full object-cover mb-4" />
-                <h3 className="text-lg font-semibold text-gray-800 text-center font-heading">{partner.name}</h3>
+              <div key={partner.id} className="bg-white p-6 rounded-xl shadow-md flex flex-col items-center justify-center hover:shadow-xl transition">
+                <div className="w-full flex items-center justify-center mb-3 min-h-[120px]">
+                  <img src={partner.imageUrl} alt={partner.name} className="max-w-full max-h-full object-contain rounded-lg" />
+                </div>
+                <h3 className="text-sm font-semibold text-gray-800 text-center font-heading break-words w-full">{partner.name}</h3>
               </div>
             ))}
           </div>
