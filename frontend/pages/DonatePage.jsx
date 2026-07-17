@@ -260,7 +260,7 @@ const DonatePage = () => {
                 />
                 <input
                   type="text"
-                  placeholder="PAN Number (for tax receipt)"
+                  placeholder="PAN Number (for 80G tax deduction)"
                   value={formData.pan}
                   onChange={(e) => setFormData({...formData, pan: e.target.value})}
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
