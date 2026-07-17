@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { createAlumni } from "../api/Alumini";
 import { createVolunteer } from "../api/Volunteer";
 import { uploadImage } from "../api/Upload";
-import SearchableDropdown from "../components/SearchableDropdown";
-
 const AluminiRegister = () => {
   const [form, setForm] = useState({
     name: "",
@@ -41,7 +39,6 @@ const AluminiRegister = () => {
     (_, i) => 1970 + i
   );
   const departments = ["DAE", "DCE", "DCSE", "DEE", "DECE", "DIT", "DME"];
-  const districts = ["Ariyalur", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kancheepuram", "Kanniyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivaganga", "Thanjavur", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", "Virudhunagar", "Tenkasi", "Ranipet", "Tirupathur", "Mayiladuthurai", "Kallakurichi", "Chengalpattu"];
 
   const handlePhotoChange = async (e) => {
     const file = e.target.files[0];
@@ -237,11 +234,13 @@ const AluminiRegister = () => {
 
               <div>
                 <label className="block text-sm font-medium mb-2">Current District *</label>
-                <SearchableDropdown
-                  options={districts}
+                <input
+                  type="text"
+                  maxLength={20}
                   value={form.district}
-                  onChange={(value) => setForm({ ...form, district: value })}
-                  placeholder="Select District"
+                  onChange={(e) => setForm({ ...form, district: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+                  required
                 />
               </div>
 
