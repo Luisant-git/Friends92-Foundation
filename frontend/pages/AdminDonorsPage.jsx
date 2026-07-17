@@ -160,7 +160,11 @@ const AdminDonorsPage = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredDonors.map((donor, index) => (
+                {filteredDonors.map((donor, index) => {
+                  const transactionId = donor.transactionId || donor.message?.match(/Txn:\s*(pay_[A-Za-z0-9]+)/)?.[1] || 'N/A';
+                  const panNumber = donor.panNumber || donor.message?.match(/PAN:\s*([A-Z0-9]+)/)?.[1] || 'N/A';
+
+                  return (
                   <tr key={index} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -187,10 +191,10 @@ const AdminDonorsPage = () => {
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {donor.panNumber || 'N/A'}
+                      {panNumber}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {donor.transactionId || 'N/A'}
+                      {transactionId}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -203,7 +207,8 @@ const AdminDonorsPage = () => {
                       {donor.createdAt ? new Date(donor.createdAt).toLocaleString() : 'N/A'}
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>
