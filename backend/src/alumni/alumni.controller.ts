@@ -73,10 +73,12 @@ export class AlumniController {
   filter(
     @Query('department') department?: string,
     @Query('passedOutYear') year?: string,
+    @Query('district') district?: string,
   ) {
     return this.alumniService.filter(
       department,
       year ? Number(year) : undefined,
+      district,
     );
   }
 

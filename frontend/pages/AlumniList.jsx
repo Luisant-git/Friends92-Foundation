@@ -21,6 +21,7 @@ export default function ViewAlumni() {
   const [filters, setFilters] = useState({
     department: "",
     year: "",
+    district: "",
   });
 
   const departments = ["DAE", "DCE", "DCSE", "DEE", "DECE", "DIT", "DME"];
@@ -33,7 +34,7 @@ export default function ViewAlumni() {
   const loadAlumni = async () => {
     setLoading(true);
     try {
-      const data = await filterAlumni(filters.department, filters.year);
+      const data = await filterAlumni(filters.department, filters.year, filters.district);
       setAlumniList(data);
     } catch (error) {
       console.error("Error fetching alumni:", error);
@@ -48,7 +49,7 @@ export default function ViewAlumni() {
   };
 
   const handleReset = () => {
-    setFilters({ department: "", year: "" });
+    setFilters({ department: "", year: "", district: "" });
     setAlumniList([]);
     setSearched(false);
   };
@@ -130,6 +131,15 @@ export default function ViewAlumni() {
             options={years}
             value={filters.year}
             onChange={(value) => setFilters({ ...filters, year: value })}
+            className="w-full sm:w-60 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+          />
+
+          {/* District input */}
+          <input
+            type="text"
+            placeholder="Search by Current District"
+            value={filters.district}
+            onChange={(e) => setFilters({ ...filters, district: e.target.value })}
             className="w-full sm:w-60 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
           />
 

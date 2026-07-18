@@ -48,11 +48,12 @@ export const deleteAlumni = async (id) => {
 };
 
 // Filter alumni
-export const filterAlumni = async (department, year) => {
+export const filterAlumni = async (department, year, district) => {
   try {
     const params = new URLSearchParams();
     if (department) params.append("department", department);
     if (year) params.append("passedOutYear", year);
+    if (district) params.append("district", district);
 
     const res = await fetch(
       `${import.meta.env.VITE_API_URL}/alumni/filter?${params.toString()}`

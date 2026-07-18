@@ -36,11 +36,12 @@ export class AlumniService {
 }
 
 
-  async filter(department?: string, year?: number) {
+  async filter(department?: string, year?: number, district?: string) {
     return this.prisma.alumni.findMany({
       where: {
         ...(department && { department }), // match department
         ...(year && { year }), // match year
+        ...(district && { district: { contains: district, mode: 'insensitive' } }), // case-insensitive district search
       },
       orderBy: { id: 'desc' },
     });
