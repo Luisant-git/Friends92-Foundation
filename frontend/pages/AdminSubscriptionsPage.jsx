@@ -213,7 +213,7 @@ const AdminSubscriptionsPage = () => {
       {/* History Table */}
       <h3 className="text-xl font-bold text-gray-800 mb-4 font-heading">Renewal Requests & History</h3>
 
-      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">Search</label>
           <input
@@ -221,7 +221,7 @@ const AdminSubscriptionsPage = () => {
             placeholder="Search by alumni name, mobile, plan or transaction ID..."
             value={searchTerm}
             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-            className="w-full max-w-2xl px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none"
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
           />
         </div>
 
@@ -231,7 +231,7 @@ const AdminSubscriptionsPage = () => {
             <select
               value={statusFilter}
               onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-              className="w-40 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none"
+              className="w-40 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
             >
               <option value="">All Statuses</option>
               <option value="PENDING">Pending</option>

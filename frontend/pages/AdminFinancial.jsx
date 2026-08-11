@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Edit, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { createFinancial, getFinancial, updateFinancial, deleteFinancial } from "../api/Financial.js";
+
+const PAGE_SIZE = 10;
 
 export default function AdminFinancial() {
   const [financial, setFinancial] = useState([]);
@@ -10,10 +12,29 @@ export default function AdminFinancial() {
   const [editingItem, setEditingItem] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     loadFinancial();
   }, []);
+
+  const filteredFinancial = useMemo(() => {
+    if (!searchTerm.trim()) return financial;
+    const term = searchTerm.toLowerCase();
+    return financial.filter(item =>
+      item.category?.toLowerCase().includes(term) ||
+      item.year?.toLowerCase().includes(term)
+    );
+  }, [financial, searchTerm]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredFinancial.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedFinancial = filteredFinancial.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const loadFinancial = async () => {
     try {
@@ -91,6 +112,30 @@ export default function AdminFinancial() {
         >
           Add Category
         </button>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Search</label>
+          <input
+            type="text"
+            placeholder="Search by category or year..."
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        {searchTerm && (
+          <div className="flex flex-wrap items-end gap-4">
+            <button
+              onClick={() => { setSearchTerm(""); setCurrentPage(1); }}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            >
+              Clear All Filters
+            </button>
+          </div>
+        )}
       </div>
 
       {totalPercentage !== 100 && financial.length > 0 && (
@@ -200,6 +245,7 @@ export default function AdminFinancial() {
         <table className="min-w-full bg-white rounded-xl shadow-md border">
           <thead>
             <tr className="bg-primary/5">
+              <th className="p-3 text-left">S.No</th>
               <th className="p-3 text-left">Year</th>
               <th className="p-3 text-left">Category</th>
               <th className="p-3 text-left">Amount</th>
@@ -208,9 +254,10 @@ export default function AdminFinancial() {
             </tr>
           </thead>
           <tbody>
-            {financial.length ? (
-              financial.map((item) => (
+            {paginatedFinancial.length ? (
+              paginatedFinancial.map((item, index) => (
                 <tr key={item.id} className="border-t hover:bg-gray-50">
+                  <td className="p-3">{(safePage - 1) * PAGE_SIZE + index + 1}</td>
                   <td className="p-3">{item.year}</td>
                   <td className="p-3">{item.category}</td>
                   <td className="p-3">{item.amount}</td>
@@ -233,13 +280,53 @@ export default function AdminFinancial() {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="p-8 text-center text-gray-500">
-                  No financial data found
+                <td colSpan="6" className="p-8 text-center text-gray-500">
+                  {searchTerm
+                    ? 'No financial data found matching your search criteria'
+                    : 'No financial data found'}
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+        {filteredFinancial.length > PAGE_SIZE && (
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredFinancial.length)}</span> to{' '}
+              <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredFinancial.length)}</span> of{' '}
+              <span className="font-medium">{filteredFinancial.length}</span> categories
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handlePageChange(safePage - 1)}
+                disabled={safePage === 1}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                    page === safePage
+                      ? 'bg-primary text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

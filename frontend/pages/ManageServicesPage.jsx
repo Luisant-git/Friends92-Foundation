@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Pencil, Trash2, Upload, X, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Pencil, Trash2, Upload } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getServices, createService, updateService, deleteService } from '../api/Services';
@@ -67,11 +67,12 @@ const ManageServicesPage = () => {
   }, [services, searchTerm, typeFilter]);
 
   // Pagination calculations
-  const totalPages = Math.ceil(filteredServices.length / ITEMS_PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(filteredServices.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
   const paginatedServices = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const startIndex = (safePage - 1) * ITEMS_PER_PAGE;
     return filteredServices.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredServices, currentPage]);
+  }, [filteredServices, safePage]);
 
   // Reset to first page when search or filter changes
   useEffect(() => {
@@ -170,53 +171,6 @@ const ManageServicesPage = () => {
     setCurrentPage(page);
   };
 
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(i);
-    }
-
-    return (
-      <div className="flex items-center justify-between mt-4">
-        <div className="text-sm text-gray-600">
-          Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1}-
-          {Math.min(currentPage * ITEMS_PER_PAGE, filteredServices.length)} of {filteredServices.length} services
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
-          >
-            <ChevronLeft size={16} />
-          </button>
-          {pageNumbers.map((page) => (
-            <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-                currentPage === page
-                  ? 'bg-primary text-white'
-                  : 'border border-gray-300 hover:bg-gray-50'
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
-          >
-            <ChevronRight size={16} />
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <ToastContainer position="top-right" autoClose={3000} />
@@ -232,35 +186,39 @@ const ManageServicesPage = () => {
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Search</label>
           <input
             type="text"
             placeholder="Search services by title or description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
           />
-          {searchTerm && (
-            <button
-              onClick={() => setSearchTerm('')}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+        </div>
+
+        <div className="flex flex-wrap items-end gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Type</label>
+            <select
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+              className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
             >
-              <X size={16} />
+              <option value="ALL">All Types</option>
+              <option value="SKILL_DEVELOPMENT">Skill Development</option>
+              <option value="PERSONALITY_DEVELOPMENT">Personality Development</option>
+            </select>
+          </div>
+          {(searchTerm || typeFilter !== 'ALL') && (
+            <button
+              onClick={() => { setSearchTerm(''); setTypeFilter('ALL'); setCurrentPage(1); }}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            >
+              Clear All Filters
             </button>
           )}
-        </div>
-        <div className="sm:w-64">
-          <select
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white"
-          >
-            <option value="ALL">All Types</option>
-            <option value="SKILL_DEVELOPMENT">Skill Development</option>
-            <option value="PERSONALITY_DEVELOPMENT">Personality Development</option>
-          </select>
         </div>
       </div>
 
@@ -396,7 +354,7 @@ const ManageServicesPage = () => {
           <tbody>
             {paginatedServices.map((service, index) => (
               <tr key={service.id} className="border-t hover:bg-gray-50">
-                <td className="p-3">{(currentPage - 1) * ITEMS_PER_PAGE + index + 1}</td>
+                <td className="p-3">{(safePage - 1) * ITEMS_PER_PAGE + index + 1}</td>
                 <td className="p-3">
                   <div className="font-medium">{service.title}</div>
                   <div className="sm:hidden text-sm text-gray-500 mt-1">
@@ -443,10 +401,45 @@ const ManageServicesPage = () => {
             )}
           </tbody>
         </table>
+        {filteredServices.length > ITEMS_PER_PAGE && (
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min((safePage - 1) * ITEMS_PER_PAGE + 1, filteredServices.length)}</span> to{' '}
+              <span className="font-medium">{Math.min(safePage * ITEMS_PER_PAGE, filteredServices.length)}</span> of{' '}
+              <span className="font-medium">{filteredServices.length}</span> services
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handlePageChange(safePage - 1)}
+                disabled={safePage === 1}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                    page === safePage
+                      ? 'bg-primary text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Pagination */}
-      {renderPagination()}
     </div>
   );
 };

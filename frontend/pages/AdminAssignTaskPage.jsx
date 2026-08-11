@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { getVolunteers } from '../api/Volunteer';
 import { createTask, getAllTasks } from '../api/Task';
+
+const PAGE_SIZE = 10;
 
 const AdminAssignTaskPage = () => {
   const [volunteers, setVolunteers] = useState([]);
@@ -16,6 +18,10 @@ const AdminAssignTaskPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('ALL');
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchVolunteers();
@@ -38,6 +44,33 @@ const AdminAssignTaskPage = () => {
     } catch (err) {
       setError('Failed to load tasks');
     }
+  };
+
+  const filteredTasks = useMemo(() => {
+    let filtered = tasks;
+
+    if (statusFilter !== 'ALL') {
+      filtered = filtered.filter(t => t.status === statusFilter);
+    }
+
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(t =>
+        t.title?.toLowerCase().includes(term) ||
+        t.volunteer?.name?.toLowerCase().includes(term) ||
+        t.volunteer?.email?.toLowerCase().includes(term)
+      );
+    }
+
+    return filtered;
+  }, [tasks, searchTerm, statusFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredTasks.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedTasks = filteredTasks.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const handleSubmit = async (e) => {
@@ -83,6 +116,42 @@ const AdminAssignTaskPage = () => {
         {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
         {success && <div className="bg-secondary/5 border border-green-200 text-secondary/90 px-4 py-3 rounded mb-4">{success}</div>}
 
+        <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Search</label>
+            <input
+              type="text"
+              placeholder="Search by task title, volunteer name or email..."
+              value={searchTerm}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+              className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-end gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Status</label>
+              <select
+                value={statusFilter}
+                onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+                className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+              >
+                <option value="ALL">All Status</option>
+                <option value="PENDING">PENDING</option>
+                <option value="IN_PROGRESS">IN PROGRESS</option>
+              </select>
+            </div>
+            {(searchTerm || statusFilter !== 'ALL') && (
+              <button
+                onClick={() => { setSearchTerm(""); setStatusFilter("ALL"); setCurrentPage(1); }}
+                className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+              >
+                Clear All Filters
+              </button>
+            )}
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white rounded-xl shadow-md border">
             <thead>
@@ -97,9 +166,9 @@ const AdminAssignTaskPage = () => {
               </tr>
             </thead>
             <tbody>
-              {tasks.map((task, index) => (
+              {paginatedTasks.map((task, index) => (
                 <tr key={task.id} className="border-t hover:bg-gray-50">
-                  <td className="p-3">{index + 1}</td>
+                  <td className="p-3">{(safePage - 1) * PAGE_SIZE + index + 1}</td>
                   <td className="p-3">{task.title}</td>
                   <td className="p-3">
                     <div>{task.volunteer.name}</div>
@@ -122,15 +191,55 @@ const AdminAssignTaskPage = () => {
                   </td>
                 </tr>
               ))}
-              {tasks.length === 0 && (
+              {filteredTasks.length === 0 && (
                 <tr>
                   <td colSpan="7" className="p-4 text-center text-gray-500">
-                    No assigned tasks yet
+                    {searchTerm || statusFilter !== 'ALL'
+                      ? 'No tasks found matching your search/filter criteria'
+                      : 'No assigned tasks yet'}
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+          {filteredTasks.length > PAGE_SIZE && (
+            <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+              <p className="text-sm text-gray-500">
+                Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredTasks.length)}</span> to{' '}
+                <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredTasks.length)}</span> of{' '}
+                <span className="font-medium">{filteredTasks.length}</span> tasks
+              </p>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handlePageChange(safePage - 1)}
+                  disabled={safePage === 1}
+                  className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                      page === safePage
+                        ? 'bg-primary text-white'
+                        : 'border border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  onClick={() => handlePageChange(safePage + 1)}
+                  disabled={safePage === totalPages}
+                  className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

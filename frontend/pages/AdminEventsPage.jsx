@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createEvent, getEvents, updateEvent, deleteEvent } from "../api/Events";
 import { uploadImage } from "../api/Upload";
+
+const PAGE_SIZE = 10;
 
 export default function AdminEventsPage() {
   const [events, setEvents] = useState([]);
@@ -24,6 +26,10 @@ export default function AdminEventsPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [typeFilter, setTypeFilter] = useState("ALL");
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     loadEvents();
   }, []);
@@ -35,6 +41,33 @@ export default function AdminEventsPage() {
     } catch (error) {
       toast.error("Failed to load events");
     }
+  };
+
+  const filteredEvents = useMemo(() => {
+    let filtered = events;
+
+    if (typeFilter !== 'ALL') {
+      filtered = filtered.filter(e => e.type?.toLowerCase() === typeFilter);
+    }
+
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(e =>
+        e.title?.toLowerCase().includes(term) ||
+        e.description?.toLowerCase().includes(term) ||
+        e.location?.toLowerCase().includes(term)
+      );
+    }
+
+    return filtered;
+  }, [events, searchTerm, typeFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredEvents.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedEvents = filteredEvents.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const resetForm = () => {
@@ -124,6 +157,42 @@ export default function AdminEventsPage() {
         >
           Add New Event
         </button>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Search</label>
+          <input
+            type="text"
+            placeholder="Search by title, description or location..."
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        <div className="flex flex-wrap items-end gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Type</label>
+            <select
+              value={typeFilter}
+              onChange={(e) => { setTypeFilter(e.target.value); setCurrentPage(1); }}
+              className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+            >
+              <option value="ALL">All Types</option>
+              <option value="event">Event</option>
+              <option value="news">News</option>
+            </select>
+          </div>
+          {(searchTerm || typeFilter !== 'ALL') && (
+            <button
+              onClick={() => { setSearchTerm(""); setTypeFilter("ALL"); setCurrentPage(1); }}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            >
+              Clear All Filters
+            </button>
+          )}
+        </div>
       </div>
 
       {showEditModal && (
@@ -291,13 +360,13 @@ export default function AdminEventsPage() {
             </tr>
           </thead>
           <tbody>
-            {events.map((event, index) => (
+            {paginatedEvents.map((event, index) => (
               <tr key={event.id} className="border-t hover:bg-gray-50">
-                <td className="p-3">{index + 1}</td>
+                <td className="p-3">{(safePage - 1) * PAGE_SIZE + index + 1}</td>
                 <td className="p-3">{event.title}</td>
                 <td className="p-3">
                   <span className={`px-2 py-1 rounded text-sm ${
-                    event.type === 'event' ? 'bg-primary/10 text-primary' : 'bg-secondary/10 text-secondary'
+                    event.type?.toLowerCase() === 'event' ? 'bg-primary/10 text-primary' : 'bg-secondary/10 text-secondary'
                   }`}>
                     {event.type}
                   </span>
@@ -320,15 +389,55 @@ export default function AdminEventsPage() {
                 </td>
               </tr>
             ))}
-            {events.length === 0 && (
+            {paginatedEvents.length === 0 && (
               <tr>
                 <td colSpan="6" className="p-4 text-center text-gray-500">
-                  No events available
+                  {searchTerm || typeFilter !== 'ALL'
+                    ? 'No events found matching your search/filter criteria'
+                    : 'No events available'}
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+        {filteredEvents.length > PAGE_SIZE && (
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredEvents.length)}</span> to{' '}
+              <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredEvents.length)}</span> of{' '}
+              <span className="font-medium">{filteredEvents.length}</span> events
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handlePageChange(safePage - 1)}
+                disabled={safePage === 1}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                    page === safePage
+                      ? 'bg-primary text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <ToastContainer position="top-right" autoClose={3000} theme="colored" />

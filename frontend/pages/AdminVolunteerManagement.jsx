@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Trash2, Eye } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getVolunteers, deleteVolunteer, toggleVolunteerActive } from '../api/Volunteer';
+
+const PAGE_SIZE = 10;
 
 const AdminVolunteerManagement = () => {
   const [volunteers, setVolunteers] = useState([]);
@@ -12,6 +14,9 @@ const AdminVolunteerManagement = () => {
   const [deleteId, setDeleteId] = useState(null);
   const [toggleVolunteer, setToggleVolunteer] = useState(null);
   const [filterService, setFilterService] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('ALL');
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchVolunteers();
@@ -24,6 +29,38 @@ const AdminVolunteerManagement = () => {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const filteredVolunteers = useMemo(() => {
+    let filtered = volunteers;
+
+    if (filterService) {
+      filtered = filtered.filter(v => v.service === filterService);
+    }
+
+    if (statusFilter !== 'ALL') {
+      const active = statusFilter === 'ACTIVE';
+      filtered = filtered.filter(v => !!v.isActive === active);
+    }
+
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(v =>
+        v.name?.toLowerCase().includes(term) ||
+        v.email?.toLowerCase().includes(term) ||
+        v.mobile1?.toLowerCase().includes(term)
+      );
+    }
+
+    return filtered;
+  }, [volunteers, filterService, statusFilter, searchTerm]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredVolunteers.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedVolunteers = filteredVolunteers.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const confirmDelete = async () => {
@@ -56,21 +93,60 @@ const AdminVolunteerManagement = () => {
 
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold font-heading">Volunteer Management</h1>
-        <select
-          value={filterService}
-          onChange={(e) => setFilterService(e.target.value)}
-          className="px-4 py-2 border rounded-md focus:ring-2 focus:ring-primary"
-        >
-          <option value="">All Services</option>
-          <option value="Education & Tutoring">Education & Tutoring</option>
-          <option value="Skill Development">Skill Development</option>
-          <option value="Career Counseling">Career Counseling</option>
-          <option value="Event Management">Event Management</option>
-          <option value="Fundraising">Fundraising</option>
-          <option value="Social Media & Marketing">Social Media & Marketing</option>
-          <option value="Community Outreach">Community Outreach</option>
-          <option value="Administrative Support">Administrative Support</option>
-        </select>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Search</label>
+          <input
+            type="text"
+            placeholder="Search by name, email or mobile..."
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        <div className="flex flex-wrap items-end gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Status</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+              className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+            >
+              <option value="ALL">All Status</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Service</label>
+            <select
+              value={filterService}
+              onChange={(e) => { setFilterService(e.target.value); setCurrentPage(1); }}
+              className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+            >
+              <option value="">All Services</option>
+              <option value="Education & Tutoring">Education & Tutoring</option>
+              <option value="Skill Development">Skill Development</option>
+              <option value="Career Counseling">Career Counseling</option>
+              <option value="Event Management">Event Management</option>
+              <option value="Fundraising">Fundraising</option>
+              <option value="Social Media & Marketing">Social Media & Marketing</option>
+              <option value="Community Outreach">Community Outreach</option>
+              <option value="Administrative Support">Administrative Support</option>
+            </select>
+          </div>
+          {(searchTerm || statusFilter !== 'ALL' || filterService) && (
+            <button
+              onClick={() => { setSearchTerm(""); setStatusFilter("ALL"); setFilterService(""); setCurrentPage(1); }}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            >
+              Clear All Filters
+            </button>
+          )}
+        </div>
       </div>
 
       {showToggleModal && (
@@ -169,9 +245,9 @@ const AdminVolunteerManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {volunteers.filter(v => !filterService || v.service === filterService).map((volunteer, index) => (
+            {paginatedVolunteers.map((volunteer, index) => (
               <tr key={volunteer.id} className="border-t hover:bg-gray-50">
-                <td className="p-3">{index + 1}</td>
+                <td className="p-3">{(safePage - 1) * PAGE_SIZE + index + 1}</td>
                 <td className="p-3">{volunteer.name}</td>
                 <td className="p-3 hidden md:table-cell">{volunteer.email}</td>
                 <td className="p-3 hidden sm:table-cell">{volunteer.mobile1}</td>
@@ -203,15 +279,55 @@ const AdminVolunteerManagement = () => {
                 </td>
               </tr>
             ))}
-            {volunteers.filter(v => !filterService || v.service === filterService).length === 0 && (
+            {filteredVolunteers.length === 0 && (
               <tr>
                 <td colSpan="6" className="p-4 text-center text-gray-500">
-                  No active volunteers yet
+                  {searchTerm || statusFilter !== 'ALL' || filterService
+                    ? 'No volunteers found matching your search/filter criteria'
+                    : 'No active volunteers yet'}
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+        {filteredVolunteers.length > PAGE_SIZE && (
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredVolunteers.length)}</span> to{' '}
+              <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredVolunteers.length)}</span> of{' '}
+              <span className="font-medium">{filteredVolunteers.length}</span> volunteers
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handlePageChange(safePage - 1)}
+                disabled={safePage === 1}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                    page === safePage
+                      ? 'bg-primary text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

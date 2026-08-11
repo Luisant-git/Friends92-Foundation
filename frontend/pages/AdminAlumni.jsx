@@ -104,7 +104,7 @@ const AdminAlumni = () => {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6 font-heading">Alumni Management</h1>
       
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">Search</label>
           <input
@@ -112,20 +112,17 @@ const AdminAlumni = () => {
             placeholder="Search by name, mobile, city, district or state..."
             value={searchTerm}
             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-            className="w-full max-w-2xl px-3 py-2 border rounded-md"
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
           />
         </div>
 
-        <div className="flex items-center mb-4">
-          <h2 className="font-semibold font-heading">Filters</h2>
-        </div>
         <div className="flex flex-wrap items-end gap-4">
           <div>
             <label className="block text-sm font-medium mb-2">Department</label>
             <select
               value={filters.department}
               onChange={(e) => { setFilters({ ...filters, department: e.target.value }); setCurrentPage(1); }}
-              className="w-52 px-3 py-2 border rounded-md"
+              className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
             >
               <option value="">All Departments</option>
               {departments.map(dep => (
@@ -138,7 +135,7 @@ const AdminAlumni = () => {
             <select
               value={filters.year}
               onChange={(e) => { setFilters({ ...filters, year: e.target.value }); setCurrentPage(1); }}
-              className="w-40 px-3 py-2 border rounded-md"
+              className="w-40 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
             >
               <option value="">All Years</option>
               {years.map(year => (
@@ -151,7 +148,7 @@ const AdminAlumni = () => {
             <select
               value={filters.willingToDonateBlood}
               onChange={(e) => { setFilters({ ...filters, willingToDonateBlood: e.target.value }); setCurrentPage(1); }}
-              className="w-52 px-3 py-2 border rounded-md"
+              className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
             >
               <option value="">All</option>
               <option value="Yes">Yes</option>
@@ -163,7 +160,7 @@ const AdminAlumni = () => {
             <select
               value={filters.willingToProvideServices}
               onChange={(e) => { setFilters({ ...filters, willingToProvideServices: e.target.value }); setCurrentPage(1); }}
-              className="w-52 px-3 py-2 border rounded-md"
+              className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
             >
               <option value="">All</option>
               <option value="Yes">Yes</option>

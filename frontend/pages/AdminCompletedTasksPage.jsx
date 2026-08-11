@@ -1,15 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { getCompletedTasks, verifyTask } from '../api/Task';
+
+const PAGE_SIZE = 10;
 
 const AdminCompletedTasksPage = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [viewTask, setViewTask] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchCompletedTasks();
   }, []);
+
+  const filteredTasks = useMemo(() => {
+    if (!searchTerm.trim()) return tasks;
+    const term = searchTerm.toLowerCase();
+    return tasks.filter(task =>
+      task.title?.toLowerCase().includes(term) ||
+      task.volunteer?.name?.toLowerCase().includes(term) ||
+      task.volunteer?.email?.toLowerCase().includes(term)
+    );
+  }, [tasks, searchTerm]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredTasks.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedTasks = filteredTasks.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const fetchCompletedTasks = async () => {
     try {
@@ -38,6 +60,30 @@ const AdminCompletedTasksPage = () => {
 
         {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
 
+        <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Search</label>
+            <input
+              type="text"
+              placeholder="Search by task title, volunteer name or email..."
+              value={searchTerm}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+              className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+          {searchTerm && (
+            <div className="flex flex-wrap items-end gap-4">
+              <button
+                onClick={() => { setSearchTerm(""); setCurrentPage(1); }}
+                className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+              >
+                Clear All Filters
+              </button>
+            </div>
+          )}
+        </div>
+
         {loading ? (
           <div className="text-center py-12">Loading...</div>
         ) : (
@@ -55,9 +101,9 @@ const AdminCompletedTasksPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {tasks.map((task, index) => (
+                {paginatedTasks.map((task, index) => (
                   <tr key={task.id} className="border-t hover:bg-gray-50">
-                    <td className="p-3">{index + 1}</td>
+                    <td className="p-3">{(safePage - 1) * PAGE_SIZE + index + 1}</td>
                     <td className="p-3">{task.title}</td>
                     <td className="p-3">
                       <div>{task.volunteer.name}</div>
@@ -82,15 +128,55 @@ const AdminCompletedTasksPage = () => {
                     </td>
                   </tr>
                 ))}
-                {tasks.length === 0 && (
+                {filteredTasks.length === 0 && (
                   <tr>
                     <td colSpan="7" className="p-4 text-center text-gray-500">
-                      No completed tasks yet
+                      {searchTerm
+                        ? 'No completed tasks found matching your search criteria'
+                        : 'No completed tasks yet'}
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
+            {filteredTasks.length > PAGE_SIZE && (
+              <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+                <p className="text-sm text-gray-500">
+                  Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredTasks.length)}</span> to{' '}
+                  <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredTasks.length)}</span> of{' '}
+                  <span className="font-medium">{filteredTasks.length}</span> tasks
+                </p>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handlePageChange(safePage - 1)}
+                    disabled={safePage === 1}
+                    className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                        page === safePage
+                          ? 'bg-primary text-white'
+                          : 'border border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => handlePageChange(safePage + 1)}
+                    disabled={safePage === totalPages}
+                    className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

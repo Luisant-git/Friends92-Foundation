@@ -124,45 +124,45 @@ const AdminDonorsPage = () => {
       </div>
 
       {/* Search Bar */}
-      <div className="bg-white p-6 rounded-xl shadow-md">
-        <div className="flex flex-wrap items-end gap-4">
-          <div className="flex-1 min-w-[250px]">
-            <label className="block text-xs font-medium text-gray-600 mb-1">Search</label>
-            <input
-              type="text"
-              placeholder="Search by name, email, mobile, PAN or transaction ID..."
-              value={searchTerm}
-              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-            />
-          </div>
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Search</label>
+          <input
+            type="text"
+            placeholder="Search by name, email, mobile, PAN or transaction ID..."
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+          />
+        </div>
 
+        <div className="flex flex-wrap items-end gap-4">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">From Date</label>
+            <label className="block text-sm font-medium mb-2">From Date</label>
             <input
               type="date"
               value={fromDate}
               onChange={(e) => { setFromDate(e.target.value); setCurrentPage(1); }}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">To Date</label>
+            <label className="block text-sm font-medium mb-2">To Date</label>
             <input
               type="date"
               value={toDate}
               onChange={(e) => { setToDate(e.target.value); setCurrentPage(1); }}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
             />
           </div>
 
           {(searchTerm || fromDate || toDate) && (
             <button
               onClick={() => { setSearchTerm(''); setFromDate(''); setToDate(''); setCurrentPage(1); }}
-              className="px-4 py-2 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary/10"
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
             >
-              Clear All
+              Clear All Filters
             </button>
           )}
         </div>

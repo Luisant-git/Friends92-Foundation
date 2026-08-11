@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Plus, Edit, Trash2, Upload } from 'lucide-react';
 import { getTrustees, createTrustee, updateTrustee, deleteTrustee } from '../api/Trustees.js';
 import { uploadImage } from '../api/Upload.js';
@@ -6,6 +6,8 @@ import InputField from '../components/common/InputField.jsx';
 import TextAreaField from '../components/common/TextAreaField.jsx';
 import StatusToggle from '../components/common/StatusToggle.jsx';
 import Toast from '../components/common/Toast.jsx';
+
+const PAGE_SIZE = 10;
 
 const AdminTrustees = () => {
   const [trustees, setTrustees] = useState([]);
@@ -23,6 +25,10 @@ const AdminTrustees = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('ALL');
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     loadTrustees();
   }, []);
@@ -34,6 +40,33 @@ const AdminTrustees = () => {
     } catch (error) {
       showToast('Failed to load trustees', 'error');
     }
+  };
+
+  const filteredTrustees = useMemo(() => {
+    let filtered = trustees;
+
+    if (statusFilter !== 'ALL') {
+      const active = statusFilter === 'ACTIVE';
+      filtered = filtered.filter(t => !!t.isActive === active);
+    }
+
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(t =>
+        t.name?.toLowerCase().includes(term) ||
+        t.designation?.toLowerCase().includes(term)
+      );
+    }
+
+    return filtered;
+  }, [trustees, searchTerm, statusFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredTrustees.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedTrustees = filteredTrustees.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const handleSubmit = async (e) => {
@@ -121,6 +154,42 @@ const AdminTrustees = () => {
           <Plus className="w-4 h-4" />
           Add Trustee
         </button>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Search</label>
+          <input
+            type="text"
+            placeholder="Search by name or designation..."
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        <div className="flex flex-wrap items-end gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Status</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+              className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+            >
+              <option value="ALL">All Status</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
+            </select>
+          </div>
+          {(searchTerm || statusFilter !== 'ALL') && (
+            <button
+              onClick={() => { setSearchTerm(''); setStatusFilter('ALL'); setCurrentPage(1); }}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            >
+              Clear All Filters
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Delete Confirmation Modal */}
@@ -218,7 +287,7 @@ const AdminTrustees = () => {
       )}
 
       <div className="grid gap-4">
-        {trustees.map((trustee) => (
+        {paginatedTrustees.map((trustee) => (
           <div key={trustee.id} className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-start gap-4">
               <img
@@ -256,6 +325,53 @@ const AdminTrustees = () => {
           </div>
         ))}
       </div>
+
+      {filteredTrustees.length > PAGE_SIZE && (
+        <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4 bg-white rounded-b-xl">
+          <p className="text-sm text-gray-500">
+            Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredTrustees.length)}</span> to{' '}
+            <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredTrustees.length)}</span> of{' '}
+            <span className="font-medium">{filteredTrustees.length}</span> trustees
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handlePageChange(safePage - 1)}
+              disabled={safePage === 1}
+              className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                  page === safePage
+                    ? 'bg-primary text-white'
+                    : 'border border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() => handlePageChange(safePage + 1)}
+              disabled={safePage === totalPages}
+              className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
+
+      {filteredTrustees.length === 0 && (
+        <div className="text-center text-gray-500 p-8 bg-white rounded-xl shadow-md">
+          {searchTerm || statusFilter !== 'ALL'
+            ? 'No trustees found matching your search/filter criteria'
+            : 'No trustees found'}
+        </div>
+      )}
 
       {toast.show && (
         <Toast

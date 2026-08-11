@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Edit, Trash2 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createTeam, getTeam, updateTeam, deleteTeam } from "../api/Team.js";
 import { uploadImage } from "../api/Gallery.js";
+
+const PAGE_SIZE = 10;
 
 export default function AdminTeam() {
   const [team, setTeam] = useState([]);
@@ -14,6 +16,10 @@ export default function AdminTeam() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     loadTeam();
@@ -26,6 +32,33 @@ export default function AdminTeam() {
     } catch {
       toast.error("Failed to load team");
     }
+  };
+
+  const filteredTeam = useMemo(() => {
+    let filtered = team;
+
+    if (statusFilter !== 'ALL') {
+      const active = statusFilter === 'ACTIVE';
+      filtered = filtered.filter(item => !!item.isActive === active);
+    }
+
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(item =>
+        item.name?.toLowerCase().includes(term) ||
+        item.description?.toLowerCase().includes(term)
+      );
+    }
+
+    return filtered;
+  }, [team, searchTerm, statusFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredTeam.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedTeam = filteredTeam.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const handleImageChange = (e) => {
@@ -120,6 +153,42 @@ export default function AdminTeam() {
         >
           Add Team
         </button>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Search</label>
+          <input
+            type="text"
+            placeholder="Search by name or description..."
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        <div className="flex flex-wrap items-end gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Status</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+              className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+            >
+              <option value="ALL">All Status</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
+            </select>
+          </div>
+          {(searchTerm || statusFilter !== 'ALL') && (
+            <button
+              onClick={() => { setSearchTerm(""); setStatusFilter("ALL"); setCurrentPage(1); }}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            >
+              Clear All Filters
+            </button>
+          )}
+        </div>
       </div>
 
       {showEditModal && (
@@ -241,8 +310,8 @@ export default function AdminTeam() {
             </tr>
           </thead>
           <tbody>
-            {team.length ? (
-              team.map((item) => (
+            {paginatedTeam.length ? (
+              paginatedTeam.map((item) => (
                 <tr key={item.id} className="border-t hover:bg-gray-50">
                   <td className="p-3">{item.order}</td>
                   <td className="p-3">
@@ -294,12 +363,52 @@ export default function AdminTeam() {
             ) : (
               <tr>
                 <td colSpan="6" className="p-8 text-center text-gray-500">
-                  No team members found
+                  {searchTerm || statusFilter !== 'ALL'
+                    ? 'No team members found matching your search/filter criteria'
+                    : 'No team members found'}
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+        {filteredTeam.length > PAGE_SIZE && (
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredTeam.length)}</span> to{' '}
+              <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredTeam.length)}</span> of{' '}
+              <span className="font-medium">{filteredTeam.length}</span> team members
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handlePageChange(safePage - 1)}
+                disabled={safePage === 1}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                    page === safePage
+                      ? 'bg-primary text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
       <ToastContainer />
     </div>

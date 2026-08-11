@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Edit, Trash2, Download, Upload } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { createReport, getReports, updateReport, deleteReport, uploadReportFile } from "../api/Reports.js";
+
+const PAGE_SIZE = 10;
 
 export default function AdminReports() {
   const [reports, setReports] = useState([]);
@@ -11,10 +13,29 @@ export default function AdminReports() {
   const [editingItem, setEditingItem] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     loadReports();
   }, []);
+
+  const filteredReports = useMemo(() => {
+    if (!searchTerm.trim()) return reports;
+    const term = searchTerm.toLowerCase();
+    return reports.filter(item =>
+      item.title?.toLowerCase().includes(term) ||
+      item.year?.toLowerCase().includes(term)
+    );
+  }, [reports, searchTerm]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredReports.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedReports = filteredReports.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const loadReports = async () => {
     try {
@@ -110,6 +131,30 @@ export default function AdminReports() {
         >
           Add Report
         </button>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Search</label>
+          <input
+            type="text"
+            placeholder="Search by title or year..."
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        {searchTerm && (
+          <div className="flex flex-wrap items-end gap-4">
+            <button
+              onClick={() => { setSearchTerm(""); setCurrentPage(1); }}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            >
+              Clear All Filters
+            </button>
+          </div>
+        )}
       </div>
 
       {showModal && (
@@ -212,6 +257,7 @@ export default function AdminReports() {
         <table className="min-w-full bg-white rounded-xl shadow-md border">
           <thead>
             <tr className="bg-primary/5">
+              <th className="p-3 text-left">S.No</th>
               <th className="p-3 text-left">Year</th>
               <th className="p-3 text-left">Title</th>
               <th className="p-3 text-left">Size</th>
@@ -219,9 +265,10 @@ export default function AdminReports() {
             </tr>
           </thead>
           <tbody>
-            {reports.length ? (
-              reports.map((item) => (
+            {paginatedReports.length ? (
+              paginatedReports.map((item, index) => (
                 <tr key={item.id} className="border-t hover:bg-gray-50">
+                  <td className="p-3">{(safePage - 1) * PAGE_SIZE + index + 1}</td>
                   <td className="p-3">{item.year}</td>
                   <td className="p-3">{item.title}</td>
                   <td className="p-3">{item.size}</td>
@@ -254,13 +301,53 @@ export default function AdminReports() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="p-8 text-center text-gray-500">
-                  No reports found
+                <td colSpan="5" className="p-8 text-center text-gray-500">
+                  {searchTerm
+                    ? 'No reports found matching your search criteria'
+                    : 'No reports found'}
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+        {filteredReports.length > PAGE_SIZE && (
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredReports.length)}</span> to{' '}
+              <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredReports.length)}</span> of{' '}
+              <span className="font-medium">{filteredReports.length}</span> reports
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handlePageChange(safePage - 1)}
+                disabled={safePage === 1}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                    page === safePage
+                      ? 'bg-primary text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
