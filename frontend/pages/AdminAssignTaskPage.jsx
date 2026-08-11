@@ -21,6 +21,8 @@ const AdminAssignTaskPage = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -62,8 +64,16 @@ const AdminAssignTaskPage = () => {
       );
     }
 
+    if (dateFrom) {
+      filtered = filtered.filter(t => new Date(t.createdAt).toISOString().slice(0, 10) >= dateFrom);
+    }
+
+    if (dateTo) {
+      filtered = filtered.filter(t => new Date(t.createdAt).toISOString().slice(0, 10) <= dateTo);
+    }
+
     return filtered;
-  }, [tasks, searchTerm, statusFilter]);
+  }, [tasks, searchTerm, statusFilter, dateFrom, dateTo]);
 
   const totalPages = Math.max(1, Math.ceil(filteredTasks.length / PAGE_SIZE));
   const safePage = Math.min(currentPage, totalPages);
@@ -96,6 +106,7 @@ const AdminAssignTaskPage = () => {
     switch (status) {
       case 'PENDING': return 'bg-yellow-100 text-yellow-800';
       case 'IN_PROGRESS': return 'bg-primary/10 text-primary';
+      case 'REVIEW': return 'bg-purple-100 text-purple-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -139,11 +150,30 @@ const AdminAssignTaskPage = () => {
                 <option value="ALL">All Status</option>
                 <option value="PENDING">PENDING</option>
                 <option value="IN_PROGRESS">IN PROGRESS</option>
+                <option value="REVIEW">REVIEW</option>
               </select>
             </div>
-            {(searchTerm || statusFilter !== 'ALL') && (
+            <div>
+              <label className="block text-sm font-medium mb-2">Assigned From</label>
+              <input
+                type="date"
+                value={dateFrom}
+                onChange={(e) => { setDateFrom(e.target.value); setCurrentPage(1); }}
+                className="w-44 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Assigned To</label>
+              <input
+                type="date"
+                value={dateTo}
+                onChange={(e) => { setDateTo(e.target.value); setCurrentPage(1); }}
+                className="w-44 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+              />
+            </div>
+            {(searchTerm || statusFilter !== 'ALL' || dateFrom || dateTo) && (
               <button
-                onClick={() => { setSearchTerm(""); setStatusFilter("ALL"); setCurrentPage(1); }}
+                onClick={() => { setSearchTerm(""); setStatusFilter("ALL"); setDateFrom(""); setDateTo(""); setCurrentPage(1); }}
                 className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
               >
                 Clear All Filters
@@ -194,7 +224,7 @@ const AdminAssignTaskPage = () => {
               {filteredTasks.length === 0 && (
                 <tr>
                   <td colSpan="7" className="p-4 text-center text-gray-500">
-                    {searchTerm || statusFilter !== 'ALL'
+                    {searchTerm || statusFilter !== 'ALL' || dateFrom || dateTo
                       ? 'No tasks found matching your search/filter criteria'
                       : 'No assigned tasks yet'}
                   </td>

@@ -9,6 +9,8 @@ const AdminCompletedTasksPage = () => {
   const [error, setError] = useState('');
   const [viewTask, setViewTask] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -16,14 +18,27 @@ const AdminCompletedTasksPage = () => {
   }, []);
 
   const filteredTasks = useMemo(() => {
-    if (!searchTerm.trim()) return tasks;
-    const term = searchTerm.toLowerCase();
-    return tasks.filter(task =>
-      task.title?.toLowerCase().includes(term) ||
-      task.volunteer?.name?.toLowerCase().includes(term) ||
-      task.volunteer?.email?.toLowerCase().includes(term)
-    );
-  }, [tasks, searchTerm]);
+    let filtered = tasks;
+
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(task =>
+        task.title?.toLowerCase().includes(term) ||
+        task.volunteer?.name?.toLowerCase().includes(term) ||
+        task.volunteer?.email?.toLowerCase().includes(term)
+      );
+    }
+
+    if (dateFrom) {
+      filtered = filtered.filter(task => new Date(task.updatedAt).toISOString().slice(0, 10) >= dateFrom);
+    }
+
+    if (dateTo) {
+      filtered = filtered.filter(task => new Date(task.updatedAt).toISOString().slice(0, 10) <= dateTo);
+    }
+
+    return filtered;
+  }, [tasks, searchTerm, dateFrom, dateTo]);
 
   const totalPages = Math.max(1, Math.ceil(filteredTasks.length / PAGE_SIZE));
   const safePage = Math.min(currentPage, totalPages);
@@ -72,16 +87,34 @@ const AdminCompletedTasksPage = () => {
             />
           </div>
 
-          {searchTerm && (
-            <div className="flex flex-wrap items-end gap-4">
+          <div className="flex flex-wrap items-end gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Completed From</label>
+              <input
+                type="date"
+                value={dateFrom}
+                onChange={(e) => { setDateFrom(e.target.value); setCurrentPage(1); }}
+                className="w-44 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Completed To</label>
+              <input
+                type="date"
+                value={dateTo}
+                onChange={(e) => { setDateTo(e.target.value); setCurrentPage(1); }}
+                className="w-44 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+              />
+            </div>
+            {(searchTerm || dateFrom || dateTo) && (
               <button
-                onClick={() => { setSearchTerm(""); setCurrentPage(1); }}
+                onClick={() => { setSearchTerm(""); setDateFrom(""); setDateTo(""); setCurrentPage(1); }}
                 className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
               >
                 Clear All Filters
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {loading ? (
@@ -131,8 +164,8 @@ const AdminCompletedTasksPage = () => {
                 {filteredTasks.length === 0 && (
                   <tr>
                     <td colSpan="7" className="p-4 text-center text-gray-500">
-                      {searchTerm
-                        ? 'No completed tasks found matching your search criteria'
+                      {searchTerm || dateFrom || dateTo
+                        ? 'No completed tasks found matching your search/filter criteria'
                         : 'No completed tasks yet'}
                     </td>
                   </tr>
