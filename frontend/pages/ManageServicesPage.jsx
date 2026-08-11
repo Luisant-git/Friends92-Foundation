@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Pencil, Trash2, Upload, X } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Pencil, Trash2, Upload, X, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getServices, createService, updateService, deleteService } from '../api/Services';
 import { uploadImage } from '../api/Upload';
 import InputField from '../components/common/InputField';
 import TextAreaField from '../components/common/TextAreaField';
+
+const ITEMS_PER_PAGE = 10;
 
 const ManageServicesPage = () => {
   const [form, setForm] = useState({
@@ -24,6 +26,11 @@ const ManageServicesPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
 
+  // Search, filter, and pagination state
+  const [searchTerm, setSearchTerm] = useState('');
+  const [typeFilter, setTypeFilter] = useState('ALL');
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     fetchServices();
   }, []);
@@ -34,8 +41,42 @@ const ManageServicesPage = () => {
       setServices(data);
     } catch (err) {
       console.error(err);
+      toast.error('Failed to fetch services');
     }
   };
+
+  // Filtered services based on search term and type filter
+  const filteredServices = useMemo(() => {
+    let filtered = services;
+
+    // Filter by type
+    if (typeFilter !== 'ALL') {
+      filtered = filtered.filter(service => service.type === typeFilter);
+    }
+
+    // Filter by search term (title or description)
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(service =>
+        service.title.toLowerCase().includes(term) ||
+        (service.description && service.description.toLowerCase().includes(term))
+      );
+    }
+
+    return filtered;
+  }, [services, searchTerm, typeFilter]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredServices.length / ITEMS_PER_PAGE);
+  const paginatedServices = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredServices.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [filteredServices, currentPage]);
+
+  // Reset to first page when search or filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, typeFilter]);
 
   const handleSubmit = async () => {
     if (!form.title || !form.description || !form.type) {
@@ -91,8 +132,10 @@ const ManageServicesPage = () => {
   };
 
   const handleEdit = (service) => {
-    setForm(service);
-    setEditId(service.id);
+    // Only set form fields, not the id
+    const { id, ...serviceData } = service;
+    setForm(serviceData);
+    setEditId(id);
     setShowModal(true);
   };
 
@@ -109,6 +152,71 @@ const ManageServicesPage = () => {
     }
   };
 
+  const getTypeBadgeClass = (type) => {
+    return type === 'SKILL_DEVELOPMENT'
+      ? 'bg-blue-100 text-blue-700'
+      : 'bg-purple-100 text-purple-700';
+  };
+
+  const getTypeLabel = (type) => {
+    return type === 'SKILL_DEVELOPMENT' ? 'Skill Development' : 'Personality Development';
+  };
+
+  const getTypeShortLabel = (type) => {
+    return type === 'SKILL_DEVELOPMENT' ? 'Skill Dev' : 'Personality Dev';
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const renderPagination = () => {
+    if (totalPages <= 1) return null;
+
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(i);
+    }
+
+    return (
+      <div className="flex items-center justify-between mt-4">
+        <div className="text-sm text-gray-600">
+          Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1}-
+          {Math.min(currentPage * ITEMS_PER_PAGE, filteredServices.length)} of {filteredServices.length} services
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            <ChevronLeft size={16} />
+          </button>
+          {pageNumbers.map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
+                currentPage === page
+                  ? 'bg-primary text-white'
+                  : 'border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            <ChevronRight size={16} />
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <ToastContainer position="top-right" autoClose={3000} />
@@ -121,6 +229,39 @@ const ManageServicesPage = () => {
         >
           Add New Service
         </button>
+      </div>
+
+      {/* Search and Filter Bar */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+          <input
+            type="text"
+            placeholder="Search services by title or description..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+          />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <X size={16} />
+            </button>
+          )}
+        </div>
+        <div className="sm:w-64">
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white"
+          >
+            <option value="ALL">All Types</option>
+            <option value="SKILL_DEVELOPMENT">Skill Development</option>
+            <option value="PERSONALITY_DEVELOPMENT">Personality Development</option>
+          </select>
+        </div>
       </div>
 
       {showModal && (
@@ -253,18 +394,14 @@ const ManageServicesPage = () => {
             </tr>
           </thead>
           <tbody>
-            {services.map((service, index) => (
+            {paginatedServices.map((service, index) => (
               <tr key={service.id} className="border-t hover:bg-gray-50">
-                <td className="p-3">{index + 1}</td>
+                <td className="p-3">{(currentPage - 1) * ITEMS_PER_PAGE + index + 1}</td>
                 <td className="p-3">
                   <div className="font-medium">{service.title}</div>
                   <div className="sm:hidden text-sm text-gray-500 mt-1">
-                    <span className={`px-2 py-1 rounded text-xs ${
-                      service.type === 'SKILL_DEVELOPMENT' 
-                        ? 'bg-primary/10 text-primary' 
-                        : 'bg-primary/10 text-primary'
-                    }`}>
-                      {service.type === 'SKILL_DEVELOPMENT' ? 'Skill Dev' : 'Personality Dev'}
+                    <span className={`px-2 py-1 rounded text-xs ${getTypeBadgeClass(service.type)}`}>
+                      {getTypeShortLabel(service.type)}
                     </span>
                   </div>
                   <div className="md:hidden text-sm text-gray-600 mt-1 truncate max-w-xs">
@@ -272,12 +409,8 @@ const ManageServicesPage = () => {
                   </div>
                 </td>
                 <td className="p-3 hidden sm:table-cell">
-                  <span className={`px-2 py-1 rounded text-sm ${
-                    service.type === 'SKILL_DEVELOPMENT' 
-                      ? 'bg-primary/10 text-primary' 
-                      : 'bg-primary/10 text-primary'
-                  }`}>
-                    {service.type === 'SKILL_DEVELOPMENT' ? 'Skill Development' : 'Personality Development'}
+                  <span className={`px-2 py-1 rounded text-sm ${getTypeBadgeClass(service.type)}`}>
+                    {getTypeLabel(service.type)}
                   </span>
                 </td>
                 <td className="p-3 hidden md:table-cell max-w-xs truncate">{service.description}</td>
@@ -299,25 +432,23 @@ const ManageServicesPage = () => {
                 </td>
               </tr>
             ))}
-            {services.length === 0 && (
+            {paginatedServices.length === 0 && (
               <tr>
                 <td colSpan="5" className="p-4 text-center text-gray-500">
-                  No services available
+                  {searchTerm || typeFilter !== 'ALL' 
+                    ? 'No services found matching your search/filter criteria' 
+                    : 'No services available'}
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {renderPagination()}
     </div>
   );
 };
 
 export default ManageServicesPage;
-
-
-
-
-
-
-

@@ -11,22 +11,26 @@ export class BannerService {
   async create(createBannerDto: CreateBannerDto) {
     const { title, imageUrl, adminId } = createBannerDto;
 
-   
-    const admin = await this.prisma.admin.findUnique({
+    let admin = await this.prisma.admin.findUnique({
       where: { id: adminId },
     });
+    if (!admin) {
+      admin = await this.prisma.admin.findFirst({
+        orderBy: { id: 'asc' },
+      });
+    }
     if (!admin)
-      throw new Error(`Admin with ID ${adminId} not found`);
+      throw new Error('No admin found');
 
     return this.prisma.banner.create({
       data: {
         title,
         imageUrl,
-        admin: { connect: { id: adminId } },
+        admin: { connect: { id: admin.id } },
       },
       include: {
         admin: {
-          select: { id: true},
+          select: { id: true },
         },
       },
     });

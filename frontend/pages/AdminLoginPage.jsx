@@ -17,8 +17,9 @@ const AdminLoginPage = () => {
     }
 
     try {
-      await loginAdmin(username, password);
+      const data = await loginAdmin(username, password);
       localStorage.setItem('adminLoggedIn', 'true');
+      if (data?.admin?.id) localStorage.setItem('adminId', String(data.admin.id));
       toast.success('Login successful!');
       window.location.href = '/admin/banner';
     } catch (error) {

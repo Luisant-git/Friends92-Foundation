@@ -20,8 +20,11 @@ const BannerPage = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const adminId = 1; // Replace with logged-in admin ID
+  const PAGE_SIZE = 10;
+  const adminId = Number(localStorage.getItem('adminId')) || 1; // Replace with logged-in admin ID
 
   useEffect(() => {
     loadBanners();
@@ -105,6 +108,14 @@ const BannerPage = () => {
     setShowEditModal(false);
   };
 
+  const filteredBanners = banners.filter(b =>
+    !searchTerm || b.title?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalPages = Math.max(1, Math.ceil(filteredBanners.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedBanners = filteredBanners.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-6">
@@ -115,6 +126,27 @@ const BannerPage = () => {
         >
           Add New Banner
         </button>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-md border p-4 mb-6">
+        <label className="block text-sm font-medium mb-2">Search</label>
+        <div className="flex flex-wrap items-end gap-4">
+          <input
+            type="text"
+            placeholder="Search by title..."
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+          />
+          {searchTerm && (
+            <button
+              onClick={() => { setSearchTerm(""); setCurrentPage(1); }}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            >
+              Clear
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Edit Modal */}
@@ -217,9 +249,9 @@ const BannerPage = () => {
             </tr>
           </thead>
           <tbody>
-            {banners.map((b, index) => (
+            {paginatedBanners.map((b, index) => (
               <tr key={b.id} className="border-t hover:bg-gray-50">
-                <td className="p-3">{index + 1}</td>
+                <td className="p-3">{(safePage - 1) * PAGE_SIZE + index + 1}</td>
                 <td className="p-3">{b.title}</td>
                 <td className="p-3">
                   <img
@@ -247,7 +279,7 @@ const BannerPage = () => {
                 </td>
               </tr>
             ))}
-            {banners.length === 0 && (
+            {filteredBanners.length === 0 && (
               <tr>
                 <td colSpan="5" className="p-4 text-center text-gray-500">
                   No banners available
@@ -256,6 +288,44 @@ const BannerPage = () => {
             )}
           </tbody>
         </table>
+        {filteredBanners.length > PAGE_SIZE && (
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredBanners.length)}</span> to{' '}
+              <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredBanners.length)}</span> of{' '}
+              <span className="font-medium">{filteredBanners.length}</span> banners
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(safePage - 1)}
+                disabled={safePage === 1}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                    page === safePage
+                      ? 'bg-primary text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Toastify */}
