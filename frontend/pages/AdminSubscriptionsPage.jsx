@@ -10,6 +10,9 @@ const AdminSubscriptionsPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [editingPlan, setEditingPlan] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   
   const [newPlan, setNewPlan] = useState({
     name: '',
@@ -17,6 +20,7 @@ const AdminSubscriptionsPage = () => {
     description: '',
   });
 
+  const PAGE_SIZE = 10;
   const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -134,6 +138,24 @@ const AdminSubscriptionsPage = () => {
     }
   };
 
+  const filteredSubscriptions = subscriptions.filter(sub => {
+    if (statusFilter && sub.status !== statusFilter) return false;
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      if (
+        !(sub.alumni?.name?.toLowerCase().includes(term) ||
+          sub.alumni?.mobile?.toLowerCase().includes(term) ||
+          sub.plan?.name?.toLowerCase().includes(term) ||
+          sub.transactionId?.toLowerCase().includes(term))
+      ) return false;
+    }
+    return true;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredSubscriptions.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedSubscriptions = filteredSubscriptions.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       
@@ -190,6 +212,44 @@ const AdminSubscriptionsPage = () => {
 
       {/* History Table */}
       <h3 className="text-xl font-bold text-gray-800 mb-4 font-heading">Renewal Requests & History</h3>
+
+      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Search</label>
+          <input
+            type="text"
+            placeholder="Search by alumni name, mobile, plan or transaction ID..."
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            className="w-full max-w-2xl px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none"
+          />
+        </div>
+
+        <div className="flex flex-wrap items-end gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Status</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+              className="w-40 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none"
+            >
+              <option value="">All Statuses</option>
+              <option value="PENDING">Pending</option>
+              <option value="APPROVED">Approved</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
+          </div>
+          {(searchTerm || statusFilter) && (
+            <button
+              onClick={() => { setSearchTerm(''); setStatusFilter(''); setCurrentPage(1); }}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            >
+              Clear All Filters
+            </button>
+          )}
+        </div>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
@@ -204,8 +264,8 @@ const AdminSubscriptionsPage = () => {
             </tr>
           </thead>
           <tbody>
-            {subscriptions.length > 0 ? (
-              subscriptions.map((sub) => (
+            {paginatedSubscriptions.length > 0 ? (
+              paginatedSubscriptions.map((sub) => (
                 <tr key={sub.id} className="border-b border-gray-100 hover:bg-gray-50 transition">
                   <td className="py-3 px-4 text-sm font-medium text-gray-800">
                     {sub.alumni?.name}
@@ -245,6 +305,44 @@ const AdminSubscriptionsPage = () => {
             )}
           </tbody>
         </table>
+        {filteredSubscriptions.length > PAGE_SIZE && (
+          <div className="px-4 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredSubscriptions.length)}</span> to{' '}
+              <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredSubscriptions.length)}</span> of{' '}
+              <span className="font-medium">{filteredSubscriptions.length}</span> records
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(safePage - 1)}
+                disabled={safePage === 1}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                    page === safePage
+                      ? 'bg-primary text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Delete Plan Modal */}
