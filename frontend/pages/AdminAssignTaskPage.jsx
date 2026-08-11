@@ -106,7 +106,6 @@ const AdminAssignTaskPage = () => {
     switch (status) {
       case 'PENDING': return 'bg-yellow-100 text-yellow-800';
       case 'IN_PROGRESS': return 'bg-primary/10 text-primary';
-      case 'REVIEW': return 'bg-purple-100 text-purple-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -150,7 +149,8 @@ const AdminAssignTaskPage = () => {
                 <option value="ALL">All Status</option>
                 <option value="PENDING">PENDING</option>
                 <option value="IN_PROGRESS">IN PROGRESS</option>
-                <option value="REVIEW">REVIEW</option>
+                <option value="COMPLETED">COMPLETED</option>
+                <option value="VERIFIED">VERIFIED</option>
               </select>
             </div>
             <div>
