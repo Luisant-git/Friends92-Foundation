@@ -16,6 +16,7 @@ const AdminAlumni = () => {
   const [filters, setFilters] = useState({
     year: '',
     department: '',
+    city: '',
     willingToDonateBlood: '',
     willingToProvideServices: ''
   });
@@ -48,6 +49,10 @@ const AdminAlumni = () => {
 
     if (filters.department) {
       filtered = filtered.filter(a => a.department === filters.department);
+    }
+
+    if (filters.city) {
+      filtered = filtered.filter(a => a.city === filters.city);
     }
 
     if (filters.willingToDonateBlood) {
@@ -97,6 +102,7 @@ const AdminAlumni = () => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: currentYear - 1970 + 1 }, (_, i) => 1970 + i);
   const departments = [...new Set(alumni.map(a => a.department).filter(Boolean))].sort();
+  const cities = [...new Set(alumni.map(a => a.city).filter(Boolean))].sort();
 
   if (loading) return <div className="p-6">Loading...</div>;
 
@@ -127,6 +133,19 @@ const AdminAlumni = () => {
               <option value="">All Departments</option>
               {departments.map(dep => (
                 <option key={dep} value={dep}>{dep}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Current City</label>
+            <select
+              value={filters.city}
+              onChange={(e) => { setFilters({ ...filters, city: e.target.value }); setCurrentPage(1); }}
+              className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+            >
+              <option value="">All Cities</option>
+              {cities.map(city => (
+                <option key={city} value={city}>{city}</option>
               ))}
             </select>
           </div>
@@ -167,10 +186,10 @@ const AdminAlumni = () => {
               <option value="No">No</option>
             </select>
           </div>
-          {(filters.year || filters.department || filters.willingToDonateBlood || filters.willingToProvideServices || searchTerm) && (
+          {(filters.year || filters.department || filters.city || filters.willingToDonateBlood || filters.willingToProvideServices || searchTerm) && (
             <button
               onClick={() => {
-                setFilters({ year: '', department: '', willingToDonateBlood: '', willingToProvideServices: '' });
+                setFilters({ year: '', department: '', city: '', willingToDonateBlood: '', willingToProvideServices: '' });
                 setSearchTerm('');
                 setCurrentPage(1);
               }}
