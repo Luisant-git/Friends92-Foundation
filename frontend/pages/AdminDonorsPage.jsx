@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { getDonations } from '../api/Donation';
 import Toast from '../components/common/Toast';
 
+const PAGE_SIZE = 10;
+
 const AdminDonorsPage = () => {
   const [donors, setDonors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -9,6 +11,7 @@ const AdminDonorsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchDonors();
@@ -46,6 +49,10 @@ const AdminDonorsPage = () => {
   });
 
   const totalDonations = donors.reduce((sum, donor) => sum + (donor.amount || 0), 0);
+
+  const totalPages = Math.max(1, Math.ceil(filteredDonors.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedDonors = filteredDonors.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   if (loading) {
     return (
@@ -125,7 +132,7 @@ const AdminDonorsPage = () => {
               type="text"
               placeholder="Search by name, email, mobile, PAN or transaction ID..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
@@ -135,7 +142,7 @@ const AdminDonorsPage = () => {
             <input
               type="date"
               value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
+              onChange={(e) => { setFromDate(e.target.value); setCurrentPage(1); }}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
@@ -145,14 +152,14 @@ const AdminDonorsPage = () => {
             <input
               type="date"
               value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
+              onChange={(e) => { setToDate(e.target.value); setCurrentPage(1); }}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
 
           {(searchTerm || fromDate || toDate) && (
             <button
-              onClick={() => { setSearchTerm(''); setFromDate(''); setToDate(''); }}
+              onClick={() => { setSearchTerm(''); setFromDate(''); setToDate(''); setCurrentPage(1); }}
               className="px-4 py-2 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary/10"
             >
               Clear All
@@ -207,7 +214,7 @@ const AdminDonorsPage = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredDonors.map((donor, index) => {
+                {paginatedDonors.map((donor, index) => {
                   const transactionId = donor.transactionId || donor.message?.match(/Txn:\s*(pay_[A-Za-z0-9]+)/)?.[1] || 'N/A';
                   const panNumber = (donor.panNumber || donor.message?.match(/PAN:\s*([A-Za-z0-9]+)/)?.[1] || 'N/A').toUpperCase();
 
@@ -258,6 +265,44 @@ const AdminDonorsPage = () => {
                 })}
               </tbody>
             </table>
+          </div>
+        )}
+        {filteredDonors.length > PAGE_SIZE && (
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredDonors.length)}</span> to{' '}
+              <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredDonors.length)}</span> of{' '}
+              <span className="font-medium">{filteredDonors.length}</span> donors
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(safePage - 1)}
+                disabled={safePage === 1}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                    page === safePage
+                      ? 'bg-primary text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
       </div>
