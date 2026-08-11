@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { getAlumni, deleteAlumni } from '../api/Alumini';
 import { Eye, Trash2 } from 'lucide-react';
 
+const PAGE_SIZE = 10;
+
 const AdminAlumni = () => {
   const [alumni, setAlumni] = useState([]);
   const [filteredAlumni, setFilteredAlumni] = useState([]);
@@ -9,8 +11,11 @@ const AdminAlumni = () => {
   const [viewModal, setViewModal] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     year: '',
+    department: '',
     willingToDonateBlood: '',
     willingToProvideServices: ''
   });
@@ -21,7 +26,7 @@ const AdminAlumni = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [alumni, filters]);
+  }, [alumni, filters, searchTerm]);
 
   const fetchAlumni = async () => {
     try {
@@ -41,6 +46,10 @@ const AdminAlumni = () => {
       filtered = filtered.filter(a => a.year === Number(filters.year));
     }
 
+    if (filters.department) {
+      filtered = filtered.filter(a => a.department === filters.department);
+    }
+
     if (filters.willingToDonateBlood) {
       filtered = filtered.filter(a => a.willingToDonateBlood === filters.willingToDonateBlood);
     }
@@ -49,8 +58,24 @@ const AdminAlumni = () => {
       filtered = filtered.filter(a => a.willingToProvideServices === filters.willingToProvideServices);
     }
 
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(a =>
+        a.name?.toLowerCase().includes(term) ||
+        a.mobile?.toLowerCase().includes(term) ||
+        a.city?.toLowerCase().includes(term) ||
+        a.district?.toLowerCase().includes(term) ||
+        a.state?.toLowerCase().includes(term) ||
+        a.department?.toLowerCase().includes(term)
+      );
+    }
+
     setFilteredAlumni(filtered);
   };
+
+  const totalPages = Math.max(1, Math.ceil(filteredAlumni.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedAlumni = filteredAlumni.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const confirmDelete = async () => {
     try {
@@ -71,6 +96,7 @@ const AdminAlumni = () => {
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: currentYear - 1970 + 1 }, (_, i) => 1970 + i);
+  const departments = [...new Set(alumni.map(a => a.department).filter(Boolean))].sort();
 
   if (loading) return <div className="p-6">Loading...</div>;
 
@@ -79,14 +105,40 @@ const AdminAlumni = () => {
       <h1 className="text-2xl font-bold mb-6 font-heading">Alumni Management</h1>
       
       <div className="bg-white rounded-lg shadow p-4 mb-6">
-        <h2 className="font-semibold mb-4 font-heading">Filters</h2>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Search</label>
+          <input
+            type="text"
+            placeholder="Search by name, mobile, city, district or state..."
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            className="w-full max-w-2xl px-3 py-2 border rounded-md"
+          />
+        </div>
+
+        <div className="flex items-center mb-4">
+          <h2 className="font-semibold font-heading">Filters</h2>
+        </div>
+        <div className="flex flex-wrap items-end gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Department</label>
+            <select
+              value={filters.department}
+              onChange={(e) => { setFilters({ ...filters, department: e.target.value }); setCurrentPage(1); }}
+              className="w-52 px-3 py-2 border rounded-md"
+            >
+              <option value="">All Departments</option>
+              {departments.map(dep => (
+                <option key={dep} value={dep}>{dep}</option>
+              ))}
+            </select>
+          </div>
           <div>
             <label className="block text-sm font-medium mb-2">Passed Out Year</label>
             <select
               value={filters.year}
-              onChange={(e) => setFilters({ ...filters, year: e.target.value })}
-              className="w-full px-3 py-2 border rounded-md"
+              onChange={(e) => { setFilters({ ...filters, year: e.target.value }); setCurrentPage(1); }}
+              className="w-40 px-3 py-2 border rounded-md"
             >
               <option value="">All Years</option>
               {years.map(year => (
@@ -98,8 +150,8 @@ const AdminAlumni = () => {
             <label className="block text-sm font-medium mb-2">Willing to Donate Blood</label>
             <select
               value={filters.willingToDonateBlood}
-              onChange={(e) => setFilters({ ...filters, willingToDonateBlood: e.target.value })}
-              className="w-full px-3 py-2 border rounded-md"
+              onChange={(e) => { setFilters({ ...filters, willingToDonateBlood: e.target.value }); setCurrentPage(1); }}
+              className="w-52 px-3 py-2 border rounded-md"
             >
               <option value="">All</option>
               <option value="Yes">Yes</option>
@@ -110,14 +162,26 @@ const AdminAlumni = () => {
             <label className="block text-sm font-medium mb-2">Willing to Provide Services</label>
             <select
               value={filters.willingToProvideServices}
-              onChange={(e) => setFilters({ ...filters, willingToProvideServices: e.target.value })}
-              className="w-full px-3 py-2 border rounded-md"
+              onChange={(e) => { setFilters({ ...filters, willingToProvideServices: e.target.value }); setCurrentPage(1); }}
+              className="w-52 px-3 py-2 border rounded-md"
             >
               <option value="">All</option>
               <option value="Yes">Yes</option>
               <option value="No">No</option>
             </select>
           </div>
+          {(filters.year || filters.department || filters.willingToDonateBlood || filters.willingToProvideServices || searchTerm) && (
+            <button
+              onClick={() => {
+                setFilters({ year: '', department: '', willingToDonateBlood: '', willingToProvideServices: '' });
+                setSearchTerm('');
+                setCurrentPage(1);
+              }}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            >
+              Clear All Filters
+            </button>
+          )}
         </div>
       </div>
       <div className="bg-white rounded-lg shadow overflow-x-auto">
@@ -135,7 +199,7 @@ const AdminAlumni = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredAlumni.map((person) => (
+            {paginatedAlumni.map((person) => (
               <tr key={person.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{person.name}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{person.mobile}</td>
@@ -156,6 +220,44 @@ const AdminAlumni = () => {
             ))}
           </tbody>
         </table>
+        {filteredAlumni.length > PAGE_SIZE && (
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredAlumni.length)}</span> to{' '}
+              <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredAlumni.length)}</span> of{' '}
+              <span className="font-medium">{filteredAlumni.length}</span> alumni
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(safePage - 1)}
+                disabled={safePage === 1}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                    page === safePage
+                      ? 'bg-primary text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {viewModal && (
