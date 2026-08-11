@@ -7,6 +7,8 @@ const AdminDonorsPage = () => {
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
 
   useEffect(() => {
     fetchDonors();
@@ -23,10 +25,25 @@ const AdminDonorsPage = () => {
     }
   };
 
-  const filteredDonors = donors.filter(donor =>
-    donor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    donor.email?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredDonors = donors.filter(donor => {
+    const transactionId = donor.transactionId || donor.message?.match(/Txn:\s*(pay_[A-Za-z0-9]+)/)?.[1] || '';
+    const panNumber = (donor.panNumber || donor.message?.match(/PAN:\s*([A-Za-z0-9]+)/)?.[1] || '').toUpperCase();
+
+    const matchesSearch = !searchTerm ||
+      donor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      donor.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      donor.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      panNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      transactionId.toLowerCase().includes(searchTerm.toLowerCase());
+
+    let matchesDate = true;
+    if (donor.createdAt) {
+      const donorDate = new Date(donor.createdAt);
+      if (fromDate && donorDate < new Date(fromDate + 'T00:00:00')) matchesDate = false;
+      if (toDate && donorDate > new Date(toDate + 'T23:59:59')) matchesDate = false;
+    }
+    return matchesSearch && matchesDate;
+  });
 
   const totalDonations = donors.reduce((sum, donor) => sum + (donor.amount || 0), 0);
 
@@ -101,16 +118,46 @@ const AdminDonorsPage = () => {
 
       {/* Search Bar */}
       <div className="bg-white p-6 rounded-xl shadow-md">
-        <div className="flex items-center space-x-4">
-          <div className="flex-1">
+        <div className="flex flex-wrap items-end gap-4">
+          <div className="flex-1 min-w-[250px]">
+            <label className="block text-xs font-medium text-gray-600 mb-1">Search</label>
             <input
               type="text"
-              placeholder="Search donors by name or email..."
+              placeholder="Search by name, email, mobile, PAN or transaction ID..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">From Date</label>
+            <input
+              type="date"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">To Date</label>
+            <input
+              type="date"
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            />
+          </div>
+
+          {(searchTerm || fromDate || toDate) && (
+            <button
+              onClick={() => { setSearchTerm(''); setFromDate(''); setToDate(''); }}
+              className="px-4 py-2 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary/10"
+            >
+              Clear All
+            </button>
+          )}
         </div>
       </div>
 
@@ -127,7 +174,7 @@ const AdminDonorsPage = () => {
             </svg>
             <h3 className="mt-2 text-sm font-medium text-gray-900 font-heading">No donors found</h3>
             <p className="mt-1 text-sm text-gray-500 font-body">
-              {searchTerm ? 'Try adjusting your search terms.' : 'No donations have been made yet.'}
+              {searchTerm || fromDate || toDate ? 'Try adjusting your filters.' : 'No donations have been made yet.'}
             </p>
           </div>
         ) : (
