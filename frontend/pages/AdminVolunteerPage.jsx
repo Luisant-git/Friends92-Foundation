@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getVolunteers, deleteVolunteer, approveVolunteer, activateVolunteer } from '../api/Volunteer';
 
+const PAGE_SIZE = 10;
+
 const AdminVolunteerPage = () => {
   const [volunteers, setVolunteers] = useState([]);
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
@@ -12,10 +14,33 @@ const AdminVolunteerPage = () => {
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [approveId, setApproveId] = useState(null);
   const [filterService, setFilterService] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchVolunteers();
   }, []);
+
+  const getStatus = (v) => (v.isActive ? 'Active' : v.password ? 'Approved' : 'Pending');
+
+  const filteredVolunteers = volunteers.filter(v => {
+    if (filterService && v.service !== filterService) return false;
+    if (statusFilter && getStatus(v) !== statusFilter) return false;
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      if (
+        !(v.name?.toLowerCase().includes(term) ||
+          v.email?.toLowerCase().includes(term) ||
+          v.mobile1?.toLowerCase().includes(term))
+      ) return false;
+    }
+    return true;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredVolunteers.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedVolunteers = filteredVolunteers.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const fetchVolunteers = async () => {
     try {
@@ -71,18 +96,60 @@ const AdminVolunteerPage = () => {
 
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold font-heading">Volunteer Requests</h1>
-        <select
-          value={filterService}
-          onChange={(e) => setFilterService(e.target.value)}
-          className="px-4 py-2 border rounded-md focus:ring-2 focus:ring-primary"
-        >
-          <option value="">All Services</option>
-          <option value="Education">Education</option>
-          <option value="Health">Health</option>
-          <option value="Environment">Environment</option>
-          <option value="Women & Child Welfare">Women & Child Welfare</option>
-          <option value="Disaster Relief">Disaster Relief</option>
-        </select>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Search</label>
+          <input
+            type="text"
+            placeholder="Search by name, email or mobile..."
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+            className="w-full max-w-2xl px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        <div className="flex flex-wrap items-end gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Service</label>
+            <select
+              value={filterService}
+              onChange={(e) => { setFilterService(e.target.value); setCurrentPage(1); }}
+              className="w-52 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+            >
+              <option value="">All Services</option>
+              <option value="Education">Education</option>
+              <option value="Health">Health</option>
+              <option value="Environment">Environment</option>
+              <option value="Women & Child Welfare">Women & Child Welfare</option>
+              <option value="Disaster Relief">Disaster Relief</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Status</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+              className="w-40 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary"
+            >
+              <option value="">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+              <option value="Active">Active</option>
+            </select>
+          </div>
+          {(searchTerm || statusFilter || filterService) && (
+            <button
+              onClick={() => {
+                setSearchTerm(''); setStatusFilter(''); setFilterService(''); setCurrentPage(1);
+              }}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            >
+              Clear All Filters
+            </button>
+          )}
+        </div>
       </div>
 
       {showDeleteModal && (
@@ -177,9 +244,9 @@ const AdminVolunteerPage = () => {
             </tr>
           </thead>
           <tbody>
-            {volunteers.filter(v => !filterService || v.service === filterService).map((volunteer, index) => (
+            {paginatedVolunteers.map((volunteer, index) => (
               <tr key={volunteer.id} className="border-t hover:bg-gray-50">
-                <td className="p-3">{index + 1}</td>
+                <td className="p-3">{(safePage - 1) * PAGE_SIZE + index + 1}</td>
                 <td className="p-3">{volunteer.name}</td>
                 <td className="p-3 hidden md:table-cell">{volunteer.email}</td>
                 <td className="p-3 hidden sm:table-cell">{volunteer.mobile1}</td>
@@ -226,7 +293,7 @@ const AdminVolunteerPage = () => {
                 </td>
               </tr>
             ))}
-            {volunteers.filter(v => !filterService || v.service === filterService).length === 0 && (
+            {filteredVolunteers.length === 0 && (
               <tr>
                 <td colSpan="6" className="p-4 text-center text-gray-500">
                   No volunteers registered yet
@@ -235,6 +302,44 @@ const AdminVolunteerPage = () => {
             )}
           </tbody>
         </table>
+        {filteredVolunteers.length > PAGE_SIZE && (
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <p className="text-sm text-gray-500">
+              Showing <span className="font-medium">{Math.min((safePage - 1) * PAGE_SIZE + 1, filteredVolunteers.length)}</span> to{' '}
+              <span className="font-medium">{Math.min(safePage * PAGE_SIZE, filteredVolunteers.length)}</span> of{' '}
+              <span className="font-medium">{filteredVolunteers.length}</span> volunteers
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(safePage - 1)}
+                disabled={safePage === 1}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-lg ${
+                    page === safePage
+                      ? 'bg-primary text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
