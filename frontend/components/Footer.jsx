@@ -133,23 +133,19 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold text-white mb-4">Follow Us</h4>
             <div className="flex flex-wrap gap-3">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" 
+              <a href="https://www.facebook.com/profile.php?id=61592802914004" target="_blank" rel="noopener noreferrer" 
                  className="text-white/80 hover:text-secondary transition-colors" aria-label="Facebook">
                 <Facebook className="w-6 h-6" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" 
+              <a href="https://www.instagram.com/gptck92trust?igsh=MXI4Y3Q2emF4ZjBxcQ==" target="_blank" rel="noopener noreferrer" 
                  className="text-white/80 hover:text-secondary transition-colors" aria-label="Instagram">
                 <Instagram className="w-6 h-6" />
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" 
+              <a href="https://www.youtube.com/@GPTCK92Trust-AlumniFoundation" target="_blank" rel="noopener noreferrer" 
                  className="text-white/80 hover:text-secondary transition-colors" aria-label="YouTube">
                 <Youtube className="w-6 h-6" />
               </a>
-              <a href="https://t.me" target="_blank" rel="noopener noreferrer" 
-                 className="text-white/80 hover:text-secondary transition-colors" aria-label="Telegram">
-                <Send className="w-6 h-6" />
-              </a>
-              <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" 
+              <a href="https://wa.me/919750089000" target="_blank" rel="noopener noreferrer" 
                  className="text-white/80 hover:text-secondary transition-colors" aria-label="WhatsApp">
                 <Phone className="w-6 h-6" />
               </a>
