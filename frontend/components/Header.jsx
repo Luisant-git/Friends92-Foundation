@@ -377,6 +377,9 @@ const Header = () => {
             </div>
 
             <div className="flex items-center gap-4">
+              <a href="https://wa.me/919750089000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                <FaWhatsapp className="w-4 h-4 hover:text-gray-200 transition cursor-pointer" />
+              </a>
               <a href="https://www.facebook.com/profile.php?id=61592802914004" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                 <FaFacebookF className="w-4 h-4 hover:text-gray-200 transition cursor-pointer" />
               </a>
@@ -385,9 +388,6 @@ const Header = () => {
               </a>
               <a href="https://www.youtube.com/@GPTCK92Trust-AlumniFoundation" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
                 <FaYoutube className="w-4 h-4 hover:text-gray-200 transition cursor-pointer" />
-              </a>
-              <a href="https://wa.me/919750089000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-                <FaWhatsapp className="w-4 h-4 hover:text-gray-200 transition cursor-pointer" />
               </a>
             </div>
           </div>

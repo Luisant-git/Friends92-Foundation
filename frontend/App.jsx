@@ -54,6 +54,7 @@ import BlogPage from './pages/BlogPage';
 import BlogDetailPage from './pages/BlogDetailPage';
 import MembershipRenewal from './pages/MembershipRenewal';
 import AdminSubscriptionsPage from './pages/AdminSubscriptionsPage';
+import SocialIcons from './components/SocialIcons';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -71,6 +72,7 @@ const App = () => {
     <BrowserRouter>
       <ScrollToTop />
       <Toaster position="top-center" reverseOrder={false} />
+      <SocialIcons />
       <Routes>
         {/* Public Routes with Header/Footer */}
         <Route path="/" element={

@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Youtube, Send, Phone, Mail, MapPin, Shield } from "lucide-react";
+import { Phone, Mail, MapPin, Shield } from "lucide-react";
+import { FaFacebookF, FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import { DonateButton, VolunteerButton } from "./common/CTAButtons";
+import SocialIcons from "./SocialIcons";
 
 const Footer = () => {
   return (
@@ -132,22 +134,18 @@ const Footer = () => {
           {/* Column 4: Social Media */}
           <div>
             <h4 className="text-lg font-semibold text-white mb-4">Follow Us</h4>
-            <div className="flex flex-wrap gap-3">
-              <a href="https://www.facebook.com/profile.php?id=61592802914004" target="_blank" rel="noopener noreferrer" 
-                 className="text-white/80 hover:text-secondary transition-colors" aria-label="Facebook">
-                <Facebook className="w-6 h-6" />
+            <div className="flex items-center gap-4">
+              <a href="https://wa.me/919750089000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                <FaWhatsapp className="w-6 h-6 hover:text-gray-200 transition cursor-pointer" />
               </a>
-              <a href="https://www.instagram.com/gptck92trust?igsh=MXI4Y3Q2emF4ZjBxcQ==" target="_blank" rel="noopener noreferrer" 
-                 className="text-white/80 hover:text-secondary transition-colors" aria-label="Instagram">
-                <Instagram className="w-6 h-6" />
+              <a href="https://www.facebook.com/profile.php?id=61592802914004" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <FaFacebookF className="w-6 h-6 hover:text-gray-200 transition cursor-pointer" />
               </a>
-              <a href="https://www.youtube.com/@GPTCK92Trust-AlumniFoundation" target="_blank" rel="noopener noreferrer" 
-                 className="text-white/80 hover:text-secondary transition-colors" aria-label="YouTube">
-                <Youtube className="w-6 h-6" />
+              <a href="https://www.instagram.com/gptck92trust?igsh=MXI4Y3Q2emF4ZjBxcQ==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <FaInstagram className="w-6 h-6 hover:text-gray-200 transition cursor-pointer" />
               </a>
-              <a href="https://wa.me/919750089000" target="_blank" rel="noopener noreferrer" 
-                 className="text-white/80 hover:text-secondary transition-colors" aria-label="WhatsApp">
-                <Phone className="w-6 h-6" />
+              <a href="https://www.youtube.com/@GPTCK92Trust-AlumniFoundation" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                <FaYoutube className="w-6 h-6 hover:text-gray-200 transition cursor-pointer" />
               </a>
             </div>
           </div>
