@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createBlog, getBlogs, updateBlog, deleteBlog } from "../api/Blog";
@@ -17,6 +17,7 @@ export default function AdminBlogPage() {
   const [imageFile, setImageFile] = useState(null);
   const [preview, setPreview] = useState("");
   const [editingBlog, setEditingBlog] = useState(null);
+  const [viewBlog, setViewBlog] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -237,6 +238,40 @@ export default function AdminBlogPage() {
         </div>
       )}
 
+      {viewBlog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 font-heading">Blog Details</h2>
+            <div className="space-y-4">
+              {viewBlog.imageUrl && (
+                <img src={viewBlog.imageUrl} alt={viewBlog.title} className="w-full max-h-64 object-cover rounded" />
+              )}
+              <div className="grid md:grid-cols-2 gap-4">
+                {viewBlog.title && <div className="md:col-span-2"><strong>Title:</strong> {viewBlog.title}</div>}
+                {viewBlog.description && (
+                  <div className="md:col-span-2"><strong>Description:</strong> {viewBlog.description}</div>
+                )}
+                {viewBlog.content && (
+                  <div className="md:col-span-2">
+                    <strong>Content:</strong>
+                    <p className="mt-1 text-gray-700 whitespace-pre-wrap">{viewBlog.content}</p>
+                  </div>
+                )}
+                {viewBlog.videoUrl && (
+                  <div className="md:col-span-2">
+                    <strong>Video URL:</strong>{' '}
+                    <a href={viewBlog.videoUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-all">{viewBlog.videoUrl}</a>
+                  </div>
+                )}
+              </div>
+            </div>
+            <button onClick={() => setViewBlog(null)} className="mt-6 px-6 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
@@ -271,6 +306,9 @@ export default function AdminBlogPage() {
                 <td className="p-3">{blog.title}</td>
                 <td className="p-3">{blog.description?.substring(0, 50)}...</td>
                 <td className="p-3 flex gap-4">
+                  <button onClick={() => setViewBlog(blog)} className="text-primary hover:text-primary transition" title="View Details">
+                    <Eye size={20} />
+                  </button>
                   <button onClick={() => handleEdit(blog)} className="text-primary hover:text-primary transition">
                     <Pencil size={20} />
                   </button>
