@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -31,6 +31,7 @@ export default function PlacementAdmin() {
   });
 
   const [placements, setPlacements] = useState([]);
+  const [viewPlacement, setViewPlacement] = useState(null);
   const [editId, setEditId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -350,6 +351,37 @@ export default function PlacementAdmin() {
         </div>
       )}
 
+      {viewPlacement && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 font-heading">Placement Details</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="md:col-span-2"><strong>Company Name:</strong> {viewPlacement.companyName}</div>
+              <div className="md:col-span-2"><strong>Company Description:</strong> {viewPlacement.companyDesc || '-'}</div>
+              <div><strong>Company Location:</strong> {viewPlacement.companyLocation}</div>
+              <div><strong>Company Contact Number:</strong> {viewPlacement.companyContactNumber}</div>
+              <div><strong>Company Email:</strong> {viewPlacement.companyEmail}</div>
+              <div><strong>Job Title:</strong> {viewPlacement.jobTitle}</div>
+              <div><strong>Job Location:</strong> {viewPlacement.jobLocation}</div>
+              <div className="md:col-span-2"><strong>Job Description:</strong> {viewPlacement.jobDescription || '-'}</div>
+              <div><strong>Skills:</strong> {Array.isArray(viewPlacement.skills) ? viewPlacement.skills.join(', ') : viewPlacement.skills || '-'}</div>
+              <div><strong>Experience:</strong> {viewPlacement.experience} yrs</div>
+              <div className="md:col-span-2">
+                <strong>Status:</strong>{' '}
+                <span className={`px-2 py-1 rounded text-sm ${
+                  viewPlacement.status ? 'bg-secondary/10 text-secondary' : 'bg-red-100 text-red-800'
+                }`}>
+                  {viewPlacement.status ? 'Active' : 'Inactive'}
+                </span>
+              </div>
+            </div>
+            <button onClick={() => setViewPlacement(null)} className="mt-6 px-6 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded-xl shadow-md border">
           <thead>
@@ -379,6 +411,13 @@ export default function PlacementAdmin() {
                   </span>
                 </td>
                 <td className="p-3 flex gap-4">
+                  <button
+                    onClick={() => setViewPlacement(p)}
+                    className="text-primary hover:text-primary transition"
+                    title="View Details"
+                  >
+                    <Eye size={20} />
+                  </button>
                   <button
                     onClick={() => handleEdit(p)}
                     className="text-primary hover:text-primary transition"

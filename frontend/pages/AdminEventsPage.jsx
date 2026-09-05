@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createEvent, getEvents, updateEvent, deleteEvent } from "../api/Events";
@@ -9,6 +9,7 @@ const PAGE_SIZE = 10;
 
 export default function AdminEventsPage() {
   const [events, setEvents] = useState([]);
+  const [viewEvent, setViewEvent] = useState(null);
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -347,6 +348,50 @@ export default function AdminEventsPage() {
         </div>
       )}
 
+      {viewEvent && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 font-heading">Event & News Details</h2>
+            <div className="space-y-4">
+              {viewEvent.imageUrl && (
+                <img src={viewEvent.imageUrl} alt={viewEvent.title} className="w-full max-h-64 object-cover rounded" />
+              )}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="md:col-span-2"><strong>Title:</strong> {viewEvent.title}</div>
+                <div>
+                  <strong>Type:</strong>{' '}
+                  <span className={`px-2 py-1 rounded text-sm ${
+                    viewEvent.type?.toLowerCase() === 'event' ? 'bg-primary/10 text-primary' : 'bg-secondary/10 text-secondary'
+                  }`}>
+                    {viewEvent.type}
+                  </span>
+                </div>
+                <div><strong>Date:</strong> {viewEvent.eventDate ? new Date(viewEvent.eventDate).toLocaleDateString() : '-'}</div>
+                <div><strong>Location:</strong> {viewEvent.location || '-'}</div>
+                {viewEvent.description && (
+                  <div className="md:col-span-2"><strong>Description:</strong> {viewEvent.description}</div>
+                )}
+                {viewEvent.content && (
+                  <div className="md:col-span-2">
+                    <strong>Content:</strong>
+                    <p className="mt-1 text-gray-700 whitespace-pre-wrap">{viewEvent.content}</p>
+                  </div>
+                )}
+                {viewEvent.videoUrl && (
+                  <div className="md:col-span-2">
+                    <strong>Video URL:</strong>{' '}
+                    <a href={viewEvent.videoUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-all">{viewEvent.videoUrl}</a>
+                  </div>
+                )}
+              </div>
+            </div>
+            <button onClick={() => setViewEvent(null)} className="mt-6 px-6 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded-xl shadow-md border">
           <thead>
@@ -374,6 +419,13 @@ export default function AdminEventsPage() {
                 <td className="p-3">{new Date(event.eventDate).toLocaleDateString()}</td>
                 <td className="p-3">{event.location || '-'}</td>
                 <td className="p-3 flex gap-4">
+                  <button
+                    onClick={() => setViewEvent(event)}
+                    className="text-primary hover:text-primary transition"
+                    title="View Details"
+                  >
+                    <Eye size={20} />
+                  </button>
                   <button
                     onClick={() => handleEdit(event)}
                     className="text-primary hover:text-primary transition"
