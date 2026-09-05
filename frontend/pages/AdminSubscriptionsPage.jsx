@@ -10,6 +10,8 @@ const AdminSubscriptionsPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [editingPlan, setEditingPlan] = useState(null);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [statusAction, setStatusAction] = useState({ id: null, status: '' });
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -119,15 +121,15 @@ const AdminSubscriptionsPage = () => {
     }
   };
 
-  const updateStatus = async (id, status) => {
+  const confirmStatusChange = async () => {
     try {
-      const response = await fetch(`${apiUrl}/alumni/subscription/${id}/status`, {
+      const response = await fetch(`${apiUrl}/alumni/subscription/${statusAction.id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ status: statusAction.status }),
       });
       if (response.ok) {
-        toast.success(`Subscription ${status}`);
+        toast.success(`Subscription ${statusAction.status}`);
         fetchSubscriptions();
       } else {
         toast.error('Failed to update status');
@@ -135,6 +137,9 @@ const AdminSubscriptionsPage = () => {
     } catch (error) {
       console.error(error);
       toast.error('Error updating status');
+    } finally {
+      setShowStatusModal(false);
+      setStatusAction({ id: null, status: '' });
     }
   };
 
@@ -289,8 +294,8 @@ const AdminSubscriptionsPage = () => {
                   <td className="py-3 px-4 text-sm">
                     {sub.status === 'PENDING' && (
                       <div className="flex gap-2">
-                        <button onClick={() => updateStatus(sub.id, 'APPROVED')} className="text-green-600 hover:underline">Approve</button>
-                        <button onClick={() => updateStatus(sub.id, 'REJECTED')} className="text-red-600 hover:underline">Reject</button>
+                        <button onClick={() => { setStatusAction({ id: sub.id, status: 'APPROVED' }); setShowStatusModal(true); }} className="text-green-600 hover:underline">Approve</button>
+                        <button onClick={() => { setStatusAction({ id: sub.id, status: 'REJECTED' }); setShowStatusModal(true); }} className="text-red-600 hover:underline">Reject</button>
                       </div>
                     )}
                   </td>
@@ -344,6 +349,34 @@ const AdminSubscriptionsPage = () => {
           </div>
         )}
       </div>
+
+      {/* Confirm Status Change Modal */}
+      {showStatusModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-2xl relative animate-slide-up">
+            <h3 className="text-xl font-bold mb-4 text-gray-800 font-heading">Confirm Status Change</h3>
+            <p className="text-gray-600 mb-6 font-body">
+              Are you sure you want to <span className={statusAction.status === 'APPROVED' ? 'font-semibold text-green-600' : 'font-semibold text-red-600'}>{statusAction.status === 'APPROVED' ? 'approve' : 'reject'}</span> this subscription request?
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => { setShowStatusModal(false); setStatusAction({ id: null, status: '' }); }}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmStatusChange}
+                className={`px-4 py-2 text-white rounded-lg hover:bg-opacity-90 transition shadow-md ${
+                  statusAction.status === 'APPROVED' ? 'bg-green-600' : 'bg-red-500'
+                }`}
+              >
+                {statusAction.status === 'APPROVED' ? 'Approve' : 'Reject'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete Plan Modal */}
       {showDeleteModal && (
